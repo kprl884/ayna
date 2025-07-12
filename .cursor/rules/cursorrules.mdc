@@ -1,0 +1,144 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Ayna - Cursor Rules
+
+## Core Development Principles
+
+### String Resources Management
+- **NEVER** hardcode user-facing strings in Composables
+- All user-visible text must be defined in `composeApp/src/commonMain/kotlin/com/ayna/app/ui/theme/StringResources.kt`
+- Use object-based approach: `object StringResources { val login_button = "Giriş Yap" }`
+- This ensures future i18n support and consistent text management
+
+### Language Standards
+- All comments, commit messages, and documentation in Turkish
+- Code elements (variables, functions, classes) in English following universal standards
+- Use descriptive English names: `getUserProfile()` not `kullaniciProfiliAl()`
+
+## Performance-First Compose Development
+
+### State Management Excellence
+- Use `derivedStateOf` instead of `remember` for expensive computations derived from state
+- Implement lazy state reading - defer state access to lowest level Composables
+- Always use `key` parameter in `LazyColumn`/`LazyRow` for stable item identities
+- Minimize recomposition by keeping state reads local
+
+### Immutability Principles
+- Prefer `val` and `ImmutableList` over mutable collections
+- Composable parameters should be primitive types or `@Immutable` annotated classes
+- Use `@Stable` annotation for classes that might change but in predictable ways
+
+### Coroutine Best Practices
+- Always use structured concurrency with appropriate scopes (`screenModelScope`, `viewModelScope`)
+- Implement proper exception handling with try-catch or `CoroutineExceptionHandler`
+- Use `flow.collectAsStateWithLifecycle()` for UI state collection
+- Prefer `StateFlow` over `LiveData` for state management
+
+## Clean Architecture Implementation
+
+### Unidirectional Data Flow (UDF)
+- UI sends events to ScreenModel/ViewModel
+- ScreenModel exposes single `StateFlow<UiState>` to UI
+- Follow UI -> Domain -> Data layer separation
+- Never access data layer directly from UI
+
+### Dependency Injection with Koin
+- All dependencies injected via constructor injection
+- Define modules in `di/` package
+- Use factory vs single appropriately based on lifecycle needs
+
+### Composable Design Patterns
+- `ui/components/` - Completely stateless, reusable components
+- `ui/screens/` - Stateful screen-level Composables
+- Pass state and event lambdas as parameters to stateless components
+
+## Apple-Inspired UI/UX Excellence
+
+### Design System Compliance
+- **STRICT RULE**: Only use `MaterialTheme.colorScheme`, `MaterialTheme.typography`, `MaterialTheme.shapes`
+- NO hardcoded colors, fonts, or dimensions
+- Create semantic color tokens: `primary`, `onPrimary`, `surface`, etc.
+
+### Visual Hierarchy & Spacing
+- Use generous whitespace for readability and focus
+- Implement 8dp grid system for consistent spacing
+- Apply visual hierarchy through typography scale and color contrast
+- "Whitespace is not a luxury, it's a necessity"
+
+### Comprehensive UI States
+Every screen must handle:
+- **Loading**: Shimmer effects, skeleton screens
+- **Content**: Main content display
+- **Empty**: Meaningful empty states with actionable guidance
+- **Error**: Clear error messages with retry options
+- **Offline**: Graceful offline experience
+
+### Accessibility (a11y) First
+- Provide `contentDescription` for all `Icon` and `Image` elements
+- Use semantic roles and state descriptions
+- Ensure minimum 4.5:1 contrast ratio for text
+- Support screen readers and keyboard navigation
+- Test with TalkBack/VoiceOver
+
+## Advanced Development Practices
+
+### Code Quality Standards
+- Use Kotlin idioms: scope functions, extension functions, higher-order functions
+- Break complex logic into small, pure functions
+- Define constants in `Constants.kt` or relevant companion objects
+- Implement proper error handling with sealed classes for results
+
+### Testing Strategy
+- Write unit tests for ViewModels/ScreenModels
+- Create UI tests for critical user flows
+- Use `@Preview` extensively for different states and screen sizes
+- Implement screenshot testing for visual regression
+
+### Platform-Specific Optimizations
+- Use `expect`/`actual` for platform-specific implementations
+- Optimize for each platform's native patterns
+- Consider platform-specific UI guidelines (Material Design, Human Interface Guidelines)
+
+## Feature Development Process
+
+### Incremental Development
+- **MANDATORY**: Implement features step-by-step with approval at each stage
+- Start with basic UI structure and placeholder data
+- Add data layer and business logic
+- Implement error handling and edge cases
+- Add animations and polish
+- Conduct thorough testing before marking complete
+
+### Code Review Checklist
+- [ ] No hardcoded strings or magic numbers
+- [ ] Proper state management with UDF
+- [ ] Accessibility requirements met
+- [ ] Performance optimizations applied
+- [ ] All UI states handled (loading, content, empty, error)
+- [ ] Proper error handling and logging
+- [ ] Tests written and passing
+
+## Security & Privacy
+- Never log sensitive user data
+- Implement proper data encryption for sensitive information
+- Follow GDPR/privacy regulations for data handling
+- Use secure networking practices (certificate pinning, etc.)
+
+## Multiplatform Considerations
+- Share business logic in `commonMain`
+- Keep platform-specific UI adaptations minimal
+- Use composition over inheritance for better multiplatform compatibility
+- Consider platform-specific performance characteristics
+
+## Documentation Standards
+- Document complex business logic with clear comments
+- Maintain README with setup instructions
+- Use KDoc for public APIs
+- Keep architectural decisions documented (ADRs)
+
+---
+
+**Remember**: These rules ensure we build a world-class mobile application that users love to use. Quality, performance, and user experience are non-negotiable. Every line of code should serve the user's needs efficiently and beautifully.
