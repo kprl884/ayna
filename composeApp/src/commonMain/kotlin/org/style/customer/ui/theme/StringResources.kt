@@ -132,6 +132,7 @@ object StringResources {
     val back_button_description = "Geri butonu"
     val menu_button_description = "Menü butonu"
     val favorite_button_description = "Favori butonu"
+    val rating_star_description = "Yıldız derecelendirme ikonu"
     val share_button_description = "Paylaş butonu"
     val calendar_button_description = "Takvim butonu"
     val location_button_description = "Konum butonu"

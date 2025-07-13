@@ -17,7 +17,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,7 +28,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         outputModuleName.set("composeApp")
@@ -48,9 +48,9 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -75,6 +75,12 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            // Compose Icons
+            implementation(libs.composeIcons.feather)
+            implementation(libs.composeIcons.fontAwesome)
+            implementation(libs.composeIcons.tablerIcons)
+            implementation(libs.composeIcons.evaIcons)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

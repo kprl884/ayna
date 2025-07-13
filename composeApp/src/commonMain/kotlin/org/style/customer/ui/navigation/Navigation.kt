@@ -3,7 +3,7 @@ package org.style.customer.ui.navigation
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
-import org.style.customer.ui.screens.home.HomeScreen
+import org.style.customer.ui.screens.splash.SplashScreen
 
 /**
  * Main Navigation Setup
@@ -13,7 +13,7 @@ import org.style.customer.ui.screens.home.HomeScreen
 @Composable
 fun AynaAppNavigation() {
     Navigator(
-        screen = HomeScreen(),
+        screen = SplashScreen(),
         content = { navigator ->
             SlideTransition(navigator)
         }
