@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,24 +18,20 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.Codepen
 import org.style.customer.data.mock.MockData
 import org.style.customer.ui.components.common.CategoryCard
 import org.style.customer.ui.components.common.SalonCard
 import org.style.customer.ui.components.common.getCategoryColor
 import org.style.customer.ui.components.common.getCategoryIcon
+import org.style.customer.ui.designsystem.components.text.AppText
+import org.style.customer.ui.designsystem.components.text.CategoryTitle
 
 class HomeScreen : Screen {
     @Composable
@@ -54,68 +47,50 @@ class HomeScreen : Screen {
             "Kaş & Kirpik"
         )
         val systemPadding = WindowInsets.statusBars.asPaddingValues()
-
-
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(12.dp),
             color = MaterialTheme.colorScheme.background
         ) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        top = systemPadding.calculateTopPadding(), // Adjust for status bar
-                        start = systemPadding.calculateStartPadding(LayoutDirection.Ltr),
-                        end = systemPadding.calculateEndPadding(LayoutDirection.Ltr)
+                        top = systemPadding.calculateTopPadding(),
+                        start = 16.dp,
+                        end = 16.dp
                     ),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+                verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
                 // Header
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(
-                                text = "Merhaba 👋",
-                                style = MaterialTheme.typography.headlineMedium.copy(
-                                    fontWeight = FontWeight.Bold
-                                ),
+                            AppText(
+                                text = "Merhaba",
+                                style = org.style.customer.ui.designsystem.foundation.typography.AppTextStyles.businessName,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
-                            Text(
-                                text = "Bugün nasıl hissediyorsun?",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                            )
                         }
-
-                        Icon(
-                            imageVector = FeatherIcons.Codepen,
-                            contentDescription = "Profile",
-                            modifier = Modifier.size(32.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
                     }
                 }
 
                 // Favorites Section
                 item {
-                    Text(
+                    CategoryTitle(
                         text = "Favoriler",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
                         color = MaterialTheme.colorScheme.onBackground
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(horizontal = 4.dp)
+                        modifier = Modifier.padding(bottom = 24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
+                        contentPadding = PaddingValues(horizontal = 2.dp)
                     ) {
                         items(MockData.favoriteSalons) { salon ->
                             SalonCard(
@@ -130,18 +105,15 @@ class HomeScreen : Screen {
 
                 // Recently Viewed
                 item {
-                    Text(
+                    CategoryTitle(
                         text = "Son Görüntülenenler",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
                         color = MaterialTheme.colorScheme.onBackground
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(20.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp)
                     ) {
                         items(MockData.recentlyViewedSalons) { salon ->
@@ -157,11 +129,9 @@ class HomeScreen : Screen {
 
                 // Categories
                 item {
-                    Text(
+                    CategoryTitle(
+                        modifier = Modifier.padding(top = 24.dp),
                         text = "Kategoriler",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold
-                        ),
                         color = MaterialTheme.colorScheme.onBackground
                     )
 

@@ -5,6 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.style.customer.ui.designsystem.foundation.typography.AynaTypography
 
 /**
  * Ayna Design System
@@ -146,7 +147,7 @@ fun AynaAppTheme(
     
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AynaTypography,
         content = content
     )
 } 

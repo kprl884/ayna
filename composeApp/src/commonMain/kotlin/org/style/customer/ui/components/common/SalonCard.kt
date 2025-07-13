@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +35,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.Heart
+import compose.icons.fontawesomeicons.solid.Star
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.style.customer.data.models.Salon
 
 @Composable
@@ -70,35 +78,29 @@ fun SalonCard(
         )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp)
+            modifier = Modifier.size(260.dp, 280.dp)
         ) {
-            // Image placeholder with shimmer effect
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .fillMaxHeight(0.5f)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                // Placeholder icon
-                //todo icon
-                /*
                 Icon(
-                    imageVector = Icons.Default.Business,
+                    imageVector = FontAwesomeIcons.Solid.Heart,
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.padding(8.dp).size(24.dp).align(Alignment.TopEnd),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-
-                 */
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Salon name
             Text(
                 text = salon.name,
+                modifier = Modifier.padding(horizontal = 8.dp),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
@@ -112,6 +114,7 @@ fun SalonCard(
             // Category
             Text(
                 text = salon.category,
+                modifier = Modifier.padding(horizontal = 8.dp),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontSize = 12.sp
                 ),
@@ -123,7 +126,7 @@ fun SalonCard(
 
             // Rating and price
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -132,18 +135,12 @@ fun SalonCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    /*
-                    todo rating icon
-
                     Icon(
-                        imageVector = Icons.Default.Star,
+                        imageVector = FontAwesomeIcons.Solid.Star,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Color(0xFFFFD700)
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                Ò
-
-                     */
                     Text(
                         text = salon.rating.toString(),
                         style = MaterialTheme.typography.bodySmall.copy(
@@ -153,17 +150,30 @@ fun SalonCard(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-
-                // Price
-                Text(
-                    text = "₺${salon.priceRange}",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 12.sp
-                    ),
-                    color = MaterialTheme.colorScheme.primary
-                )
             }
         }
     }
+}
+
+@Preview()
+@Composable
+fun SalonCardPreview() {
+    SalonCard(
+        salon = Salon(
+            name = "Salon Name",
+            category = "Category",
+            rating = 4.5f,
+            priceRange = "50.9",
+            id = "a",
+            imageUrl = "f",
+            isFavorite = true,
+            isNew = true,
+            isTrending = false,
+            description = "dsfs",
+            address = "fdsf",
+            phone = "fdsf",
+            workingHours = "fds",
+        ),
+        onClick = {}
+    )
 }

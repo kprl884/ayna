@@ -15,22 +15,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.CloudRain
+import org.style.customer.ui.designsystem.components.text.AppTitle
+import org.style.customer.ui.designsystem.components.text.AppSubtitle
 import org.style.customer.ui.screens.home.HomeScreen
 
 /**
@@ -79,23 +77,16 @@ class SplashScreen : Screen {
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                // App name with fade animation
-                Text(
+                // App name with new font system
+                AppTitle(
                     text = "Ayna",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-                    ),
                     color = Color.White
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                Text(
+                AppSubtitle(
                     text = "Güzellik & Wellness",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontSize = 16.sp
-                    ),
                     color = Color.White.copy(alpha = 0.8f)
                 )
             }
@@ -108,19 +99,3 @@ class SplashScreen : Screen {
         }
     }
 }
-
-/**
- * Linearly interpolate between two color lists
- */
-fun lerpColors(colors1: List<Color>, colors2: List<Color>, t: Float): List<Color> =
-    colors1.zip(colors2) { c1, c2 -> lerpColor(c1, c2, t) }
-
-fun lerpColor(a: Color, b: Color, t: Float): Color =
-    Color(
-        red = lerp(a.red, b.red, t),
-        green = lerp(a.green, b.green, t),
-        blue = lerp(a.blue, b.blue, t),
-        alpha = lerp(a.alpha, b.alpha, t)
-    )
-
-fun lerp(start: Float, stop: Float, fraction: Float): Float = start + (stop - start) * fraction
