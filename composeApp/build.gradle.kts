@@ -76,7 +76,10 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+            implementation("com.github.skydoves:landscapist-coil3:2.5.1")
+
             // Compose Icons
+            implementation("org.jetbrains.compose.material:material-icons-core:1.6.11")
             implementation(libs.composeIcons.feather)
             implementation(libs.composeIcons.fontAwesome)
             implementation(libs.composeIcons.tablerIcons)

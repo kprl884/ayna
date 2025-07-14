@@ -40,7 +40,7 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Heart
 import compose.icons.fontawesomeicons.solid.Star
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.style.customer.data.models.Salon
+import org.style.customer.model.Salon
 
 @Composable
 fun SalonCard(
@@ -83,7 +83,7 @@ fun SalonCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
+                    .fillMaxHeight(0.7f)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
@@ -173,6 +173,12 @@ fun SalonCardPreview() {
             address = "fdsf",
             phone = "fdsf",
             workingHours = "fds",
+            services = emptyList(),
+            photos = emptyList(),
+            reviewCount = 44,
+            location = "TODO()",
+            status = "TODO()",
+            team = emptyList(),
         ),
         onClick = {}
     )

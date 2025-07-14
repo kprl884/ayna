@@ -9,7 +9,6 @@ import org.style.customer.ui.screens.splash.SplashScreen
  * Main Navigation Setup
  * Uses Voyager Navigator for cross-platform navigation
  */
-
 @Composable
 fun AynaAppNavigation() {
     Navigator(

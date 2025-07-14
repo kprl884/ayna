@@ -42,7 +42,7 @@ fun BusinessCard(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp),
-        shape = RoundedCornerShape(CornerRadius.md.dp),
+        shape = RoundedCornerShape(CornerRadius.md),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -61,7 +61,7 @@ fun BusinessCard(
             Card(
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(RoundedCornerShape(CornerRadius.sm.dp)),
+                    .clip(RoundedCornerShape(CornerRadius.sm)),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 )

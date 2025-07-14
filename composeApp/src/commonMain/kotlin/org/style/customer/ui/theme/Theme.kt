@@ -5,6 +5,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import org.style.customer.ui.designsystem.foundation.typography.AynaTypography
 
 /**
@@ -103,39 +104,39 @@ private val DarkColorScheme = darkColorScheme(
 
 // MARK: - Spacing System
 object Spacing {
-    val xs = 4
-    val sm = 8
-    val md = 16
-    val lg = 24
-    val xl = 32
-    val xxl = 48
-    val xxxl = 64
+    val xs = 4.dp
+    val sm = 8.dp
+    val md = 16.dp
+    val lg = 24.dp
+    val xl = 32.dp
+    val xxl = 48.dp
+    val xxxl = 64.dp
 }
 
 // MARK: - Corner Radius
 object CornerRadius {
-    val xs = 4
-    val sm = 8
-    val md = 12
-    val lg = 16
-    val xl = 24
-    val round = 50
+    val xs = 4.dp
+    val sm = 8.dp
+    val md = 12.dp
+    val lg = 16.dp
+    val xl = 24.dp
+    val round = 50.dp
 }
 
 // MARK: - Elevation
 object Elevation {
-    val xs = 1
-    val sm = 2
-    val md = 4
-    val lg = 8
-    val xl = 16
+    val xs = 1.dp
+    val sm = 2.dp
+    val md = 4.dp
+    val lg = 8.dp
+    val xl = 16.dp
 }
 
 // MARK: - Animation Durations
 object AnimationDuration {
-    val fast = 150
-    val normal = 300
-    val slow = 500
+    const val fast = 150
+    const val normal = 300
+    const val slow = 500
 }
 
 @Composable

@@ -51,7 +51,7 @@ fun LoadingShimmer(
     
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(CornerRadius.md.dp))
+            .clip(RoundedCornerShape(CornerRadius.md))
             .background(shimmerBrush)
     )
 }
@@ -68,7 +68,7 @@ fun BusinessCardShimmer(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp),
-        shape = RoundedCornerShape(CornerRadius.md.dp),
+        shape = RoundedCornerShape(CornerRadius.md),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -83,7 +83,7 @@ fun BusinessCardShimmer(
             LoadingShimmer(
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(RoundedCornerShape(CornerRadius.sm.dp))
+                    .clip(RoundedCornerShape(CornerRadius.sm))
             )
             
             Spacer(modifier = Modifier.width(12.dp))

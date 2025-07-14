@@ -45,7 +45,7 @@ fun TextField(
         keyboardOptions = keyboardOptions,
         singleLine = singleLine,
         enabled = enabled,
-        shape = RoundedCornerShape(CornerRadius.md.dp),
+        shape = RoundedCornerShape(CornerRadius.md),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = MaterialTheme.colorScheme.surface,
             unfocusedContainerColor = MaterialTheme.colorScheme.surface,

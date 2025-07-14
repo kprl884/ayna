@@ -25,17 +25,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.style.customer.data.mock.MockData
-import org.style.customer.ui.components.common.CategoryCard
 import org.style.customer.ui.components.common.SalonCard
-import org.style.customer.ui.components.common.getCategoryColor
-import org.style.customer.ui.components.common.getCategoryIcon
-import org.style.customer.ui.designsystem.components.text.AppText
 import org.style.customer.ui.designsystem.components.text.CategoryTitle
+import org.style.customer.ui.screens.salondetail.SalonDetailScreen
 
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
         val categories = listOf(
             "Saç",
             "Makyaj",
@@ -69,7 +70,7 @@ class HomeScreen : Screen {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            AppText(
+                            org.style.customer.ui.designsystem.components.text.AppText(
                                 text = "Merhaba",
                                 style = org.style.customer.ui.designsystem.foundation.typography.AppTextStyles.businessName,
                                 color = MaterialTheme.colorScheme.onBackground
@@ -96,14 +97,18 @@ class HomeScreen : Screen {
                             SalonCard(
                                 salon = salon,
                                 onClick = {
-                                    // TODO: Navigate to salon detail
+                                    navigator.replace(
+                                        item = SalonDetailScreen(
+                                            salon = salon,
+                                            onBack = { navigator.pop() }
+                                        )
+                                    )
                                 }
                             )
                         }
                     }
                 }
 
-                // Recently Viewed
                 item {
                     CategoryTitle(
                         text = "Son Görüntülenenler",
@@ -120,7 +125,12 @@ class HomeScreen : Screen {
                             SalonCard(
                                 salon = salon,
                                 onClick = {
-                                    // TODO: Navigate to salon detail
+                                    navigator.replace(
+                                        item = SalonDetailScreen(
+                                            salon = salon,
+                                            onBack = { navigator.pop() }
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -144,10 +154,14 @@ class HomeScreen : Screen {
                         modifier = Modifier.height(200.dp)
                     ) {
                         items(categories) { category ->
-                            CategoryCard(
+                            org.style.customer.ui.components.common.CategoryCard(
                                 title = category,
-                                icon = getCategoryIcon(category),
-                                backgroundColor = getCategoryColor(category),
+                                icon = org.style.customer.ui.components.common.getCategoryIcon(
+                                    category
+                                ),
+                                backgroundColor = org.style.customer.ui.components.common.getCategoryColor(
+                                    category
+                                ),
                                 onClick = {
                                     // TODO: Navigate to category screen
                                 }
