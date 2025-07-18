@@ -4,5 +4,22 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	
+	<!-- Internet Usage Description -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	
+	<!-- Location Usage Descriptions -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Bu uygulama size yakındaki salonları gösterebilmek için konumunuza erişim istiyor.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Bu uygulama size yakındaki salonları gösterebilmek için konumunuza erişim istiyor.</string>
+	
+	<!-- Notification Permissions -->
+	<key>NSUserNotificationUsageDescription</key>
+	<string>Bu uygulama randevu hatırlatmaları ve özel teklifler için bildirim göndermek istiyor.</string>
 </dict>
 </plist>

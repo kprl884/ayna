@@ -1,9 +1,10 @@
 package org.style.customer.model
 
-data class TeamMember(
+data class NearbyVenue(
     val id: String,
     val name: String,
-    val title: String,
     val rating: Float,
-    val imageUrl: String
-)
+    val reviewCount: Int,
+    val address: String,
+    val type: String
+) 

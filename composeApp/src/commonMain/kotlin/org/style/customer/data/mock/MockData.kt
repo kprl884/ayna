@@ -1,94 +1,81 @@
 package org.style.customer.data.mock
 
-import org.style.customer.model.Salon
+import org.style.customer.model.*
 
 object MockData {
-    val favoriteSalons = listOf(
+    val serviceCategories = listOf("Featured", "Shampoo", "Balayage-Hilights")
+    val services = listOf(
+        Service("1", "Hairstyling with shampoo", "45 mins", "€30", "Professional styling", true, "Featured"),
+        Service("2", "Woman hair cut", "45 mins", "€55", "Expert cut", true, "Featured"),
+        Service("3", "colour roots", "1 hr, 20 mins", "€43", "Root coloring", true, "Featured"),
+        Service("4", "COMB OUT", "15 mins", "€20", "Comb out", true, "Featured"),
+    )
+
+
+    val mockSalons = listOf(
         Salon(
             id = "1",
             name = "Tania S Hair and Head Spa",
-            category = "Hair & Spa",
-            rating = 4.9f,
-            priceRange = "€30-€100",
-            imageUrl = "https://picsum.photos/200/300?1",
+            photos = mockPhotos,
+            rating = 5.0f,
+            reviewCount = 6,
+            location = "Kυψελαιτινου Σωκου 2, Εμπορικο Κεντρο, Λευκωσια",
+            status = "Closed - opens on Tuesday at 9:00 AM",
+            services = mockServices,
+            team = mockTeam,
+            category = "Berber",
+            priceRange = "20 Tl",
+            imageUrl = "https://picsum.photos/200",
             isFavorite = true,
             isNew = true,
-            isTrending = false,
-            description = "Best hair and spa in town.",
-            address = "Kυψελαιτινου Σωκου 2, Lefkoşa",
-            phone = "+90 555 123 45 67",
-            workingHours = "09:00-19:00",
-            photos = listOf(),
-            reviewCount = 32,
-            location = "lcoation",
-            status = "Status",
-            services = emptyList(),
-            team = emptyList(),
+            isTrending = true,
+            description = "description",
+            address = "bursa",
+            phone = "053885743",
+            workingHours = "10:00",
         ),
         Salon(
-            id = "2",
-            name = "My Thai Massage",
-            category = "Massage",
-            rating = 4.8f,
-            priceRange = "€40-€120",
-            imageUrl = "https://picsum.photos/200/300?2",
-            isFavorite = true,
-            isNew = false,
-            isTrending = true,
-            description = "Relaxing Thai massage.",
-            address = "Main Street 123, Lefkoşa",
-            phone = "+90 555 987 65 43",
-            workingHours = "10:00-22:00",
-            photos = listOf(),
-            reviewCount = 32,
-            location = "lcoation",
-            status = "Status",
-            services = emptyList(),
-            team = emptyList(),
-        )
-    )
-    val recentlyViewedSalons = listOf(
-        Salon(
-            id = "3",
-            name = "Pink Ivy",
-            category = "Saç & Makyaj",
-            rating = 4.8f,
-            priceRange = "€25-€80",
-            imageUrl = "https://picsum.photos/200/300?3",
-            isFavorite = false,
-            isNew = false,
-            isTrending = true,
-            description = "Modern saç ve makyaj.",
-            address = "Atatürk Cad. 45, Lefkoşa",
-            phone = "+90 555 111 22 33",
-            photos = listOf(),
-            reviewCount = 32,
-            location = "lcoation",
-            status = "Status",
-            services = emptyList(),
-            team = emptyList(),
-            workingHours = "08:00-20:00"
-        ),
-        Salon(
-            id = "4",
+            id = "1",
             name = "Tania S Hair and Head Spa",
-            category = "Saç",
-            rating = 4.6f,
-            priceRange = "€30-€100",
-            imageUrl = "https://picsum.photos/200/300?4",
-            isFavorite = false,
-            isNew = false,
-            isTrending = false,
-            description = "Profesyonel saç bakımı.",
-            address = "Küçük Kaymaklı, Lefkoşa",
-            phone = "+90 555 444 55 66",
-            photos = listOf(),
-            reviewCount = 32,
-            location = "lcoation",
-            status = "Status",
-            services = emptyList(),
-            team = emptyList(),
-            workingHours = "09:00-19:00"
+            photos = mockPhotos,
+            rating = 5.0f,
+            reviewCount = 6,
+            location = "Kυψελαιτινου Σωκου 2, Εμπορικο Κεντρο, Λευκωσια",
+            status = "Closed - opens on Tuesday at 9:00 AM",
+            services = mockServices,
+            team = mockTeam,
+            category = "Berber",
+            priceRange = "20 Tl",
+            imageUrl = "https://picsum.photos/200",
+            isFavorite = true,
+            isNew = true,
+            isTrending = true,
+            description = "description",
+            address = "bursa",
+            phone = "053885743",
+            workingHours = "10:00",
         )
     )
+    val team = listOf(
+        TeamMember("1", "Soultana", "MASTER HAIRD...", 5.0f, ""),
+        TeamMember("2", "Agnis", "Senior Hairdress...", 5.0f, "")
+    )
+    val reviews = listOf(
+        Review("1", "BRIGITTE P", "BP", "Fri, Jul 4, 2025 at 12:36 PM", 5.0f, "A pleasure as usual !!!!"),
+        Review("2", "Toula B", "TB", "Fri, Jul 4, 2025 at 12:36 PM", 5.0f, "Εξαιρετική εξυπηρέτηση!")
+    )
+    val openingHours = listOf(
+        OpeningHours("Monday", "9:00 AM - 6:00 PM", true),
+        OpeningHours("Tuesday", "9:00 AM - 6:00 PM", true),
+        OpeningHours("Wednesday", "10:00 AM - 7:00 PM", true),
+        OpeningHours("Thursday", "Closed", false),
+        OpeningHours("Friday", "9:00 AM - 6:00 PM", true),
+        OpeningHours("Saturday", "9:00 AM - 5:00 PM", true),
+        OpeningHours("Sunday", "Closed", false)
+    )
+    val nearbyVenues = listOf(
+        NearbyVenue("1", "Beauty Bar", 4.8f, 120, "Main St 1", "Salon"),
+        NearbyVenue("2", "Nail Studio", 4.7f, 80, "Second St 2", "Nail")
+    )
+    val photos = List(5) { "https://picsum.photos/600/400?random=$it" }
 } 

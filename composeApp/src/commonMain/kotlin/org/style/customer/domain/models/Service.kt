@@ -13,7 +13,7 @@ data class Service @OptIn(ExperimentalTime::class) constructor(
     val businessId: String,
     val name: String,
     val description: String,
-    val duration: Int, // in minutes
+    val duration: Int,
     val price: Double,
     val currency: String = "TRY",
     val category: ServiceCategory,
@@ -21,20 +21,3 @@ data class Service @OptIn(ExperimentalTime::class) constructor(
     val createdAt: Instant = Clock.System.now(),
     val updatedAt: Instant = Clock.System.now()
 )
-
-/**
- * Service Category Enum
- */
-enum class ServiceCategory {
-    HAIRCUT,
-    HAIR_COLORING,
-    MANICURE,
-    PEDICURE,
-    FACIAL,
-    MASSAGE,
-    WAXING,
-    MAKEUP,
-    DENTAL_CLEANING,
-    FITNESS_TRAINING,
-    OTHER
-}

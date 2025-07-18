@@ -5,7 +5,61 @@ alwaysApply: false
 ---
 # Ayna - Cursor Rules
 
-## Core Development Principles
+## CRITICAL IMPLEMENTATION RULE
+**NEVER PROVIDE EXAMPLE CODE WITHOUT FULL IMPLEMENTATION**
+- When asked to create a feature, implement it completely from start to finish
+- Don't show partial code or examples - write the full working solution
+- Continue working until the code compiles and runs without errors
+- If errors occur, analyze and fix them immediately - don't stop until resolved
+- Test your implementation mentally before providing it
+
+## ERROR HANDLING MANDATE
+**ZERO TOLERANCE FOR RUNTIME ERRORS**
+- Every code suggestion must be analyzed for potential runtime errors
+- Fix compilation errors immediately - don't provide broken code
+- Consider edge cases and null safety in every implementation
+- If unsure about syntax or API, research and verify before suggesting
+- Use defensive programming - handle unexpected states gracefully
+
+## EXPERT UI/UX DESIGN STANDARDS
+
+### Design System Mastery
+- **STRICT RULE**: Follow Material 3 design system religiously
+- Use proper elevation, spacing, and visual hierarchy
+- Implement consistent interaction patterns (ripple effects, state changes)
+- Follow 8dp grid system for ALL spacing and sizing
+- Use semantic colors from MaterialTheme.colorScheme ONLY
+
+### Component Design Excellence
+- Create components that feel native and polished
+- Implement proper loading states, hover effects, and animations
+- Use appropriate component sizes for touch targets (minimum 44dp)
+- Follow accessibility guidelines (contrast ratios, semantic labels)
+- Design for both light and dark themes simultaneously
+
+### Professional Visual Design
+- Apply generous whitespace for breathing room
+- Use consistent typography scale (MaterialTheme.typography)
+- Implement subtle shadows and elevations appropriately
+- Create visual hierarchy through size, color, and spacing
+- Ensure components look professional and production-ready
+
+## Compose Multiplatform Expertise
+
+### Platform Awareness
+- **MANDATORY**: Always consider you're building for multiple platforms
+- Use only KMP-compatible APIs and dependencies
+- Avoid platform-specific code in shared components
+- Test mental compatibility with Android, iOS, and Desktop
+- Use expect/actual declarations when truly necessary
+
+### Resource Management
+- Images and assets must be platform-agnostic
+- Use resource management appropriate for KMP
+- Consider different screen densities and sizes
+- Implement proper resource loading strategies
+
+## Code Quality Enforcement
 
 ### String Resources Management
 - **NEVER** hardcode user-facing strings in Composables
@@ -18,127 +72,119 @@ alwaysApply: false
 - Code elements (variables, functions, classes) in English following universal standards
 - Use descriptive English names: `getUserProfile()` not `kullaniciProfiliAl()`
 
-## Performance-First Compose Development
+## Performance-First Development
 
 ### State Management Excellence
-- Use `derivedStateOf` instead of `remember` for expensive computations derived from state
+- Use `derivedStateOf` for expensive computations derived from state
 - Implement lazy state reading - defer state access to lowest level Composables
 - Always use `key` parameter in `LazyColumn`/`LazyRow` for stable item identities
 - Minimize recomposition by keeping state reads local
+- Use `@Stable` and `@Immutable` annotations appropriately
 
-### Immutability Principles
-- Prefer `val` and `ImmutableList` over mutable collections
-- Composable parameters should be primitive types or `@Immutable` annotated classes
-- Use `@Stable` annotation for classes that might change but in predictable ways
+### Memory and Performance
+- Prefer `val` and immutable collections over mutable ones
+- Use `collectAsStateWithLifecycle()` for proper lifecycle management
+- Implement proper coroutine scoping with structured concurrency
+- Avoid memory leaks with proper resource cleanup
 
-### Coroutine Best Practices
-- Always use structured concurrency with appropriate scopes (`screenModelScope`, `viewModelScope`)
-- Implement proper exception handling with try-catch or `CoroutineExceptionHandler`
-- Use `flow.collectAsStateWithLifecycle()` for UI state collection
-- Prefer `StateFlow` over `LiveData` for state management
+## Architecture Standards
 
-## Clean Architecture Implementation
+### Clean Architecture Implementation
+- Follow UI -> Domain -> Data layer separation strictly
+- Implement unidirectional data flow (UDF)
+- Use dependency injection with Koin properly
+- Never access data layer directly from UI components
 
-### Unidirectional Data Flow (UDF)
-- UI sends events to ScreenModel/ViewModel
-- ScreenModel exposes single `StateFlow<UiState>` to UI
-- Follow UI -> Domain -> Data layer separation
-- Never access data layer directly from UI
+### Error Handling Strategy
+- Implement comprehensive error handling with sealed classes
+- Use proper exception handling in coroutines
+- Create meaningful error messages for users
+- Log errors appropriately without exposing sensitive data
 
-### Dependency Injection with Koin
-- All dependencies injected via constructor injection
-- Define modules in `di/` package
-- Use factory vs single appropriately based on lifecycle needs
+## Comprehensive UI States
 
-### Composable Design Patterns
-- `ui/components/` - Completely stateless, reusable components
-- `ui/screens/` - Stateful screen-level Composables
-- Pass state and event lambdas as parameters to stateless components
-
-## Apple-Inspired UI/UX Excellence
-
-### Design System Compliance
-- **STRICT RULE**: Only use `MaterialTheme.colorScheme`, `MaterialTheme.typography`, `MaterialTheme.shapes`
-- NO hardcoded colors, fonts, or dimensions
-- Create semantic color tokens: `primary`, `onPrimary`, `surface`, etc.
-
-### Visual Hierarchy & Spacing
-- Use generous whitespace for readability and focus
-- Implement 8dp grid system for consistent spacing
-- Apply visual hierarchy through typography scale and color contrast
-- "Whitespace is not a luxury, it's a necessity"
-
-### Comprehensive UI States
-Every screen must handle:
-- **Loading**: Shimmer effects, skeleton screens
-- **Content**: Main content display
+### State Coverage Mandate
+Every screen/component must handle:
+- **Loading**: Professional shimmer effects, skeleton screens
+- **Content**: Main content display with proper spacing
 - **Empty**: Meaningful empty states with actionable guidance
 - **Error**: Clear error messages with retry options
 - **Offline**: Graceful offline experience
 
-### Accessibility (a11y) First
-- Provide `contentDescription` for all `Icon` and `Image` elements
+### Accessibility Requirements
+- Provide `contentDescription` for all interactive elements
 - Use semantic roles and state descriptions
 - Ensure minimum 4.5:1 contrast ratio for text
 - Support screen readers and keyboard navigation
-- Test with TalkBack/VoiceOver
+- Test with accessibility tools mentally
 
-## Advanced Development Practices
+## Development Process
 
-### Code Quality Standards
-- Use Kotlin idioms: scope functions, extension functions, higher-order functions
-- Break complex logic into small, pure functions
-- Define constants in `Constants.kt` or relevant companion objects
-- Implement proper error handling with sealed classes for results
+### Implementation Approach
+- **MANDATORY**: Implement features completely before showing code
+- Start with data models and business logic
+- Build UI components from bottom-up
+- Test integration between layers
+- Handle all edge cases and error scenarios
+- Ensure cross-platform compatibility
 
-### Testing Strategy
-- Write unit tests for ViewModels/ScreenModels
-- Create UI tests for critical user flows
-- Use `@Preview` extensively for different states and screen sizes
-- Implement screenshot testing for visual regression
-
-### Platform-Specific Optimizations
-- Use `expect`/`actual` for platform-specific implementations
-- Optimize for each platform's native patterns
-- Consider platform-specific UI guidelines (Material Design, Human Interface Guidelines)
-
-## Feature Development Process
-
-### Incremental Development
-- **MANDATORY**: Implement features step-by-step with approval at each stage
-- Start with basic UI structure and placeholder data
-- Add data layer and business logic
-- Implement error handling and edge cases
-- Add animations and polish
-- Conduct thorough testing before marking complete
-
-### Code Review Checklist
-- [ ] No hardcoded strings or magic numbers
-- [ ] Proper state management with UDF
-- [ ] Accessibility requirements met
-- [ ] Performance optimizations applied
-- [ ] All UI states handled (loading, content, empty, error)
-- [ ] Proper error handling and logging
-- [ ] Tests written and passing
+### Code Review Standards
+- No hardcoded strings or magic numbers
+- Proper state management with UDF
+- All UI states handled
+- Accessibility requirements met
+- Performance optimizations applied
+- Error handling comprehensive
+- KMP compatibility verified
 
 ## Security & Privacy
 - Never log sensitive user data
-- Implement proper data encryption for sensitive information
-- Follow GDPR/privacy regulations for data handling
-- Use secure networking practices (certificate pinning, etc.)
+- Implement proper data encryption
+- Follow GDPR/privacy regulations
+- Use secure networking practices
 
-## Multiplatform Considerations
-- Share business logic in `commonMain`
-- Keep platform-specific UI adaptations minimal
-- Use composition over inheritance for better multiplatform compatibility
-- Consider platform-specific performance characteristics
+## Quality Assurance
 
-## Documentation Standards
-- Document complex business logic with clear comments
+### Testing Strategy
+- Write unit tests for business logic
+- Create UI tests for critical flows
+- Use `@Preview` extensively for different states
+- Implement screenshot testing for visual regression
+
+### Documentation Standards
+- Document complex business logic with clear Turkish comments
 - Maintain README with setup instructions
 - Use KDoc for public APIs
-- Keep architectural decisions documented (ADRs)
+- Keep architectural decisions documented
+
+## FINAL IMPLEMENTATION RULES
+
+### Before Providing Any Code:
+1. **Analyze Requirements**: Understand the complete scope
+2. **Plan Architecture**: Design the full solution structure
+3. **Consider Edge Cases**: Think about error scenarios
+4. **Verify KMP Compatibility**: Ensure cross-platform support
+5. **Implement Completely**: Write full working solution
+6. **Test Mentally**: Check for compilation and runtime errors
+7. **Apply Design Standards**: Ensure professional UI/UX
+8. **Review Quality**: Verify all standards are met
+
+### Success Criteria:
+- Code compiles without errors on first try
+- Handles all UI states properly
+- Follows design system standards
+- Works across all target platforms
+- Implements proper error handling
+- Uses string resources correctly
+- Follows clean architecture principles
 
 ---
 
-**Remember**: These rules ensure we build a world-class mobile application that users love to use. Quality, performance, and user experience are non-negotiable. Every line of code should serve the user's needs efficiently and beautifully.
+**REMEMBER**: You are building a world-class mobile application. Every implementation must be:
+- ✅ **Complete** - Fully implemented, not just examples
+- ✅ **Error-free** - Compiles and runs without issues
+- ✅ **Professional** - Follows design system standards
+- ✅ **Cross-platform** - Works on all KMP targets
+- ✅ **Maintainable** - Clean, documented, and tested
+
+**Quality is non-negotiable. User experience is paramount. Every line of code serves the user's needs efficiently and beautifully.**

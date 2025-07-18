@@ -28,8 +28,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.style.customer.data.mock.MockData
+import org.style.customer.ui.components.common.CategoryCard
 import org.style.customer.ui.components.common.SalonCard
+import org.style.customer.ui.components.common.getCategoryColor
+import org.style.customer.ui.components.common.getCategoryIcon
+import org.style.customer.ui.designsystem.components.text.AppText
 import org.style.customer.ui.designsystem.components.text.CategoryTitle
+import org.style.customer.ui.designsystem.foundation.typography.AppTextStyles
 import org.style.customer.ui.screens.salondetail.SalonDetailScreen
 
 class HomeScreen : Screen {
@@ -70,9 +75,9 @@ class HomeScreen : Screen {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            org.style.customer.ui.designsystem.components.text.AppText(
+                            AppText(
                                 text = "Merhaba",
-                                style = org.style.customer.ui.designsystem.foundation.typography.AppTextStyles.businessName,
+                                style = AppTextStyles.businessName,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                         }
@@ -93,14 +98,14 @@ class HomeScreen : Screen {
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         contentPadding = PaddingValues(horizontal = 2.dp)
                     ) {
-                        items(MockData.favoriteSalons) { salon ->
+                        items(MockData.mockSalons) { salon ->
                             SalonCard(
                                 salon = salon,
                                 onClick = {
                                     navigator.replace(
-                                        item = SalonDetailScreen(
+                                        SalonDetailScreen(
                                             salon = salon,
-                                            onBack = { navigator.pop() }
+                                            onBack = {}
                                         )
                                     )
                                 }
@@ -121,14 +126,14 @@ class HomeScreen : Screen {
                         horizontalArrangement = Arrangement.spacedBy(20.dp),
                         contentPadding = PaddingValues(horizontal = 4.dp)
                     ) {
-                        items(MockData.recentlyViewedSalons) { salon ->
+                        items(MockData.mockSalons) { salon ->
                             SalonCard(
                                 salon = salon,
                                 onClick = {
                                     navigator.replace(
-                                        item = SalonDetailScreen(
+                                        SalonDetailScreen(
                                             salon = salon,
-                                            onBack = { navigator.pop() }
+                                            onBack = {}
                                         )
                                     )
                                 }
@@ -154,12 +159,12 @@ class HomeScreen : Screen {
                         modifier = Modifier.height(200.dp)
                     ) {
                         items(categories) { category ->
-                            org.style.customer.ui.components.common.CategoryCard(
+                            CategoryCard(
                                 title = category,
-                                icon = org.style.customer.ui.components.common.getCategoryIcon(
+                                icon = getCategoryIcon(
                                     category
                                 ),
-                                backgroundColor = org.style.customer.ui.components.common.getCategoryColor(
+                                backgroundColor = getCategoryColor(
                                     category
                                 ),
                                 onClick = {

@@ -45,11 +45,16 @@ object StringResources {
     val select_service_text = "Hizmet Seçin"
     val select_date_text = "Tarih Seçin"
     val select_time_text = "Saat Seçin"
+    val select_staff_text = "Uzman Seçin"
     val confirm_booking_text = "Rezervasyonu Onayla"
     val booking_confirmed_text = "Rezervasyon Onaylandı"
     val booking_cancelled_text = "Rezervasyon İptal Edildi"
     val reschedule_text = "Yeniden Planla"
     val cancel_booking_text = "Rezervasyonu İptal Et"
+    val continue_button_text = "Devam Et"
+    val remove_service_text = "Hizmeti Kaldır"
+    val no_preference_text = "Tercih Yok"
+    val any_stylist_text = "Herhangi bir uzman"
     
     // MARK: - Payment
     val payment_method_text = "Ödeme Yöntemi"
