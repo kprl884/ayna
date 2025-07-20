@@ -1,0 +1,5 @@
+package com.techtactoe.ayna
+
+import androidx.compose.ui.window.ComposeUIViewController
+
+fun MainViewController() = ComposeUIViewController { App() }
