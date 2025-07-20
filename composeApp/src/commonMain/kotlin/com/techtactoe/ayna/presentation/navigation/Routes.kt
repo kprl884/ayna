@@ -35,6 +35,8 @@ sealed interface Screen {
     data class Detail(val salonId: String) : Screen {
         override val route: String = "detail"
     }
+
+
 }
 
 /**

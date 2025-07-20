@@ -65,7 +65,7 @@ fun AppNavigation() {
         ) {
             composable<Screen.Home> {
                 HomeScreen(onSalonClick = { salonId ->
-                    navController.navigate(Screen.Detail(salonId))
+                    navController.navigate(Screen.SalonDetailScreen(salonId))
                 })
             }
             composable<Screen.Search> { SearchScreen() }

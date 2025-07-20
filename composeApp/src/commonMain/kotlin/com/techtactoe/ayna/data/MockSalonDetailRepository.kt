@@ -8,7 +8,7 @@ import com.techtactoe.ayna.domain.model.SalonAbout
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonService
 import com.techtactoe.ayna.domain.model.SalonStatus
-import com.techtactoe.ayna.domain.model.ServiceCategory
+import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
 import com.techtactoe.ayna.domain.model.TeamMember
 
 object MockSalonDetailRepository {
@@ -48,7 +48,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €20",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "2",
@@ -57,7 +57,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Female only",
                 priceFrom = "from €20",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "3",
@@ -66,7 +66,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €40",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "4",
@@ -75,7 +75,7 @@ object MockSalonDetailRepository {
                 serviceCount = 5,
                 genderRestriction = null,
                 priceFrom = "from €60",
-                category = ServiceCategory.COLOR
+                category = ServiceCategoryEnum.COLOR
             ),
             SalonService(
                 id = "5",
@@ -84,7 +84,7 @@ object MockSalonDetailRepository {
                 serviceCount = 1,
                 genderRestriction = null,
                 priceFrom = "Free",
-                category = ServiceCategory.CONSULTATION
+                category = ServiceCategoryEnum.CONSULTATION
             )
         )
     }
