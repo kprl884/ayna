@@ -1,0 +1,285 @@
+---
+description: Enhanced Cursor Development Rules for Ayna App
+globs:
+alwaysApply: false
+---
+
+# Cursor Rules for Ayna App - Compose Multiplatform
+
+## Project Overview
+- **Platform**: Compose Multiplatform (Android & iOS)
+- **Architecture**: Clean Architecture with MVVM pattern
+- **Language**: Kotlin
+- **Target**: Barber shop booking application
+
+---
+
+## 1. Core Development Principles
+
+### SOLID Principles
+- **Single Responsibility**: One reason to change per class
+- **Open/Closed**: Open for extension, closed for modification
+- **Liskov Substitution**: Derived classes must be substitutable for base classes
+- **Interface Segregation**: Don’t force clients to depend on unused interfaces
+- **Dependency Inversion**: Rely on abstractions, not concrete implementations
+
+---
+
+## 2. Project Structure (Clean Architecture)
+
+presentation/
+├── ui/
+│ ├── components/ # Reusable UI components
+│ ├── screens/ # Screen-specific Composables only
+│ └── theme/ # Theme, typography, colors
+├── viewmodel/ # ViewModel layer
+
+domain/
+├── model/ # Data models
+├── repository/ # Repository interfaces
+├── usecase/ # Business logic
+
+data/
+├── repository/ # Repository implementations
+├── datasource/ # Local & remote sources
+├── dto/ # Data Transfer Objects
+
+yaml
+Kopyala
+Düzenle
+
+---
+
+## 3. Component & File Guidelines
+
+- Do **NOT** define components inside screen files
+- Put all reusable UI in `ui/components/`
+- Keep components atomic and composable
+- Max file length: **300 lines**
+- Use extension functions or helpers to reduce file size
+
+---
+
+## 4. Performance Practices
+
+- Use `remember`, `derivedStateOf`, and `mutableStateOf` wisely
+- Annotate stable classes with `@Stable` and `@Immutable`
+- Use `LazyColumn` and `LazyRow` for lists
+- Prefer `ImageLoader` with caching (e.g., Coil)
+
+---
+
+## 5. Backend & Async Integration
+
+- Mock-first approach, connect API later
+- Use Repository pattern and sealed `Result` state
+- Use `suspend` for async operations
+- Retry logic for transient failures
+
+---
+
+## 6. Code Quality & Formatting
+
+- **Naming**:
+  - Classes: `PascalCase`
+  - Functions & Variables: `camelCase`
+  - Constants: `UPPER_SNAKE_CASE`
+- Use KDoc for public APIs
+- Enforce formatting (e.g., ktlint)
+- Indentation: 4 spaces, max line length: 120 chars
+
+---
+
+## 7. Error Handling Convention
+
+```kotlin
+sealed class Result<out T> {
+    data class Success<T>(val data: T) : Result<T>()
+    data class Error(val exception: Throwable) : Result<Nothing>()
+    object Loading : Result<Nothing>()
+}
+8. Testing Requirements
+Unit test ViewModels and UseCases
+
+Use fake repositories and mocks
+
+Target ≥80% test coverage on business logic
+
+Add @Preview for every composable
+
+9. State Management
+Use StateFlow in ViewModels
+
+Use collectAsState() in Composables
+
+Properly hoist state and handle loading/error/success states
+
+10. Navigation
+Use Compose Navigation
+
+Keep navigation logic separate from UI
+
+Use type-safe arguments between screens
+
+11. Dependency Management
+Use libs.versions.toml (version catalog)
+
+Keep dependencies minimal and stable
+
+Upgrade dependencies incrementally
+
+12. Task Execution Rules
+❗ Complete only the requested task
+
+❗ Do not add unrequested features
+
+✅ Resolve errors immediately before continuing
+
+✅ Review your code before marking as complete
+
+13. Security Best Practices
+Never hardcode API keys or secrets
+
+Use proper API key/environment config management
+
+Validate all user input
+
+Apply certificate pinning in production
+
+14. UI/UX Design System Guidelines
+Follow Material 3 principles
+
+Typography:
+
+Titles: headlineLarge, titleMedium
+
+Body: bodyLarge, bodySmall
+
+Spacing:
+
+Use 4dp grid (8, 12, 16, 24 dp)
+
+Modifier.padding(horizontal = 16.dp)
+
+Components:
+
+Buttons: minHeight = 48.dp, RoundedCornerShape(12.dp)
+
+Cards: RoundedCornerShape(16.dp), elevation: 4.dp
+
+Motion:
+
+Use AnimatedVisibility, Crossfade for transitions
+
+Use animate*AsState for small interactions
+
+Dark Mode support is mandatory
+
+15. Accessibility (a11y)
+Every image/icon must have a proper contentDescription
+
+Minimum touch targets: 48x48.dp
+
+Font sizes scalable (TextStyle.Default.copy(fontSize = 14.sp))
+
+Ensure contrast ratio ≥4.5:1
+
+Support screen readers (TalkBack, VoiceOver)
+
+Implement focus order and semantics
+
+16. Design Tokens & Component Abstraction
+Define tokens in DesignTokens.kt:
+
+Spacing.SM, Elevation.Level1, Corners.RoundedMedium
+
+Create central components like:
+
+StyleButton, StyleCard, StyleTextField, StyleChip
+
+Use these across the app to ensure consistent design
+
+17. UI Testing & Previews
+Every Composable must have @Preview
+
+Use ComposeTestRule for functional UI testing
+
+Consider snapshot testing with tools like:
+
+Paparazzi
+
+Shot
+
+18. Responsive Design Guidelines
+Use WindowSizeClass to adapt UI for small/medium/large screens
+
+Use BoxWithConstraints, FlowRow, ConstraintLayout for flexibility
+
+Apply padding/margin based on screen width
+
+19. Usability & Interaction
+Keep flows short (e.g., booking = max 3 steps)
+
+Prefer skeleton loading UIs instead of blank placeholders
+
+Use meaningful success/error messages
+
+Support emoji/human-readable micro-feedback: ✅ ❌ 😊
+
+20. Task Completion Checklist
+Before completing any task, ensure:
+
+ Code compiles and runs without error
+
+ Follows Clean Architecture structure
+
+ Composables and components are correctly placed
+
+ File size < 300 lines
+
+ Error states handled via sealed classes
+
+ Dark mode and responsive layout tested
+
+ @Preview and test coverage provided
+
+ Accessibility tags and sizes validated
+
+ No hardcoded strings or sensitive data
+
+ No unrequested features added
+
+21. Prohibited Practices
+❌ Placing UI components in screen files
+
+❌ Hardcoding strings (use resources)
+
+❌ Skipping error/loading state handling
+
+❌ God classes or files > 300 lines
+
+❌ Direct use of implementation classes (use interfaces)
+
+❌ Skipping @Preview or composable separation
+
+❌ Ignoring a11y and responsive design
+
+❌ Using deprecated APIs without valid reason
+
+22. Communication Guidelines
+Ask clarifying questions if specs are unclear
+
+Report blockers or issues immediately
+
+Share reasoning behind major architectural choices
+
+Always give concise and relevant code examples
+
+23. Typography & Font System
+
+- Font management must be handled via the `AppFontFamilies` system in `com.techtactoe.ayna.typography`
+- Use only fonts defined via `FontProvider.getSystemFontFamily(...)`
+- Avoid loading TTF/OTF manually unless explicitly required
+- All font usage should go through centralized `AppFontFamilies`
+- Use `FontMetrics` to ensure consistent line spacing per font family
+- If a font fails to load, fall back using `FontErrorHandler.getFallbackFont(...)`
