@@ -1,6 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,10 +29,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun SalonCard(
     salon: Salon,
+    onSalonClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.width(280.dp),
+        modifier = modifier.width(280.dp).clickable { onSalonClick(salon.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = AynaColors.White)

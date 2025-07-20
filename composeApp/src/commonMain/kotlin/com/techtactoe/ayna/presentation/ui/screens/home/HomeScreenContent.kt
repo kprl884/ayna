@@ -34,7 +34,8 @@ import com.techtactoe.ayna.theme.AynaColors
 
 @Composable
 fun HomeScreenContent(
-    state: HomeScreenState
+    state: HomeScreenState,
+    onSalonClick: (String) -> Unit = {}
 ) {
     Scaffold(
         containerColor = AynaColors.White,
@@ -116,7 +117,7 @@ fun HomeScreenContent(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(state.salons) { salon ->
-                                    SalonCard(salon = salon)
+                                    SalonCard(salon = salon, onSalonClick = onSalonClick)
                                 }
                             }
 

@@ -8,9 +8,13 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
+    onSalonClick: (String) -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-
-    HomeScreenContent(state = state)
+    
+    HomeScreenContent(
+        state = state,
+        onSalonClick = onSalonClick
+    )
 } 

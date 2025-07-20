@@ -6,7 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
+import com.techtactoe.ayna.presentation.navigation.AppNavigation
 
 @Composable
 fun App() {
@@ -14,7 +14,7 @@ fun App() {
         colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
     ) {
         Surface {
-            HomeScreen()
+            AppNavigation()
         }
     }
 }
