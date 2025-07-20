@@ -16,10 +16,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
+import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 
 @Composable
@@ -35,6 +37,7 @@ fun AppNavigation() {
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Appointments") == true -> Screen.Appointments
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Profile") == true -> Screen.Profile
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Detail") == true -> null // Don't show bottom bar
+        currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.SalonDetailScreen") == true -> null // Don't show bottom bar
         else -> null
     }
 
@@ -79,6 +82,44 @@ fun AppNavigation() {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text("Detail Screen for Salon ID: $salonId")
                 }
+            }
+
+            composable<Screen.SalonDetailScreen> { backStackEntry ->
+                val screen: Screen.SalonDetailScreen = backStackEntry.toRoute()
+                val salonId = screen.salonId
+
+                SalonDetailScreen(
+                    salonDetail = SalonDetail(
+                        id = salonId,
+                        name = "Salon Name",
+                        rating = 4.5,
+                        reviewCount = 100,
+                        address = "123 Main St",
+                        status = com.techtactoe.ayna.domain.model.SalonStatus.OPEN,
+                        images = listOf("image1.jpg", "image2.jpg"),
+                        services = emptyList(),
+                        team = emptyList(),
+                        reviews = emptyList(),
+                        buyOptions = emptyList(),
+                        about = com.techtactoe.ayna.domain.model.SalonAbout(
+                            description = "Description",
+                            fullDescription = "Full Description"
+                        ),
+                        openingHours = emptyList()
+                    ),
+                    onBackClick = {
+
+                    },
+                    onShareClick = {
+
+                    },
+                    onFavoriteClick = {
+
+                    },
+                    onBookNowClick = {
+
+                    }
+                )
             }
         }
     }
