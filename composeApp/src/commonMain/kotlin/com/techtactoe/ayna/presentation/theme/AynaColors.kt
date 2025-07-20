@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.theme
+package com.techtactoe.ayna.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.screens.list
+package com.techtactoe.ayna.presentation.screens.list
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.techtactoe.ayna.data.MuseumObject
-import com.techtactoe.ayna.screens.EmptyScreenContent
+import com.techtactoe.ayna.presentation.screens.EmptyScreenContent
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

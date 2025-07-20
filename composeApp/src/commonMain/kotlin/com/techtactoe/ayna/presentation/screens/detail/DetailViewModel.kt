@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.screens.detail
+package com.techtactoe.ayna.presentation.screens.detail
 
 import androidx.lifecycle.ViewModel
 import com.techtactoe.ayna.data.MuseumObject

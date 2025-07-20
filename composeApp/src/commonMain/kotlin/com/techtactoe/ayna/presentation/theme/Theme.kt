@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.theme
+package com.techtactoe.ayna.presentation.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -6,7 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.typography.AynaTypography
+import com.techtactoe.ayna.presentation.typography.AynaTypography
 
 /**
  * Ayna Design System

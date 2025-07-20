@@ -3,15 +3,13 @@ package com.techtactoe.ayna.presentation.ui.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -26,51 +24,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.presentation.ui.components.BottomNavItem
-import com.techtactoe.ayna.presentation.ui.components.BottomNavigation
+import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
 import com.techtactoe.ayna.presentation.viewmodel.HomeScreenState
-import com.techtactoe.ayna.theme.AynaColors
 
 @Composable
 fun HomeScreenContent(
-    state: HomeScreenState
+    state: HomeScreenState,
+    onSalonClick: (String) -> Unit = {}
 ) {
     Scaffold(
-        containerColor = AynaColors.White,
-        contentWindowInsets = WindowInsets(0, 0, 0, 0), // Let bottom nav handle its own insets
-        bottomBar = {
-            BottomNavigation(
-                selectedItem = BottomNavItem.HOME,
-                onItemClick = { /* Handle navigation */ }
-            )
-        }
+        containerColor = AynaColors.White
     ) { paddingValues ->
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(AynaColors.White)
-                .windowInsetsPadding(WindowInsets.statusBars) // Handle status bar
+                .padding(paddingValues)
         ) {
+            val topPadding = this.maxHeight / 9
             when {
                 state.isLoading -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = AynaColors.Purple)
                     }
                 }
-                
+
                 state.error != null -> {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -81,17 +67,17 @@ fun HomeScreenContent(
                                 text = "❌",
                                 style = MaterialTheme.typography.headlineLarge
                             )
-                            
+
                             Spacer(modifier = Modifier.height(16.dp))
-                            
+
                             Text(
                                 text = "Bir hata oluştu",
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold
                             )
-                            
+
                             Spacer(modifier = Modifier.height(8.dp))
-                            
+
                             Text(
                                 text = state.error,
                                 style = MaterialTheme.typography.bodyMedium,
@@ -101,41 +87,42 @@ fun HomeScreenContent(
                         }
                     }
                 }
-                
+
                 else -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues)
+                            .background(AynaColors.White)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        // Header with greeting and avatar
+                        Spacer(modifier = Modifier.height(topPadding))
+
                         UserHeader(
                             userName = "John"
                         )
-                        
-                        // Recommended section
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         if (state.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
-                            
+
                             Spacer(modifier = Modifier.height(16.dp))
-                            
+
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(state.salons) { salon ->
-                                    SalonCard(salon = salon)
+                                    SalonCard(salon = salon, onSalonClick = onSalonClick)
                                 }
                             }
-                            
+
                             Spacer(modifier = Modifier.height(24.dp))
-                            
-                            // New to Fresha section
+
                             SectionHeader(title = "New to Fresha")
-                            
+
                             Spacer(modifier = Modifier.height(16.dp))
-                            
+
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -144,8 +131,7 @@ fun HomeScreenContent(
                                     SalonCard(salon = salon)
                                 }
                             }
-                            
-                            // Extra bottom padding to ensure content doesn't hide behind nav
+
                             Spacer(modifier = Modifier.height(32.dp))
                         }
                     }

@@ -27,12 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techtactoe.ayna.theme.AynaColors
+import com.techtactoe.ayna.presentation.model.BottomNavItem
+import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-enum class BottomNavItem {
-    HOME, SEARCH, CALENDAR
-}
 
 @Composable
 fun BottomNavigation(
@@ -43,7 +40,7 @@ fun BottomNavigation(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .windowInsetsPadding(WindowInsets.navigationBars), // Handle Android system navigation
+            .windowInsetsPadding(WindowInsets.navigationBars),
         shadowElevation = 4.dp,
         color = AynaColors.White,
         shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
@@ -52,7 +49,7 @@ fun BottomNavigation(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .padding(bottom = 8.dp) // Additional padding for iOS safe area
+                .padding(bottom = 8.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -61,28 +58,22 @@ fun BottomNavigation(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Home icon
                 NavIcon(
                     icon = "🏠",
                     isSelected = selectedItem == BottomNavItem.HOME,
                     onClick = { onItemClick(BottomNavItem.HOME) },
-                    contentDescription = "Home"
                 )
 
-                // Search icon
                 NavIcon(
                     icon = "🔍",
                     isSelected = selectedItem == BottomNavItem.SEARCH,
                     onClick = { onItemClick(BottomNavItem.SEARCH) },
-                    contentDescription = "Search"
                 )
 
-                // Calendar icon
                 NavIcon(
                     icon = "📅",
                     isSelected = selectedItem == BottomNavItem.CALENDAR,
                     onClick = { onItemClick(BottomNavItem.CALENDAR) },
-                    contentDescription = "Calendar"
                 )
             }
         }
@@ -94,7 +85,6 @@ private fun NavIcon(
     icon: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    contentDescription: String,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
