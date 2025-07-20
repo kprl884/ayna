@@ -24,13 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.presentation.model.BottomNavItem
-import com.techtactoe.ayna.presentation.ui.components.BottomNavigation
+import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
 import com.techtactoe.ayna.presentation.viewmodel.HomeScreenState
-import com.techtactoe.ayna.presentation.theme.AynaColors
 
 @Composable
 fun HomeScreenContent(
@@ -38,10 +36,7 @@ fun HomeScreenContent(
     onSalonClick: (String) -> Unit = {}
 ) {
     Scaffold(
-        containerColor = AynaColors.White,
-        bottomBar = {
-            BottomNavigation(selectedItem = BottomNavItem.HOME)
-        }
+        containerColor = AynaColors.White
     ) { paddingValues ->
         BoxWithConstraints(
             modifier = Modifier
