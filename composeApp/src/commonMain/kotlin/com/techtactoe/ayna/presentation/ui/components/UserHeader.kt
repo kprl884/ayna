@@ -8,14 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.techtactoe.ayna.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -27,41 +27,33 @@ fun UserHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 16.dp, vertical = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Highlight badge
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Text(
-                text = "Highlight",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        // Greeting text
+        Text(
+            text = "Hey, $userName",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = AynaColors.PrimaryText
+        )
         
         // User avatar
         Box(
             modifier = Modifier
                 .size(40.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    color = AynaColors.LightGray,
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = userInitials,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = AynaColors.PrimaryText
             )
         }
     }
@@ -70,10 +62,8 @@ fun UserHeader(
 @Preview
 @Composable
 fun UserHeaderPreview() {
-    MaterialTheme {
-        UserHeader(
-            userName = "John",
-            userInitials = "JS"
-        )
-    }
+    UserHeader(
+        userName = "John",
+        userInitials = "JS"
+    )
 }
