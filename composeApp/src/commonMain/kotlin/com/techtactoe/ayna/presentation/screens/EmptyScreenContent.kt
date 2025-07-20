@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.screens
+package com.techtactoe.ayna.presentation.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text

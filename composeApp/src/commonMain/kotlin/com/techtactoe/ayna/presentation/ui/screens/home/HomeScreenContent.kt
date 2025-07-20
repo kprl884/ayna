@@ -24,13 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.presentation.ui.components.BottomNavItem
+import com.techtactoe.ayna.presentation.model.BottomNavItem
 import com.techtactoe.ayna.presentation.ui.components.BottomNavigation
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
 import com.techtactoe.ayna.presentation.viewmodel.HomeScreenState
-import com.techtactoe.ayna.theme.AynaColors
+import com.techtactoe.ayna.presentation.theme.AynaColors
 
 @Composable
 fun HomeScreenContent(
@@ -106,7 +106,8 @@ fun HomeScreenContent(
                             userName = "John"
                         )
 
-                        // Recommended section
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         if (state.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
 
@@ -123,7 +124,6 @@ fun HomeScreenContent(
 
                             Spacer(modifier = Modifier.height(24.dp))
 
-                            // New to Fresha section
                             SectionHeader(title = "New to Fresha")
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -137,7 +137,6 @@ fun HomeScreenContent(
                                 }
                             }
 
-                            // Extra bottom padding to ensure content doesn't hide behind nav
                             Spacer(modifier = Modifier.height(32.dp))
                         }
                     }

@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.typography
+package com.techtactoe.ayna.presentation.typography
 
 import androidx.compose.ui.text.font.FontFamily
 

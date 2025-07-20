@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.screens.list
+package com.techtactoe.ayna.presentation.screens.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

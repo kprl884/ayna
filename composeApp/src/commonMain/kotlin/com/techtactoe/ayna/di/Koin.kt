@@ -9,8 +9,8 @@ import com.techtactoe.ayna.data.MuseumStorage
 import com.techtactoe.ayna.domain.repository.SalonRepository
 import com.techtactoe.ayna.domain.usecase.GetNearbySalonsUseCase
 import com.techtactoe.ayna.presentation.viewmodel.HomeViewModel
-import com.techtactoe.ayna.screens.detail.DetailViewModel
-import com.techtactoe.ayna.screens.list.ListViewModel
+import com.techtactoe.ayna.presentation.screens.detail.DetailViewModel
+import com.techtactoe.ayna.presentation.screens.list.ListViewModel
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

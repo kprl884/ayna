@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.screens.detail
+package com.techtactoe.ayna.presentation.screens.detail
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.techtactoe.ayna.data.MuseumObject
-import com.techtactoe.ayna.screens.EmptyScreenContent
+import com.techtactoe.ayna.presentation.screens.EmptyScreenContent
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.back
 import ayna.composeapp.generated.resources.label_artist
