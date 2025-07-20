@@ -111,8 +111,7 @@ fun HomeScreenContent(
                     ) {
                         // Header with greeting and avatar
                         UserHeader(
-                            userName = "John",
-                            userInitials = "JS"
+                            userName = "John"
                         )
                         
                         // Recommended section

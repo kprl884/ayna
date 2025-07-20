@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -68,7 +68,7 @@ fun BottomNavigation(
                     onClick = { onItemClick(BottomNavItem.HOME) },
                     contentDescription = "Home"
                 )
-                
+
                 // Search icon
                 NavIcon(
                     icon = "🔍",
@@ -76,7 +76,7 @@ fun BottomNavigation(
                     onClick = { onItemClick(BottomNavItem.SEARCH) },
                     contentDescription = "Search"
                 )
-                
+
                 // Calendar icon
                 NavIcon(
                     icon = "📅",
@@ -98,7 +98,7 @@ private fun NavIcon(
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    
+
     Box(
         modifier = modifier
             .size(40.dp)
@@ -109,7 +109,7 @@ private fun NavIcon(
             )
             .clickable(
                 interactionSource = interactionSource,
-                indication = rememberRipple(
+                indication = ripple(
                     bounded = true,
                     radius = 20.dp,
                     color = if (isSelected) AynaColors.White else AynaColors.Purple
