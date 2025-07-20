@@ -3,13 +3,15 @@ package com.techtactoe.ayna.presentation.ui.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -38,31 +40,37 @@ fun HomeScreenContent(
 ) {
     Scaffold(
         containerColor = AynaColors.White,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // Let bottom nav handle its own insets
         bottomBar = {
-            BottomNavigation(selectedItem = BottomNavItem.HOME)
+            BottomNavigation(
+                selectedItem = BottomNavItem.HOME,
+                onItemClick = { /* Handle navigation */ }
+            )
         }
     ) { paddingValues ->
-        BoxWithConstraints(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .background(AynaColors.White)
+                .windowInsetsPadding(WindowInsets.statusBars) // Handle status bar
         ) {
-            val topPadding = this.maxHeight / 9
-
-
             when {
                 state.isLoading -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = AynaColors.Purple)
                     }
                 }
-
+                
                 state.error != null -> {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -73,17 +81,17 @@ fun HomeScreenContent(
                                 text = "❌",
                                 style = MaterialTheme.typography.headlineLarge
                             )
-
+                            
                             Spacer(modifier = Modifier.height(16.dp))
-
+                            
                             Text(
                                 text = "Bir hata oluştu",
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold
                             )
-
+                            
                             Spacer(modifier = Modifier.height(8.dp))
-
+                            
                             Text(
                                 text = state.error,
                                 style = MaterialTheme.typography.bodyMedium,
@@ -93,26 +101,25 @@ fun HomeScreenContent(
                         }
                     }
                 }
-
+                
                 else -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(AynaColors.White)
+                            .padding(paddingValues)
                             .verticalScroll(rememberScrollState())
                     ) {
-                        Spacer(modifier = Modifier.height(topPadding))
-
+                        // Header with greeting and avatar
                         UserHeader(
                             userName = "John"
                         )
-
+                        
                         // Recommended section
                         if (state.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
-
+                            
                             Spacer(modifier = Modifier.height(16.dp))
-
+                            
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -121,14 +128,14 @@ fun HomeScreenContent(
                                     SalonCard(salon = salon)
                                 }
                             }
-
+                            
                             Spacer(modifier = Modifier.height(24.dp))
-
+                            
                             // New to Fresha section
                             SectionHeader(title = "New to Fresha")
-
+                            
                             Spacer(modifier = Modifier.height(16.dp))
-
+                            
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -137,8 +144,9 @@ fun HomeScreenContent(
                                     SalonCard(salon = salon)
                                 }
                             }
-
-                            Spacer(modifier = Modifier.height(24.dp))
+                            
+                            // Extra bottom padding to ensure content doesn't hide behind nav
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }

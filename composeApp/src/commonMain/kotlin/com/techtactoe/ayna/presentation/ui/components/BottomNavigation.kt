@@ -1,21 +1,30 @@
 package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.theme.AynaColors
@@ -28,40 +37,54 @@ enum class BottomNavItem {
 @Composable
 fun BottomNavigation(
     selectedItem: BottomNavItem = BottomNavItem.HOME,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (BottomNavItem) -> Unit = {}
 ) {
-    Card(
+    Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = RoundedCornerShape(0.dp),
-        colors = CardDefaults.cardColors(containerColor = AynaColors.White)
+            .windowInsetsPadding(WindowInsets.navigationBars), // Handle Android system navigation
+        shadowElevation = 4.dp,
+        color = AynaColors.White,
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+                .height(64.dp)
+                .padding(bottom = 8.dp) // Additional padding for iOS safe area
         ) {
-            // Home icon (selected)
-            NavIcon(
-                icon = "🏠",
-                isSelected = selectedItem == BottomNavItem.HOME
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Home icon
+                NavIcon(
+                    icon = "🏠",
+                    isSelected = selectedItem == BottomNavItem.HOME,
+                    onClick = { onItemClick(BottomNavItem.HOME) },
+                    contentDescription = "Home"
+                )
 
-            // Search icon
-            NavIcon(
-                icon = "🔍",
-                isSelected = selectedItem == BottomNavItem.SEARCH
-            )
+                // Search icon
+                NavIcon(
+                    icon = "🔍",
+                    isSelected = selectedItem == BottomNavItem.SEARCH,
+                    onClick = { onItemClick(BottomNavItem.SEARCH) },
+                    contentDescription = "Search"
+                )
 
-            // Calendar icon
-            NavIcon(
-                icon = "📅",
-                isSelected = selectedItem == BottomNavItem.CALENDAR
-            )
+                // Calendar icon
+                NavIcon(
+                    icon = "📅",
+                    isSelected = selectedItem == BottomNavItem.CALENDAR,
+                    onClick = { onItemClick(BottomNavItem.CALENDAR) },
+                    contentDescription = "Calendar"
+                )
+            }
         }
     }
 }
@@ -70,14 +93,29 @@ fun BottomNavigation(
 private fun NavIcon(
     icon: String,
     isSelected: Boolean,
+    onClick: () -> Unit,
+    contentDescription: String,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Box(
         modifier = modifier
             .size(40.dp)
+            .clip(RoundedCornerShape(12.dp))
             .background(
                 color = if (isSelected) AynaColors.Purple else Color.Transparent,
                 shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(
+                    bounded = true,
+                    radius = 20.dp,
+                    color = if (isSelected) AynaColors.White else AynaColors.Purple
+                ),
+                role = Role.Tab,
+                onClick = onClick
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -92,5 +130,23 @@ private fun NavIcon(
 @Preview
 @Composable
 fun BottomNavigationPreview() {
-    BottomNavigation()
+    MaterialTheme {
+        BottomNavigation()
+    }
+}
+
+@Preview
+@Composable
+fun BottomNavigationSearchSelectedPreview() {
+    MaterialTheme {
+        BottomNavigation(selectedItem = BottomNavItem.SEARCH)
+    }
+}
+
+@Preview
+@Composable
+fun BottomNavigationCalendarSelectedPreview() {
+    MaterialTheme {
+        BottomNavigation(selectedItem = BottomNavItem.CALENDAR)
+    }
 }

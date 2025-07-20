@@ -51,7 +51,7 @@ fun SalonCard(
                     fontSize = 32.sp
                 )
             }
-
+            
             Column(
                 modifier = Modifier.padding(12.dp)
             ) {
@@ -64,9 +64,9 @@ fun SalonCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-
+                
                 Spacer(modifier = Modifier.height(4.dp))
-
+                
                 // Rating and review count
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -77,18 +77,18 @@ fun SalonCard(
                         fontWeight = FontWeight.Bold,
                         color = AynaColors.PrimaryText
                     )
-
+                    
                     Spacer(modifier = Modifier.width(4.dp))
-
+                    
                     Text(
                         text = "(${salon.reviewCount})",
                         fontSize = 14.sp,
                         color = AynaColors.SecondaryText
                     )
                 }
-
+                
                 Spacer(modifier = Modifier.height(4.dp))
-
+                
                 // Address
                 Text(
                     text = salon.address,
@@ -97,9 +97,9 @@ fun SalonCard(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-
+                
                 Spacer(modifier = Modifier.height(8.dp))
-
+                
                 // Category tag
                 if (salon.tags.isNotEmpty()) {
                     Box(
@@ -134,6 +134,6 @@ fun SalonCardPreview() {
         reviewCount = 236,
         tags = listOf("Hair Salon")
     )
-
+    
     SalonCard(salon = mockSalon)
 }

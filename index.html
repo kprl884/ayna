@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayna App - Kotlin Multiplatform Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #7B61FF;
+        }
+        
+        .feature h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .feature p {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .tech-stack {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .tech-stack h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tech-tag {
+            background: #7B61FF;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .screens {
+            margin-top: 30px;
+        }
+        
+        .screens h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .screen-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .screen-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .screen-item:last-child {
+            border-bottom: none;
+        }
+        
+        .screen-emoji {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .screen-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .screen-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .note h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .note p {
+            color: #856404;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .highlight h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .highlight p {
+            color: #2e7d32;
+            line-height: 1.5;
+        }
+        
+        .highlight ul {
+            color: #2e7d32;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">💇‍♀️</div>
+            <h1>Ayna App</h1>
+            <p class="subtitle">Kotlin Multiplatform Salon Booking App</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🔧 Multiplatform</h3>
+                <p>Built with Kotlin Multiplatform to share business logic between Android and iOS platforms.</p>
+            </div>
+            <div class="feature">
+                <h3>🎨 Modern UI</h3>
+                <p>Compose Multiplatform with Material 3 design system for beautiful, consistent interfaces.</p>
+            </div>
+            <div class="feature">
+                <h3>🏢 Salon Finder</h3>
+                <p>Find nearby salons, view ratings, reviews, and book appointments seamlessly.</p>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <h4>🎯 Latest Update: Fixed Bottom Navigation</h4>
+            <p>Just resolved the system navigation overlap issue! The bottom navigation now properly respects:</p>
+            <ul>
+                <li><strong>Android:</strong> Gesture navigation and 3-button navigation using WindowInsets.navigationBars</li>
+                <li><strong>iOS:</strong> Safe area insets with proper bottom padding</li>
+                <li><strong>Accessibility:</strong> Proper clickable areas with ripple effects and content descriptions</li>
+                <li><strong>Visual Polish:</strong> 4dp elevation, rounded corners, and purple accent (#7B61FF)</li>
+            </ul>
+        </div>
+        
+        <div class="tech-stack">
+            <h3>🛠 Technology Stack</h3>
+            <div class="tech-list">
+                <span class="tech-tag">Kotlin Multiplatform</span>
+                <span class="tech-tag">Compose Multiplatform</span>
+                <span class="tech-tag">Material 3</span>
+                <span class="tech-tag">WindowInsets API</span>
+                <span class="tech-tag">Ktor Client</span>
+                <span class="tech-tag">Koin DI</span>
+                <span class="tech-tag">Coil Image Loading</span>
+                <span class="tech-tag">Navigation Compose</span>
+            </div>
+        </div>
+        
+        <div class="screens">
+            <h3>📱 Implemented Screens</h3>
+            <div class="screen-list">
+                <div class="screen-item">
+                    <div class="screen-emoji">🏠</div>
+                    <div class="screen-info">
+                        <h4>Home Screen</h4>
+                        <p>Fresha-inspired design with user greeting, recommended salons, and service categories</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🪒</div>
+                    <div class="screen-info">
+                        <h4>Salon Cards</h4>
+                        <p>Beautiful salon cards with images, ratings, addresses, and category tags</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">👤</div>
+                    <div class="screen-info">
+                        <h4>User Header</h4>
+                        <p>Personalized greeting with user avatar and clean typography</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🧭</div>
+                    <div class="screen-info">
+                        <h4>System-Aware Bottom Navigation</h4>
+                        <p>NEW! Fixed overlap with Android gesture navigation and iOS safe areas</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">💇‍♀️</div>
+                    <div class="screen-info">
+                        <h4>Service Categories</h4>
+                        <p>Grid of beauty services: Hair styling, Nails, Massage, Barbering, etc.</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">📱</div>
+                    <div class="screen-info">
+                        <h4>Safe Area Utilities</h4>
+                        <p>Platform-aware components that handle status bars and navigation insets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <h4>📝 Development Note</h4>
+            <p>This is a Kotlin Multiplatform project with Compose UI. The actual app runs on Android/iOS devices or simulators. This web interface showcases the project structure and implemented components. The bottom navigation overlap issue has been resolved using proper WindowInsets handling for both platforms.</p>
+        </div>
+    </div>
+</body>
+</html>
