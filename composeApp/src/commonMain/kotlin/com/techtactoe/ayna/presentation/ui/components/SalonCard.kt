@@ -1,7 +1,6 @@
 package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,9 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.Salon
+import com.techtactoe.ayna.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -32,110 +31,109 @@ fun SalonCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .width(280.dp)
-            .padding(end = 16.dp),
+        modifier = modifier.width(280.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = AynaColors.White)
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp)
-        ) {
-            // Salon görseli - placeholder olarak renkli box kullanıyoruz
+        Column {
+            // Salon image placeholder
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainer),
+                    .height(100.dp)
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                    .background(AynaColors.LightGray),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "🪒",
-                    style = MaterialTheme.typography.headlineMedium
+                    fontSize = 32.sp
                 )
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
-            
-            // Salon adı
-            Text(
-                text = salon.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            
-            Spacer(modifier = Modifier.height(4.dp))
-            
-            // Rating ve review sayısı
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.padding(12.dp)
             ) {
+                // Salon name
                 Text(
-                    text = "${salon.rating} ⭐",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Medium
+                    text = salon.name,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AynaColors.PrimaryText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 
-                Text(
-                    text = "(${salon.reviewCount})",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(6.dp))
-            
-            // Adres
-            Text(
-                text = salon.address,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            // Tag - sadece ilk tag'i göster
-            if (salon.tags.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                // Rating and review count
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = salon.tags.first(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        text = "${salon.rating} ⭐",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = AynaColors.PrimaryText
                     )
+                    
+                    Spacer(modifier = Modifier.width(4.dp))
+                    
+                    Text(
+                        text = "(${salon.reviewCount})",
+                        fontSize = 14.sp,
+                        color = AynaColors.SecondaryText
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                // Address
+                Text(
+                    text = salon.address,
+                    fontSize = 12.sp,
+                    color = AynaColors.SecondaryText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Category tag
+                if (salon.tags.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = AynaColors.White,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = salon.tags.first(),
+                            fontSize = 12.sp,
+                            color = AynaColors.SecondaryText
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun SalonCardPreview() {
     val mockSalon = Salon(
         id = "1",
-        name = "Elite Erkek Kuaförü",
-        address = "Kadıköy, İstanbul",
-        imageUrl = "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400",
-        rating = 4.8,
-        reviewCount = 127,
-        tags = listOf("Barbershop", "Erkek Kuaförü", "Sakal Tıraşı")
+        name = "David James San Francisco",
+        address = "600 Fillmore Street, San Francisco",
+        imageUrl = "",
+        rating = 4.9,
+        reviewCount = 236,
+        tags = listOf("Hair Salon")
     )
     
-    MaterialTheme {
-        SalonCard(salon = mockSalon)
-    }
+    SalonCard(salon = mockSalon)
 }
