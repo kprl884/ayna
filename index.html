@@ -162,6 +162,30 @@
             color: #856404;
             line-height: 1.5;
         }
+        
+        .highlight {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .highlight h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .highlight p {
+            color: #2e7d32;
+            line-height: 1.5;
+        }
+        
+        .highlight ul {
+            color: #2e7d32;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -187,12 +211,24 @@
             </div>
         </div>
         
+        <div class="highlight">
+            <h4>🎯 Latest Update: Fixed Bottom Navigation</h4>
+            <p>Just resolved the system navigation overlap issue! The bottom navigation now properly respects:</p>
+            <ul>
+                <li><strong>Android:</strong> Gesture navigation and 3-button navigation using WindowInsets.navigationBars</li>
+                <li><strong>iOS:</strong> Safe area insets with proper bottom padding</li>
+                <li><strong>Accessibility:</strong> Proper clickable areas with ripple effects and content descriptions</li>
+                <li><strong>Visual Polish:</strong> 4dp elevation, rounded corners, and purple accent (#7B61FF)</li>
+            </ul>
+        </div>
+        
         <div class="tech-stack">
             <h3>🛠 Technology Stack</h3>
             <div class="tech-list">
                 <span class="tech-tag">Kotlin Multiplatform</span>
                 <span class="tech-tag">Compose Multiplatform</span>
                 <span class="tech-tag">Material 3</span>
+                <span class="tech-tag">WindowInsets API</span>
                 <span class="tech-tag">Ktor Client</span>
                 <span class="tech-tag">Koin DI</span>
                 <span class="tech-tag">Coil Image Loading</span>
@@ -227,8 +263,8 @@
                 <div class="screen-item">
                     <div class="screen-emoji">🧭</div>
                     <div class="screen-info">
-                        <h4>Bottom Navigation</h4>
-                        <p>Purple accent navigation with home, search, and calendar tabs</p>
+                        <h4>System-Aware Bottom Navigation</h4>
+                        <p>NEW! Fixed overlap with Android gesture navigation and iOS safe areas</p>
                     </div>
                 </div>
                 <div class="screen-item">
@@ -238,12 +274,19 @@
                         <p>Grid of beauty services: Hair styling, Nails, Massage, Barbering, etc.</p>
                     </div>
                 </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">📱</div>
+                    <div class="screen-info">
+                        <h4>Safe Area Utilities</h4>
+                        <p>Platform-aware components that handle status bars and navigation insets</p>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="note">
             <h4>📝 Development Note</h4>
-            <p>This is a Kotlin Multiplatform project with Compose UI. The actual app runs on Android/iOS devices or simulators. This web interface showcases the project structure and implemented components. To run the mobile app, use Android Studio or Xcode with the appropriate device/simulator setup.</p>
+            <p>This is a Kotlin Multiplatform project with Compose UI. The actual app runs on Android/iOS devices or simulators. This web interface showcases the project structure and implemented components. The bottom navigation overlap issue has been resolved using proper WindowInsets handling for both platforms.</p>
         </div>
     </div>
 </body>
