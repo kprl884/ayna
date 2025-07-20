@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -37,104 +40,115 @@ fun HomeScreenContent(
 ) {
     Scaffold(
         containerColor = AynaColors.White,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0), // Let bottom nav handle its own insets
         bottomBar = {
-            BottomNavigation(selectedItem = BottomNavItem.HOME)
+            BottomNavigation(
+                selectedItem = BottomNavItem.HOME,
+                onItemClick = { /* Handle navigation */ }
+            )
         }
     ) { paddingValues ->
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = AynaColors.Purple)
-                }
-            }
-            
-            state.error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AynaColors.White)
+                .windowInsetsPadding(WindowInsets.statusBars) // Handle status bar
+        ) {
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "❌",
-                            style = MaterialTheme.typography.headlineLarge
-                        )
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        Text(
-                            text = "Bir hata oluştu",
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        Text(
-                            text = state.error,
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            color = AynaColors.SecondaryText
-                        )
+                        CircularProgressIndicator(color = AynaColors.Purple)
                     }
                 }
-            }
-            
-            else -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(AynaColors.White)
-                        .padding(paddingValues)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    // Header with greeting and avatar
-                    UserHeader(
-                        userName = "John",
-                        userInitials = "JS"
-                    )
-                    
-                    // Recommended section
-                    if (state.salons.isNotEmpty()) {
-                        SectionHeader(title = "Recommended")
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                
+                state.error != null -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            items(state.salons) { salon ->
-                                SalonCard(salon = salon)
-                            }
+                            Text(
+                                text = "❌",
+                                style = MaterialTheme.typography.headlineLarge
+                            )
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            Text(
+                                text = "Bir hata oluştu",
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            
+                            Spacer(modifier = Modifier.height(8.dp))
+                            
+                            Text(
+                                text = state.error,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                color = AynaColors.SecondaryText
+                            )
                         }
+                    }
+                }
+                
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        // Header with greeting and avatar
+                        UserHeader(
+                            userName = "John",
+                            userInitials = "JS"
+                        )
                         
-                        Spacer(modifier = Modifier.height(24.dp))
-                        
-                        // New to Fresha section
-                        SectionHeader(title = "New to Fresha")
-                        
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(state.salons.take(2)) { salon ->
-                                SalonCard(salon = salon)
+                        // Recommended section
+                        if (state.salons.isNotEmpty()) {
+                            SectionHeader(title = "Recommended")
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.salons) { salon ->
+                                    SalonCard(salon = salon)
+                                }
                             }
+                            
+                            Spacer(modifier = Modifier.height(24.dp))
+                            
+                            // New to Fresha section
+                            SectionHeader(title = "New to Fresha")
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.salons.take(2)) { salon ->
+                                    SalonCard(salon = salon)
+                                }
+                            }
+                            
+                            // Extra bottom padding to ensure content doesn't hide behind nav
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
-                        
-                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
             }
