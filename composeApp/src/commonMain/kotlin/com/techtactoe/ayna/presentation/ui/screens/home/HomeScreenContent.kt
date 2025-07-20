@@ -3,6 +3,7 @@ package com.techtactoe.ayna.presentation.ui.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -41,100 +42,104 @@ fun HomeScreenContent(
             BottomNavigation(selectedItem = BottomNavItem.HOME)
         }
     ) { paddingValues ->
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = AynaColors.Purple)
-                }
-            }
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            val topPadding = this.maxHeight / 9
 
-            state.error != null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "❌",
-                            style = MaterialTheme.typography.headlineLarge
-                        )
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Text(
-                            text = "Bir hata oluştu",
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = state.error,
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            color = AynaColors.SecondaryText
-                        )
+                        CircularProgressIndicator(color = AynaColors.Purple)
                     }
                 }
-            }
 
-            else -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(AynaColors.White)
-                        .padding(paddingValues)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    // Header with greeting and avatar
-                    UserHeader(
-                        userName = "John",
-                        userInitials = "JS"
-                    )
-
-                    // Recommended section
-                    if (state.salons.isNotEmpty()) {
-                        SectionHeader(title = "Recommended")
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                state.error != null -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            items(state.salons) { salon ->
-                                SalonCard(salon = salon)
-                            }
+                            Text(
+                                text = "❌",
+                                style = MaterialTheme.typography.headlineLarge
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Text(
+                                text = "Bir hata oluştu",
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                text = state.error,
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                color = AynaColors.SecondaryText
+                            )
                         }
+                    }
+                }
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                else -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(AynaColors.White)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Spacer(modifier = Modifier.height(topPadding))
 
-                        // New to Fresha section
-                        SectionHeader(title = "New to Fresha")
+                        UserHeader(
+                            userName = "John"
+                        )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        // Recommended section
+                        if (state.salons.isNotEmpty()) {
+                            SectionHeader(title = "Recommended")
 
-                        LazyRow(
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(state.salons.take(2)) { salon ->
-                                SalonCard(salon = salon)
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.salons) { salon ->
+                                    SalonCard(salon = salon)
+                                }
                             }
-                        }
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            // New to Fresha section
+                            SectionHeader(title = "New to Fresha")
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(state.salons.take(2)) { salon ->
+                                    SalonCard(salon = salon)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(24.dp))
+                        }
                     }
                 }
             }
