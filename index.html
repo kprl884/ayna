@@ -26,7 +26,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 40px;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
         }
         
@@ -186,6 +186,28 @@
             margin-left: 20px;
             margin-top: 10px;
         }
+
+        .new-feature {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .new-feature h4 {
+            margin-bottom: 10px;
+        }
+        
+        .new-feature p {
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .new-feature ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -194,6 +216,19 @@
             <div class="logo">💇‍♀️</div>
             <h1>Ayna App</h1>
             <p class="subtitle">Kotlin Multiplatform Salon Booking App</p>
+        </div>
+        
+        <div class="new-feature">
+            <h4>🆕 NEW: Complete Salon Detail Screen!</h4>
+            <p>Just implemented a fully functional, Fresha-inspired salon detail screen with:</p>
+            <ul>
+                <li><strong>Image Carousel:</strong> Swipeable gallery with indicators and overlay controls</li>
+                <li><strong>Sticky Tab Navigation:</strong> Photos, Services, Team, Reviews, Buy, About sections</li>
+                <li><strong>Interactive Components:</strong> Service booking, team profiles, user reviews</li>
+                <li><strong>Floating Booking Bar:</strong> Always-visible "Book now" with service count</li>
+                <li><strong>Opening Hours:</strong> Visual status indicators and detailed schedules</li>
+                <li><strong>System-Aware Design:</strong> Safe area support for notch devices</li>
+            </ul>
         </div>
         
         <div class="features">
@@ -211,17 +246,6 @@
             </div>
         </div>
         
-        <div class="highlight">
-            <h4>🎯 Latest Update: Fixed Bottom Navigation</h4>
-            <p>Just resolved the system navigation overlap issue! The bottom navigation now properly respects:</p>
-            <ul>
-                <li><strong>Android:</strong> Gesture navigation and 3-button navigation using WindowInsets.navigationBars</li>
-                <li><strong>iOS:</strong> Safe area insets with proper bottom padding</li>
-                <li><strong>Accessibility:</strong> Proper clickable areas with ripple effects and content descriptions</li>
-                <li><strong>Visual Polish:</strong> 4dp elevation, rounded corners, and purple accent (#7B61FF)</li>
-            </ul>
-        </div>
-        
         <div class="tech-stack">
             <h3>🛠 Technology Stack</h3>
             <div class="tech-list">
@@ -229,15 +253,16 @@
                 <span class="tech-tag">Compose Multiplatform</span>
                 <span class="tech-tag">Material 3</span>
                 <span class="tech-tag">WindowInsets API</span>
+                <span class="tech-tag">Lazy Lists</span>
+                <span class="tech-tag">Pager</span>
+                <span class="tech-tag">Sticky Headers</span>
                 <span class="tech-tag">Ktor Client</span>
                 <span class="tech-tag">Koin DI</span>
-                <span class="tech-tag">Coil Image Loading</span>
-                <span class="tech-tag">Navigation Compose</span>
             </div>
         </div>
         
         <div class="screens">
-            <h3>📱 Implemented Screens</h3>
+            <h3>📱 Implemented Screens & Components</h3>
             <div class="screen-list">
                 <div class="screen-item">
                     <div class="screen-emoji">🏠</div>
@@ -247,38 +272,73 @@
                     </div>
                 </div>
                 <div class="screen-item">
-                    <div class="screen-emoji">🪒</div>
+                    <div class="screen-emoji">🏢</div>
                     <div class="screen-info">
-                        <h4>Salon Cards</h4>
-                        <p>Beautiful salon cards with images, ratings, addresses, and category tags</p>
+                        <h4>Salon Detail Screen (NEW!)</h4>
+                        <p>Complete detail view with image carousel, sticky tabs, services, team, reviews, and booking</p>
                     </div>
                 </div>
                 <div class="screen-item">
-                    <div class="screen-emoji">👤</div>
+                    <div class="screen-emoji">📸</div>
                     <div class="screen-info">
-                        <h4>User Header</h4>
-                        <p>Personalized greeting with user avatar and clean typography</p>
+                        <h4>Image Carousel</h4>
+                        <p>Swipeable image gallery with indicators, back/share/favorite overlay controls</p>
                     </div>
                 </div>
                 <div class="screen-item">
-                    <div class="screen-emoji">🧭</div>
+                    <div class="screen-emoji">📋</div>
                     <div class="screen-info">
-                        <h4>System-Aware Bottom Navigation</h4>
-                        <p>NEW! Fixed overlap with Android gesture navigation and iOS safe areas</p>
+                        <h4>Sticky Tab Navigation</h4>
+                        <p>Collapsible tabs that stick when scrolling: Photos, Services, Team, Reviews, Buy, About</p>
                     </div>
                 </div>
                 <div class="screen-item">
-                    <div class="screen-emoji">💇‍♀️</div>
+                    <div class="screen-emoji">💇‍♂️</div>
                     <div class="screen-info">
-                        <h4>Service Categories</h4>
-                        <p>Grid of beauty services: Hair styling, Nails, Massage, Barbering, etc.</p>
+                        <h4>Services Section</h4>
+                        <p>Filterable service list with categories, pricing, duration, and individual booking buttons</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">👥</div>
+                    <div class="screen-info">
+                        <h4>Team Section</h4>
+                        <p>Horizontal scrolling team members with circular avatars, ratings, names, and roles</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">⭐</div>
+                    <div class="screen-info">
+                        <h4>Reviews Section</h4>
+                        <p>User reviews with avatars, ratings, dates, and expandable comments</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🛍️</div>
+                    <div class="screen-info">
+                        <h4>Buy Section</h4>
+                        <p>Memberships and gift card options with descriptions and purchase buttons</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">📍</div>
+                    <div class="screen-info">
+                        <h4>About & Hours</h4>
+                        <p>Salon description, opening hours with status indicators, and additional information</p>
                     </div>
                 </div>
                 <div class="screen-item">
                     <div class="screen-emoji">📱</div>
                     <div class="screen-info">
-                        <h4>Safe Area Utilities</h4>
-                        <p>Platform-aware components that handle status bars and navigation insets</p>
+                        <h4>Floating Booking Bar</h4>
+                        <p>Always-visible bottom bar with service count and prominent "Book now" button</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🧭</div>
+                    <div class="screen-info">
+                        <h4>System-Aware Navigation</h4>
+                        <p>Fixed overlap with Android gesture navigation and iOS safe areas</p>
                     </div>
                 </div>
             </div>
@@ -286,7 +346,7 @@
         
         <div class="note">
             <h4>📝 Development Note</h4>
-            <p>This is a Kotlin Multiplatform project with Compose UI. The actual app runs on Android/iOS devices or simulators. This web interface showcases the project structure and implemented components. The bottom navigation overlap issue has been resolved using proper WindowInsets handling for both platforms.</p>
+            <p>This is a Kotlin Multiplatform project with Compose UI. The actual app runs on Android/iOS devices or simulators. This web interface showcases the project structure and implemented components. The salon detail screen now provides a complete, production-ready booking experience with all the features you'd expect from a modern salon app like Fresha.</p>
         </div>
     </div>
 </body>
