@@ -2,7 +2,6 @@ package com.techtactoe.ayna.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Fresha-inspired color palette
 object AynaColors {
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
