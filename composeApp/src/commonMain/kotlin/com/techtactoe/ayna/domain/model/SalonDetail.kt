@@ -78,7 +78,14 @@ enum class SalonStatus {
 
 @Serializable
 enum class ServiceCategory {
-    FEATURED, CONSULTATION, MENS_CUT, WOMENS_CUT, STYLING, COLOR
+    FEATURED, 
+    CONSULTATION, 
+    MENS_CUT, 
+    WOMENS_HAIRCUT, 
+    STYLE, 
+    COLOR_APPLICATION, 
+    QIQI_STRAIGHTENING,
+    KIDS
 }
 
 @Serializable
