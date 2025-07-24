@@ -29,8 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonService
-import com.techtactoe.ayna.domain.model.ServiceCategory
-import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
 import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -41,7 +39,7 @@ fun ServicesSection(
     modifier: Modifier = Modifier
 ) {
     var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
-    
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +52,7 @@ fun ServicesSection(
             color = AynaColors.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        
+
         // Filter tabs
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -68,10 +66,10 @@ fun ServicesSection(
                 )
             }
         }
-        
+
         // Service list - filtered based on selected category
         val filteredServices = services.filter { it.category == selectedCategory }
-        
+
         if (filteredServices.isNotEmpty()) {
             filteredServices.forEachIndexed { index, service ->
                 ServiceCard(
@@ -113,16 +111,16 @@ private fun FilterTab(
     modifier: Modifier = Modifier
 ) {
     val categoryName = when (category) {
-        ServiceCategory.FEATURED -> "Featured"
-        ServiceCategory.CONSULTATION -> "CONSULTATION"
-        ServiceCategory.MENS_CUT -> "MEN'S CUT"
-        ServiceCategory.WOMENS_HAIRCUT -> "WOMEN'S HAIRCUT"
-        ServiceCategory.STYLE -> "STYLE"
-        ServiceCategory.COLOR_APPLICATION -> "COLOR APPLICATION"
-        ServiceCategory.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
-        ServiceCategory.KIDS -> "KIDS"
+        ServiceCategoryEnum.FEATURED -> "Featured"
+        ServiceCategoryEnum.CONSULTATION -> "CONSULTATION"
+        ServiceCategoryEnum.MENS_CUT -> "MEN'S CUT"
+        ServiceCategoryEnum.WOMENS_HAIRCUT -> "WOMEN'S HAIRCUT"
+        ServiceCategoryEnum.STYLE -> "STYLE"
+        ServiceCategoryEnum.COLOR_APPLICATION -> "COLOR APPLICATION"
+        ServiceCategoryEnum.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
+        ServiceCategoryEnum.KIDS -> "KIDS"
     }
-    
+
     Surface(
         modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(50.dp), // Fully rounded
@@ -172,9 +170,9 @@ private fun ServiceCard(
                 fontWeight = FontWeight.Bold,
                 color = AynaColors.Black
             )
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             // Details line: duration • serviceCount services • genderRestriction
             val detailsText = buildString {
                 append(service.duration)
@@ -191,9 +189,9 @@ private fun ServiceCard(
                 fontSize = 14.sp,
                 color = AynaColors.SecondaryText
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             // Price
             Text(
                 text = service.priceFrom,
@@ -202,7 +200,7 @@ private fun ServiceCard(
                 color = AynaColors.Black
             )
         }
-        
+
         // Book button with fully rounded shape
         Surface(
             modifier = Modifier.clickable { onBookClick() },
@@ -236,7 +234,7 @@ fun ServicesSectionPreview() {
             serviceCount = 2,
             genderRestriction = "Male only",
             priceFrom = "from €20",
-            category = ServiceCategory.MENS_CUT
+            category = ServiceCategoryEnum.MENS_CUT
         ),
         SalonService(
             id = "3",
@@ -245,10 +243,10 @@ fun ServicesSectionPreview() {
             serviceCount = 3,
             genderRestriction = null,
             priceFrom = "from €40",
-            category = ServiceCategory.WOMENS_HAIRCUT
+            category = ServiceCategoryEnum.WOMENS_HAIRCUT
         )
     )
-    
+
     MaterialTheme {
         ServicesSection(services = mockServices)
     }

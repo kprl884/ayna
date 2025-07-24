@@ -77,7 +77,7 @@ enum class SalonStatus {
 }
 
 @Serializable
-enum class ServiceCategory {
+enum class ServiceCategoryEnum {
     FEATURED,
     CONSULTATION,
     MENS_CUT,
