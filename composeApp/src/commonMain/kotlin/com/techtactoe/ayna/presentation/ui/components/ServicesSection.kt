@@ -1,6 +1,5 @@
 package com.techtactoe.ayna.presentation.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonService
+<<<<<<< HEAD
 import com.techtactoe.ayna.domain.model.ServiceCategory
+=======
+import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
 import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -39,7 +42,7 @@ fun ServicesSection(
     services: List<SalonService>,
     modifier: Modifier = Modifier
 ) {
-    var selectedCategory by remember { mutableStateOf(ServiceCategory.FEATURED) }
+    var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
     
     Column(
         modifier = modifier
@@ -59,7 +62,7 @@ fun ServicesSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.padding(bottom = 20.dp)
         ) {
-            items(ServiceCategory.entries) { category ->
+            items(ServiceCategoryEnum.entries) { category ->
                 FilterTab(
                     category = category,
                     isSelected = selectedCategory == category,
@@ -106,12 +109,13 @@ fun ServicesSection(
 
 @Composable
 private fun FilterTab(
-    category: ServiceCategory,
+    category: ServiceCategoryEnum,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val categoryName = when (category) {
+<<<<<<< HEAD
         ServiceCategory.FEATURED -> "Featured"
         ServiceCategory.CONSULTATION -> "CONSULTATION"
         ServiceCategory.MENS_CUT -> "MEN'S CUT"
@@ -120,6 +124,14 @@ private fun FilterTab(
         ServiceCategory.COLOR_APPLICATION -> "COLOR APPLICATION"
         ServiceCategory.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
         ServiceCategory.KIDS -> "KIDS"
+=======
+        ServiceCategoryEnum.FEATURED -> "Featured"
+        ServiceCategoryEnum.CONSULTATION -> "Consultation"
+        ServiceCategoryEnum.MENS_CUT -> "Men's Cut"
+        ServiceCategoryEnum.WOMENS_CUT -> "Women's Cut"
+        ServiceCategoryEnum.STYLING -> "Styling"
+        ServiceCategoryEnum.COLOR -> "Color"
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
     }
     
     Surface(
@@ -244,6 +256,7 @@ fun ServicesSectionPreview() {
             serviceCount = 2,
             genderRestriction = "Male only",
             priceFrom = "from €20",
+<<<<<<< HEAD
             category = ServiceCategory.MENS_CUT
         ),
         SalonService(
@@ -254,6 +267,18 @@ fun ServicesSectionPreview() {
             genderRestriction = null,
             priceFrom = "from €40",
             category = ServiceCategory.WOMENS_HAIRCUT
+=======
+            category = ServiceCategoryEnum.FEATURED
+        ),
+        SalonService(
+            id = "2",
+            name = "BLOW DRY | BRUSH STYLE",
+            duration = "50 mins – 1 hr, 10 mins",
+            serviceCount = 2,
+            genderRestriction = "Female only",
+            priceFrom = "from €20",
+            category = ServiceCategoryEnum.FEATURED
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
         )
     )
     

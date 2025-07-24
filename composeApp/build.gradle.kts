@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
+    id("org.jetbrains.kotlin.native.cocoapods")
 }
 
 kotlin {
@@ -23,8 +24,21 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "shared" // Bu önemli - podspec'te kullanılan framework ismiyle aynı
             isStatic = true
+        }
+    }
+
+    cocoapods {
+        version = "1.0.0"
+        summary = "Ayna paylaşımlı modül"
+        homepage = "https://github.com/techtactoe/ayna"
+        ios.deploymentTarget = "14.1"
+
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
+            baseName = "shared"
         }
     }
 

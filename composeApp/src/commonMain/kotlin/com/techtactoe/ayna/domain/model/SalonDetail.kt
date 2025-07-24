@@ -27,7 +27,7 @@ data class SalonService(
     val serviceCount: Int,
     val genderRestriction: String? = null,
     val priceFrom: String,
-    val category: ServiceCategory
+    val category: ServiceCategoryEnum
 )
 
 @Serializable
@@ -77,6 +77,7 @@ enum class SalonStatus {
 }
 
 @Serializable
+<<<<<<< HEAD
 enum class ServiceCategory {
     FEATURED, 
     CONSULTATION, 
@@ -86,6 +87,10 @@ enum class ServiceCategory {
     COLOR_APPLICATION, 
     QIQI_STRAIGHTENING,
     KIDS
+=======
+enum class ServiceCategoryEnum {
+    FEATURED, CONSULTATION, MENS_CUT, WOMENS_CUT, STYLING, COLOR
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
 }
 
 @Serializable

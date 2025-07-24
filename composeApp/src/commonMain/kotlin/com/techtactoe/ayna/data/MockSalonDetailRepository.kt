@@ -8,7 +8,7 @@ import com.techtactoe.ayna.domain.model.SalonAbout
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonService
 import com.techtactoe.ayna.domain.model.SalonStatus
-import com.techtactoe.ayna.domain.model.ServiceCategory
+import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
 import com.techtactoe.ayna.domain.model.TeamMember
 
 object MockSalonDetailRepository {
@@ -49,7 +49,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €20",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "2",
@@ -58,7 +58,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Female only",
                 priceFrom = "from €20",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "3",
@@ -67,16 +67,24 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €40",
-                category = ServiceCategory.FEATURED
+                category = ServiceCategoryEnum.FEATURED
             ),
             SalonService(
                 id = "4",
                 name = "COLOR | ROOTS & FINISH",
+<<<<<<< HEAD
                 duration = "1 hr, 40 mins – 1 hr, 50 mins",
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €40",
                 category = ServiceCategory.FEATURED
+=======
+                duration = "2 hrs – 3 hrs",
+                serviceCount = 5,
+                genderRestriction = null,
+                priceFrom = "from €60",
+                category = ServiceCategoryEnum.COLOR
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
             ),
             
             // Consultation services
@@ -86,6 +94,7 @@ object MockSalonDetailRepository {
                 duration = "10 mins",
                 serviceCount = 0,
                 genderRestriction = null,
+<<<<<<< HEAD
                 priceFrom = "free",
                 category = ServiceCategory.CONSULTATION
             ),
@@ -307,6 +316,10 @@ object MockSalonDetailRepository {
                 genderRestriction = "Male only",
                 priceFrom = "from €14",
                 category = ServiceCategory.KIDS
+=======
+                priceFrom = "Free",
+                category = ServiceCategoryEnum.CONSULTATION
+>>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
             )
         )
     }

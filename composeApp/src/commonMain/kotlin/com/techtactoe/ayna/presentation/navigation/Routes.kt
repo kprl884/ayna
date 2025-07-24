@@ -35,6 +35,13 @@ sealed interface Screen {
     data class Detail(val salonId: String) : Screen {
         override val route: String = "detail"
     }
+
+    @Serializable
+    data class SalonDetailScreen(val salonId: String) : Screen {
+        override val route: String = "salon_detail"
+    }
+
+
 }
 
 /**
@@ -47,4 +54,5 @@ val Screen.icon: ImageVector?
         is Screen.Appointments -> Icons.Default.DateRange
         is Screen.Profile -> Icons.Default.AccountCircle
         is Screen.Detail -> null
+        is Screen.SalonDetailScreen -> null
     } 
