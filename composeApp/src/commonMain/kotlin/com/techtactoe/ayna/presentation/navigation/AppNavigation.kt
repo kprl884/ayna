@@ -11,16 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.techtactoe.ayna.data.MockSalonDetailRepository
-=======
-import com.techtactoe.ayna.domain.model.SalonDetail
->>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
-=======
-import com.techtactoe.ayna.data.MockSalonDetailRepository
-import com.techtactoe.ayna.domain.model.SalonDetail
->>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
