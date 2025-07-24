@@ -6,7 +6,6 @@ import kotlinx.coroutines.delay
 
 class MockSalonRepository : SalonRepository {
     override suspend fun getNearbySalons(): List<Salon> {
-        // Network request simülasyonu için delay
         delay(1000)
         
         return listOf(

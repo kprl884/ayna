@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.ui.components
+package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -67,23 +67,20 @@ fun ServicesSection(
             }
         }
 
-        // Service list - filtered based on selected category
+        // Service list
         val filteredServices = services.filter { it.category == selectedCategory }
 
-        if (filteredServices.isNotEmpty()) {
-            filteredServices.forEachIndexed { index, service ->
-                ServiceCard(
-                    service = service,
-                    onBookClick = { /* Handle booking */ }
-                )
+        filteredServices.forEach { service ->
+            ServiceCard(
+                service = service,
+                onBookClick = { /* Handle booking */ }
+            )
 
-                if (index < filteredServices.size - 1) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        thickness = 1.dp,
-                        color = AynaColors.BorderGray
-                    )
-                }
+            if (service != filteredServices.last()) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = AynaColors.BorderGray
+                )
             }
         } else {
             // Show empty state when no services in category
