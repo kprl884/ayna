@@ -67,20 +67,23 @@ fun ServicesSection(
             }
         }
 
-        // Service list
+        // Service list - filtered based on selected category
         val filteredServices = services.filter { it.category == selectedCategory }
 
-        filteredServices.forEach { service ->
-            ServiceCard(
-                service = service,
-                onBookClick = { /* Handle booking */ }
-            )
-
-            if (service != filteredServices.last()) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = AynaColors.BorderGray
+        if (filteredServices.isNotEmpty()) {
+            filteredServices.forEachIndexed { index, service ->
+                ServiceCard(
+                    service = service,
+                    onBookClick = { /* Handle booking */ }
                 )
+
+                if (index < filteredServices.size - 1) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        thickness = 1.dp,
+                        color = AynaColors.BorderGray
+                    )
+                }
             }
         } else {
             // Show empty state when no services in category
@@ -206,7 +209,7 @@ private fun ServiceCard(
         ) {
             Box(
                 modifier = Modifier
-                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(20.dp))
+                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(50.dp))
                     .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
                 Text(
@@ -226,6 +229,15 @@ fun ServicesSectionPreview() {
     val mockServices = listOf(
         SalonService(
             id = "1",
+            name = "QIQI | STRAIGHTENING TREATMENT - MAN",
+            duration = "2 hrs, 20 mins",
+            serviceCount = 4,
+            genderRestriction = "Male only",
+            priceFrom = "€70",
+            category = ServiceCategoryEnum.QIQI_STRAIGHTENING
+        ),
+        SalonService(
+            id = "2",
             name = "CUT",
             duration = "55 mins – 1 hr, 10 mins",
             serviceCount = 2,
