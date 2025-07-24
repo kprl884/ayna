@@ -82,6 +82,20 @@ fun ServicesSection(
                     color = AynaColors.BorderGray
                 )
             }
+        } else {
+            // Show empty state when no services in category
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No services available in this category",
+                    fontSize = 16.sp,
+                    color = AynaColors.SecondaryText
+                )
+            }
         }
     }
 }
@@ -95,16 +109,18 @@ private fun FilterTab(
 ) {
     val categoryName = when (category) {
         ServiceCategoryEnum.FEATURED -> "Featured"
-        ServiceCategoryEnum.CONSULTATION -> "Consultation"
-        ServiceCategoryEnum.MENS_CUT -> "Men's Cut"
-        ServiceCategoryEnum.WOMENS_CUT -> "Women's Cut"
-        ServiceCategoryEnum.STYLING -> "Styling"
-        ServiceCategoryEnum.COLOR -> "Color"
+        ServiceCategoryEnum.CONSULTATION -> "CONSULTATION"
+        ServiceCategoryEnum.MENS_CUT -> "MEN'S CUT"
+        ServiceCategoryEnum.WOMENS_HAIRCUT -> "WOMEN'S HAIRCUT"
+        ServiceCategoryEnum.STYLE -> "STYLE"
+        ServiceCategoryEnum.COLOR_APPLICATION -> "COLOR APPLICATION"
+        ServiceCategoryEnum.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
+        ServiceCategoryEnum.KIDS -> "KIDS"
     }
 
     Surface(
         modifier = modifier.clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(50.dp), // Fully rounded
         color = if (isSelected) AynaColors.Black else Color.Transparent
     ) {
         Box(
@@ -114,7 +130,7 @@ private fun FilterTab(
                         Modifier.border(
                             1.dp,
                             AynaColors.BorderGray,
-                            RoundedCornerShape(20.dp)
+                            RoundedCornerShape(50.dp)
                         )
                     } else Modifier
                 )
@@ -144,6 +160,7 @@ private fun ServiceCard(
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            // Service title
             Text(
                 text = service.name,
                 fontSize = 18.sp,
@@ -153,22 +170,26 @@ private fun ServiceCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            // Details line: duration • serviceCount services • genderRestriction
+            val detailsText = buildString {
+                append(service.duration)
+                if (service.serviceCount > 0) {
+                    append(" • ${service.serviceCount} services")
+                }
+                service.genderRestriction?.let { restriction ->
+                    append(" • $restriction")
+                }
+            }
+
             Text(
-                text = "${service.duration} • ${service.serviceCount} services",
+                text = detailsText,
                 fontSize = 14.sp,
                 color = AynaColors.SecondaryText
             )
 
-            service.genderRestriction?.let { restriction ->
-                Text(
-                    text = restriction,
-                    fontSize = 14.sp,
-                    color = AynaColors.SecondaryText
-                )
-            }
-
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Price
             Text(
                 text = service.priceFrom,
                 fontSize = 16.sp,
@@ -177,9 +198,10 @@ private fun ServiceCard(
             )
         }
 
+        // Book button with fully rounded shape
         Surface(
             modifier = Modifier.clickable { onBookClick() },
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(50.dp), // Fully rounded
             color = Color.Transparent
         ) {
             Box(
@@ -209,16 +231,16 @@ fun ServicesSectionPreview() {
             serviceCount = 2,
             genderRestriction = "Male only",
             priceFrom = "from €20",
-            category = ServiceCategoryEnum.FEATURED
+            category = ServiceCategoryEnum.MENS_CUT
         ),
         SalonService(
-            id = "2",
-            name = "BLOW DRY | BRUSH STYLE",
-            duration = "50 mins – 1 hr, 10 mins",
-            serviceCount = 2,
-            genderRestriction = "Female only",
-            priceFrom = "from €20",
-            category = ServiceCategoryEnum.FEATURED
+            id = "3",
+            name = "HAIRCUT & FINISH",
+            duration = "1 hr, 15 mins – 1 hr, 45 mins",
+            serviceCount = 3,
+            genderRestriction = null,
+            priceFrom = "from €40",
+            category = ServiceCategoryEnum.WOMENS_HAIRCUT
         )
     )
 
