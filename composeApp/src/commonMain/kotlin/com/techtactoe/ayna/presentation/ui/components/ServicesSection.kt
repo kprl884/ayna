@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonService
 import com.techtactoe.ayna.domain.model.ServiceCategory
-import com.techtactoe.ayna.theme.AynaColors
+import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -68,19 +68,36 @@ fun ServicesSection(
             }
         }
         
-        // Service list
+        // Service list - filtered based on selected category
         val filteredServices = services.filter { it.category == selectedCategory }
         
-        filteredServices.forEach { service ->
-            ServiceCard(
-                service = service,
-                onBookClick = { /* Handle booking */ }
-            )
-            
-            if (service != filteredServices.last()) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = AynaColors.BorderGray
+        if (filteredServices.isNotEmpty()) {
+            filteredServices.forEachIndexed { index, service ->
+                ServiceCard(
+                    service = service,
+                    onBookClick = { /* Handle booking */ }
+                )
+                
+                if (index < filteredServices.size - 1) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        thickness = 1.dp,
+                        color = AynaColors.BorderGray
+                    )
+                }
+            }
+        } else {
+            // Show empty state when no services in category
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No services available in this category",
+                    fontSize = 16.sp,
+                    color = AynaColors.SecondaryText
                 )
             }
         }
@@ -96,16 +113,18 @@ private fun FilterTab(
 ) {
     val categoryName = when (category) {
         ServiceCategory.FEATURED -> "Featured"
-        ServiceCategory.CONSULTATION -> "Consultation"
-        ServiceCategory.MENS_CUT -> "Men's Cut"
-        ServiceCategory.WOMENS_CUT -> "Women's Cut"
-        ServiceCategory.STYLING -> "Styling"
-        ServiceCategory.COLOR -> "Color"
+        ServiceCategory.CONSULTATION -> "CONSULTATION"
+        ServiceCategory.MENS_CUT -> "MEN'S CUT"
+        ServiceCategory.WOMENS_HAIRCUT -> "WOMEN'S HAIRCUT"
+        ServiceCategory.STYLE -> "STYLE"
+        ServiceCategory.COLOR_APPLICATION -> "COLOR APPLICATION"
+        ServiceCategory.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
+        ServiceCategory.KIDS -> "KIDS"
     }
     
     Surface(
         modifier = modifier.clickable { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(50.dp), // Fully rounded
         color = if (isSelected) AynaColors.Black else Color.Transparent
     ) {
         Box(
@@ -115,7 +134,7 @@ private fun FilterTab(
                         Modifier.border(
                             1.dp,
                             AynaColors.BorderGray,
-                            RoundedCornerShape(20.dp)
+                            RoundedCornerShape(50.dp)
                         )
                     } else Modifier
                 )
@@ -145,6 +164,7 @@ private fun ServiceCard(
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            // Service title
             Text(
                 text = service.name,
                 fontSize = 18.sp,
@@ -154,22 +174,26 @@ private fun ServiceCard(
             
             Spacer(modifier = Modifier.height(4.dp))
             
+            // Details line: duration • serviceCount services • genderRestriction
+            val detailsText = buildString {
+                append(service.duration)
+                if (service.serviceCount > 0) {
+                    append(" • ${service.serviceCount} services")
+                }
+                service.genderRestriction?.let { restriction ->
+                    append(" • $restriction")
+                }
+            }
+            
             Text(
-                text = "${service.duration} • ${service.serviceCount} services",
+                text = detailsText,
                 fontSize = 14.sp,
                 color = AynaColors.SecondaryText
             )
             
-            service.genderRestriction?.let { restriction ->
-                Text(
-                    text = restriction,
-                    fontSize = 14.sp,
-                    color = AynaColors.SecondaryText
-                )
-            }
-            
             Spacer(modifier = Modifier.height(8.dp))
             
+            // Price
             Text(
                 text = service.priceFrom,
                 fontSize = 16.sp,
@@ -178,14 +202,15 @@ private fun ServiceCard(
             )
         }
         
+        // Book button with fully rounded shape
         Surface(
             modifier = Modifier.clickable { onBookClick() },
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(50.dp), // Fully rounded
             color = Color.Transparent
         ) {
             Box(
                 modifier = Modifier
-                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(20.dp))
+                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(50.dp))
                     .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
                 Text(
@@ -205,21 +230,30 @@ fun ServicesSectionPreview() {
     val mockServices = listOf(
         SalonService(
             id = "1",
+            name = "QIQI | STRAIGHTENING TREATMENT - MAN",
+            duration = "2 hrs, 20 mins",
+            serviceCount = 4,
+            genderRestriction = "Male only",
+            priceFrom = "€70",
+            category = ServiceCategory.QIQI_STRAIGHTENING
+        ),
+        SalonService(
+            id = "2",
             name = "CUT",
             duration = "55 mins – 1 hr, 10 mins",
             serviceCount = 2,
             genderRestriction = "Male only",
             priceFrom = "from €20",
-            category = ServiceCategory.FEATURED
+            category = ServiceCategory.MENS_CUT
         ),
         SalonService(
-            id = "2",
-            name = "BLOW DRY | BRUSH STYLE",
-            duration = "50 mins – 1 hr, 10 mins",
-            serviceCount = 2,
-            genderRestriction = "Female only",
-            priceFrom = "from €20",
-            category = ServiceCategory.FEATURED
+            id = "3",
+            name = "HAIRCUT & FINISH",
+            duration = "1 hr, 15 mins – 1 hr, 45 mins",
+            serviceCount = 3,
+            genderRestriction = null,
+            priceFrom = "from €40",
+            category = ServiceCategory.WOMENS_HAIRCUT
         )
     )
     
