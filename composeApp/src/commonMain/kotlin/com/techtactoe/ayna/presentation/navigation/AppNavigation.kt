@@ -1,14 +1,9 @@
 package com.techtactoe.ayna.presentation.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -16,10 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.techtactoe.ayna.data.MockSalonDetailRepository
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
+import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 
 @Composable
@@ -52,8 +49,7 @@ fun AppNavigation() {
                             }
                             launchSingleTop = true
                         }
-                    },
-                    modifier = Modifier.navigationBarsPadding()
+                    }
                 )
             }
         }
@@ -76,9 +72,16 @@ fun AppNavigation() {
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
 
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Detail Screen for Salon ID: $salonId")
-                }
+                // Get salon detail data
+                val salonDetail = MockSalonDetailRepository.getSalonDetail(salonId)
+
+                SalonDetailScreen(
+                    salonDetail = salonDetail,
+                    onBackClick = { navController.popBackStack() },
+                    onShareClick = { /* Handle share */ },
+                    onFavoriteClick = { /* Handle favorite */ },
+                    onBookNowClick = { /* Handle booking */ }
+                )
             }
         }
     }
