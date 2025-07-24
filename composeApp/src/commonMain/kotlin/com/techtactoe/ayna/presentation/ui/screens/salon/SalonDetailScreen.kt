@@ -1,5 +1,6 @@
 package com.techtactoe.ayna.presentation.ui.screens.salon
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonStatus
 import com.techtactoe.ayna.presentation.theme.AynaColors
+import com.techtactoe.ayna.presentation.theme.AynaColors.LightPurple
 import com.techtactoe.ayna.presentation.ui.components.AboutSection
 import com.techtactoe.ayna.presentation.ui.components.BuySection
 import com.techtactoe.ayna.presentation.ui.components.FloatingBookingBar
@@ -47,14 +49,13 @@ fun SalonDetailScreen(
 ) {
     val scrollState = rememberLazyListState()
     var selectedTab by remember { mutableStateOf(SalonDetailTab.SERVICES) }
-    
-    // Determine if we should show the sticky tab bar based on scroll position
+
     val showStickyTabBar by remember {
         derivedStateOf {
             scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 100
         }
     }
-    
+
     Scaffold(
         containerColor = AynaColors.White,
         bottomBar = {
@@ -73,7 +74,6 @@ fun SalonDetailScreen(
                 state = scrollState,
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Image carousel header
                 item {
                     ImageCarousel(
                         images = salonDetail.images,
@@ -82,28 +82,28 @@ fun SalonDetailScreen(
                         onFavoriteClick = onFavoriteClick
                     )
                 }
-                
+
                 // Salon basic info
                 item {
                     SalonBasicInfo(salonDetail = salonDetail)
                 }
-                
+
                 // Photos section
                 item {
                     // Placeholder for photos section (can reuse image carousel or extend it)
                     Spacer(modifier = Modifier.height(0.dp))
                 }
-                
+
                 // Services section
                 item {
                     ServicesSection(services = salonDetail.services)
                 }
-                
+
                 // Team section
                 item {
                     TeamSection(teamMembers = salonDetail.team)
                 }
-                
+
                 // Reviews section
                 item {
                     ReviewsSection(
@@ -112,12 +112,12 @@ fun SalonDetailScreen(
                         reviewCount = salonDetail.reviewCount
                     )
                 }
-                
+
                 // Buy section
                 item {
                     BuySection(buyOptions = salonDetail.buyOptions)
                 }
-                
+
                 // About section
                 item {
                     AboutSection(
@@ -125,13 +125,13 @@ fun SalonDetailScreen(
                         openingHours = salonDetail.openingHours
                     )
                 }
-                
+
                 // Bottom padding for the floating bar
                 item {
                     Spacer(modifier = Modifier.height(80.dp))
                 }
             }
-            
+
             // Sticky tab bar
             if (showStickyTabBar) {
                 StickyTabBar(
@@ -140,7 +140,11 @@ fun SalonDetailScreen(
                         selectedTab = tab
                         // TODO: Scroll to the corresponding section
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    salonName = salonDetail.name,
+                    onBackClick = onBackClick,
+                    onShareClick = onShareClick,
+                    onFavoriteClick = onFavoriteClick
                 )
             }
         }
@@ -164,46 +168,52 @@ private fun SalonBasicInfo(
             fontWeight = FontWeight.Bold,
             color = AynaColors.Black
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         // Rating and reviews
         Text(
             text = "${salonDetail.rating} ⭐⭐⭐⭐⭐ (${salonDetail.reviewCount})",
             fontSize = 16.sp,
             color = AynaColors.Black
         )
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         // Address
         Text(
             text = salonDetail.address,
             fontSize = 14.sp,
             color = AynaColors.SecondaryText
         )
-        
+
         Spacer(modifier = Modifier.height(4.dp))
-        
+
         // Status
         val statusText = when (salonDetail.status) {
             SalonStatus.OPEN -> "Open now"
             SalonStatus.CLOSED -> "Closed"
             SalonStatus.OPENS_LATER -> "Closed - opens on Tuesday at 9:00 AM"
         }
-        
+
         Text(
             text = statusText,
             fontSize = 14.sp,
             color = AynaColors.SecondaryText
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         // Featured tag
         Box(
             modifier = Modifier
                 .padding(bottom = 16.dp)
+                .border(
+                    1.dp,
+                    LightPurple,
+                    MaterialTheme.shapes.medium
+                )
+
         ) {
             Text(
                 text = "Featured",
