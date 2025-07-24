@@ -1,6 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +44,7 @@ fun ReviewsSection(
             color = AynaColors.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        
+
         // Overall rating
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -56,21 +57,24 @@ fun ReviewsSection(
                     fontSize = 20.sp
                 )
             }
-            
+
             Spacer(modifier = Modifier.width(8.dp))
-            
+
             Text(
+                modifier = Modifier.clickable {
+                    //todo navigate Reviews screen
+                },
                 text = "$overallRating ($reviewCount)",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = AynaColors.Black
             )
         }
-        
+
         // Individual reviews
         reviews.forEach { review ->
             ReviewCard(review = review)
-            
+
             if (review != reviews.last()) {
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -101,7 +105,7 @@ private fun ReviewCard(
                 color = AynaColors.Purple
             )
         }
-        
+
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -117,16 +121,16 @@ private fun ReviewCard(
                     fontWeight = FontWeight.Medium,
                     color = AynaColors.Black
                 )
-                
+
                 Text(
                     text = review.date,
                     fontSize = 12.sp,
                     color = AynaColors.SecondaryText
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             // Star rating
             Row {
                 repeat(review.rating) {
@@ -136,9 +140,9 @@ private fun ReviewCard(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             // Review comment
             Text(
                 text = review.comment,
@@ -146,7 +150,7 @@ private fun ReviewCard(
                 color = AynaColors.Black,
                 lineHeight = 20.sp
             )
-            
+
             // Read more link (if needed)
             if (review.comment.length > 100) {
                 Text(
@@ -181,7 +185,7 @@ fun ReviewsSectionPreview() {
             comment = "Absolutely excellent service! The environment is welcoming, stylish, and relaxing. Special thanks to the team for their professionalism."
         )
     )
-    
+
     MaterialTheme {
         ReviewsSection(
             reviews = mockReviews,

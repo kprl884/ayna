@@ -12,10 +12,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.techtactoe.ayna.data.MockSalonDetailRepository
 =======
 import com.techtactoe.ayna.domain.model.SalonDetail
 >>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+=======
+import com.techtactoe.ayna.data.MockSalonDetailRepository
+import com.techtactoe.ayna.domain.model.SalonDetail
+>>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
@@ -36,7 +41,6 @@ fun AppNavigation() {
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Appointments") == true -> Screen.Appointments
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Profile") == true -> Screen.Profile
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Detail") == true -> null // Don't show bottom bar
-        currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.SalonDetailScreen") == true -> null // Don't show bottom bar
         else -> null
     }
 
@@ -66,7 +70,7 @@ fun AppNavigation() {
         ) {
             composable<Screen.Home> {
                 HomeScreen(onSalonClick = { salonId ->
-                    navController.navigate(Screen.SalonDetailScreen(salonId))
+                    navController.navigate(Screen.Detail(salonId))
                 })
             }
             composable<Screen.Search> { SearchScreen() }
@@ -86,44 +90,6 @@ fun AppNavigation() {
                     onShareClick = { /* Handle share */ },
                     onFavoriteClick = { /* Handle favorite */ },
                     onBookNowClick = { /* Handle booking */ }
-                )
-            }
-
-            composable<Screen.SalonDetailScreen> { backStackEntry ->
-                val screen: Screen.SalonDetailScreen = backStackEntry.toRoute()
-                val salonId = screen.salonId
-
-                SalonDetailScreen(
-                    salonDetail = SalonDetail(
-                        id = salonId,
-                        name = "Salon Name",
-                        rating = 4.5,
-                        reviewCount = 100,
-                        address = "123 Main St",
-                        status = com.techtactoe.ayna.domain.model.SalonStatus.OPEN,
-                        images = listOf("image1.jpg", "image2.jpg"),
-                        services = emptyList(),
-                        team = emptyList(),
-                        reviews = emptyList(),
-                        buyOptions = emptyList(),
-                        about = com.techtactoe.ayna.domain.model.SalonAbout(
-                            description = "Description",
-                            fullDescription = "Full Description"
-                        ),
-                        openingHours = emptyList()
-                    ),
-                    onBackClick = {
-
-                    },
-                    onShareClick = {
-
-                    },
-                    onFavoriteClick = {
-
-                    },
-                    onBookNowClick = {
-
-                    }
                 )
             }
         }

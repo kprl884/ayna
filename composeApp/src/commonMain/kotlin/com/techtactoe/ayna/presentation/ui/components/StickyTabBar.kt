@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +32,10 @@ enum class SalonDetailTab {
 
 @Composable
 fun StickyTabBar(
+    salonName: String,
+    onBackClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onFavoriteClick: () -> Unit,
     selectedTab: SalonDetailTab,
     onTabClick: (SalonDetailTab) -> Unit,
     modifier: Modifier = Modifier
@@ -37,27 +45,88 @@ fun StickyTabBar(
             .fillMaxWidth()
             .background(AynaColors.White)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            SalonDetailTab.entries.forEach { tab ->
-                TabItem(
-                    tab = tab,
-                    isSelected = selectedTab == tab,
-                    onClick = { onTabClick(tab) }
-                )
+        Column {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Surface(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable { onBackClick() },
+                    shape = CircleShape,
+                    color = AynaColors.White,
+                    shadowElevation = 2.dp
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "←",
+                            fontSize = 18.sp,
+                            color = AynaColors.Black
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Text(salonName)
+                Spacer(modifier = Modifier.weight(1f))
+                Surface(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable { onShareClick() },
+                    shape = CircleShape,
+                    color = AynaColors.White,
+                    shadowElevation = 2.dp
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "↗",
+                            fontSize = 18.sp,
+                            color = AynaColors.Black
+                        )
+                    }
+                }
+
+                Surface(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clickable { onFavoriteClick() },
+                    shape = CircleShape,
+                    color = AynaColors.White,
+                    shadowElevation = 2.dp
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "♡",
+                            fontSize = 18.sp,
+                            color = AynaColors.Black
+                        )
+                    }
+                }
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                SalonDetailTab.entries.forEach { tab ->
+                    TabItem(
+                        tab = tab,
+                        isSelected = selectedTab == tab,
+                        onClick = { onTabClick(tab) }
+                    )
+                }
+            }
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = AynaColors.BorderGray
+            )
         }
-        
-        // Bottom border
-        HorizontalDivider(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            thickness = 1.dp,
-            color = AynaColors.BorderGray
-        )
+
     }
 }
 
@@ -87,7 +156,7 @@ private fun TabItem(
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                 color = if (isSelected) AynaColors.Black else AynaColors.SecondaryText
             )
-            
+
             if (isSelected) {
                 Box(
                     modifier = Modifier
@@ -107,7 +176,11 @@ fun StickyTabBarPreview() {
     MaterialTheme {
         StickyTabBar(
             selectedTab = SalonDetailTab.SERVICES,
-            onTabClick = {}
+            onTabClick = {},
+            salonName = "Salon Name",
+            onBackClick = {},
+            onShareClick = {},
+            onFavoriteClick = {}
         )
     }
 }

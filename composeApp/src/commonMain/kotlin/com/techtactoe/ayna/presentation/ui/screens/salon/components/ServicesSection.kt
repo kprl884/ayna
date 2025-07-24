@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.ui.components
+package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,11 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonService
+<<<<<<< HEAD:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/components/ServicesSection.kt
 <<<<<<< HEAD
 import com.techtactoe.ayna.domain.model.ServiceCategory
 =======
 import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
 >>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+=======
+import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
+>>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/screens/salon/components/ServicesSection.kt
 import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -43,7 +47,7 @@ fun ServicesSection(
     modifier: Modifier = Modifier
 ) {
     var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
-    
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -56,7 +60,7 @@ fun ServicesSection(
             color = AynaColors.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        
+
         // Filter tabs
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -70,24 +74,21 @@ fun ServicesSection(
                 )
             }
         }
-        
-        // Service list - filtered based on selected category
+
+        // Service list
         val filteredServices = services.filter { it.category == selectedCategory }
-        
-        if (filteredServices.isNotEmpty()) {
-            filteredServices.forEachIndexed { index, service ->
-                ServiceCard(
-                    service = service,
-                    onBookClick = { /* Handle booking */ }
+
+        filteredServices.forEach { service ->
+            ServiceCard(
+                service = service,
+                onBookClick = { /* Handle booking */ }
+            )
+
+            if (service != filteredServices.last()) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = AynaColors.BorderGray
                 )
-                
-                if (index < filteredServices.size - 1) {
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        thickness = 1.dp,
-                        color = AynaColors.BorderGray
-                    )
-                }
             }
         } else {
             // Show empty state when no services in category
@@ -115,6 +116,7 @@ private fun FilterTab(
     modifier: Modifier = Modifier
 ) {
     val categoryName = when (category) {
+<<<<<<< HEAD:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/components/ServicesSection.kt
 <<<<<<< HEAD
         ServiceCategory.FEATURED -> "Featured"
         ServiceCategory.CONSULTATION -> "CONSULTATION"
@@ -132,8 +134,18 @@ private fun FilterTab(
         ServiceCategoryEnum.STYLING -> "Styling"
         ServiceCategoryEnum.COLOR -> "Color"
 >>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+=======
+        ServiceCategoryEnum.FEATURED -> "Featured"
+        ServiceCategoryEnum.CONSULTATION -> "CONSULTATION"
+        ServiceCategoryEnum.MENS_CUT -> "MEN'S CUT"
+        ServiceCategoryEnum.WOMENS_HAIRCUT -> "WOMEN'S HAIRCUT"
+        ServiceCategoryEnum.STYLE -> "STYLE"
+        ServiceCategoryEnum.COLOR_APPLICATION -> "COLOR APPLICATION"
+        ServiceCategoryEnum.QIQI_STRAIGHTENING -> "QIQI | STRAIGHTENING"
+        ServiceCategoryEnum.KIDS -> "KIDS"
+>>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/screens/salon/components/ServicesSection.kt
     }
-    
+
     Surface(
         modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(50.dp), // Fully rounded
@@ -183,9 +195,9 @@ private fun ServiceCard(
                 fontWeight = FontWeight.Bold,
                 color = AynaColors.Black
             )
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             // Details line: duration • serviceCount services • genderRestriction
             val detailsText = buildString {
                 append(service.duration)
@@ -196,15 +208,15 @@ private fun ServiceCard(
                     append(" • $restriction")
                 }
             }
-            
+
             Text(
                 text = detailsText,
                 fontSize = 14.sp,
                 color = AynaColors.SecondaryText
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             // Price
             Text(
                 text = service.priceFrom,
@@ -213,7 +225,7 @@ private fun ServiceCard(
                 color = AynaColors.Black
             )
         }
-        
+
         // Book button with fully rounded shape
         Surface(
             modifier = Modifier.clickable { onBookClick() },
@@ -222,7 +234,7 @@ private fun ServiceCard(
         ) {
             Box(
                 modifier = Modifier
-                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(50.dp))
+                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(20.dp))
                     .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
                 Text(
@@ -242,22 +254,17 @@ fun ServicesSectionPreview() {
     val mockServices = listOf(
         SalonService(
             id = "1",
-            name = "QIQI | STRAIGHTENING TREATMENT - MAN",
-            duration = "2 hrs, 20 mins",
-            serviceCount = 4,
-            genderRestriction = "Male only",
-            priceFrom = "€70",
-            category = ServiceCategory.QIQI_STRAIGHTENING
-        ),
-        SalonService(
-            id = "2",
             name = "CUT",
             duration = "55 mins – 1 hr, 10 mins",
             serviceCount = 2,
             genderRestriction = "Male only",
             priceFrom = "from €20",
+<<<<<<< HEAD:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/components/ServicesSection.kt
 <<<<<<< HEAD
             category = ServiceCategory.MENS_CUT
+=======
+            category = ServiceCategoryEnum.MENS_CUT
+>>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/screens/salon/components/ServicesSection.kt
         ),
         SalonService(
             id = "3",
@@ -266,6 +273,7 @@ fun ServicesSectionPreview() {
             serviceCount = 3,
             genderRestriction = null,
             priceFrom = "from €40",
+<<<<<<< HEAD:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/components/ServicesSection.kt
             category = ServiceCategory.WOMENS_HAIRCUT
 =======
             category = ServiceCategoryEnum.FEATURED
@@ -279,9 +287,12 @@ fun ServicesSectionPreview() {
             priceFrom = "from €20",
             category = ServiceCategoryEnum.FEATURED
 >>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+=======
+            category = ServiceCategoryEnum.WOMENS_HAIRCUT
+>>>>>>> 7904688811748dd1eab3bfbada01aec314e1c956:composeApp/src/commonMain/kotlin/com/techtactoe/ayna/presentation/ui/screens/salon/components/ServicesSection.kt
         )
     )
-    
+
     MaterialTheme {
         ServicesSection(services = mockServices)
     }
