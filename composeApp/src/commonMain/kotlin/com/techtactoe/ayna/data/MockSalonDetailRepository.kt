@@ -72,19 +72,11 @@ object MockSalonDetailRepository {
             SalonService(
                 id = "4",
                 name = "COLOR | ROOTS & FINISH",
-<<<<<<< HEAD
                 duration = "1 hr, 40 mins – 1 hr, 50 mins",
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €40",
-                category = ServiceCategory.FEATURED
-=======
-                duration = "2 hrs – 3 hrs",
-                serviceCount = 5,
-                genderRestriction = null,
-                priceFrom = "from €60",
-                category = ServiceCategoryEnum.COLOR
->>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+                category = ServiceCategoryEnum.FEATURED
             ),
             
             // Consultation services
@@ -94,9 +86,8 @@ object MockSalonDetailRepository {
                 duration = "10 mins",
                 serviceCount = 0,
                 genderRestriction = null,
-<<<<<<< HEAD
                 priceFrom = "free",
-                category = ServiceCategory.CONSULTATION
+                category = ServiceCategoryEnum.CONSULTATION
             ),
             SalonService(
                 id = "6",
@@ -105,7 +96,7 @@ object MockSalonDetailRepository {
                 serviceCount = 0,
                 genderRestriction = null,
                 priceFrom = "€0",
-                category = ServiceCategory.CONSULTATION
+                category = ServiceCategoryEnum.CONSULTATION
             ),
             SalonService(
                 id = "7",
@@ -114,7 +105,7 @@ object MockSalonDetailRepository {
                 serviceCount = 0,
                 genderRestriction = null,
                 priceFrom = "free",
-                category = ServiceCategory.CONSULTATION
+                category = ServiceCategoryEnum.CONSULTATION
             ),
             SalonService(
                 id = "8",
@@ -123,7 +114,7 @@ object MockSalonDetailRepository {
                 serviceCount = 0,
                 genderRestriction = null,
                 priceFrom = "free",
-                category = ServiceCategory.CONSULTATION
+                category = ServiceCategoryEnum.CONSULTATION
             ),
             
             // Men's Cut services
@@ -134,7 +125,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €20",
-                category = ServiceCategory.MENS_CUT
+                category = ServiceCategoryEnum.MENS_CUT
             ),
             SalonService(
                 id = "10",
@@ -143,7 +134,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Male only",
                 priceFrom = "from €25",
-                category = ServiceCategory.MENS_CUT
+                category = ServiceCategoryEnum.MENS_CUT
             ),
             SalonService(
                 id = "11",
@@ -152,7 +143,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €15",
-                category = ServiceCategory.MENS_CUT
+                category = ServiceCategoryEnum.MENS_CUT
             ),
             SalonService(
                 id = "12",
@@ -161,7 +152,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €20",
-                category = ServiceCategory.MENS_CUT
+                category = ServiceCategoryEnum.MENS_CUT
             ),
             
             // Women's Haircut services
@@ -172,7 +163,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €40",
-                category = ServiceCategory.WOMENS_HAIRCUT
+                category = ServiceCategoryEnum.WOMENS_HAIRCUT
             ),
             SalonService(
                 id = "14",
@@ -181,7 +172,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €50",
-                category = ServiceCategory.WOMENS_HAIRCUT
+                category = ServiceCategoryEnum.WOMENS_HAIRCUT
             ),
             SalonService(
                 id = "15",
@@ -190,7 +181,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €50",
-                category = ServiceCategory.WOMENS_HAIRCUT
+                category = ServiceCategoryEnum.WOMENS_HAIRCUT
             ),
             SalonService(
                 id = "16",
@@ -199,7 +190,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €55",
-                category = ServiceCategory.WOMENS_HAIRCUT
+                category = ServiceCategoryEnum.WOMENS_HAIRCUT
             ),
             
             // Style services
@@ -210,7 +201,7 @@ object MockSalonDetailRepository {
                 serviceCount = 0,
                 genderRestriction = null,
                 priceFrom = "€15",
-                category = ServiceCategory.STYLE
+                category = ServiceCategoryEnum.STYLE
             ),
             SalonService(
                 id = "18",
@@ -219,7 +210,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Female only",
                 priceFrom = "from €20",
-                category = ServiceCategory.STYLE
+                category = ServiceCategoryEnum.STYLE
             ),
             SalonService(
                 id = "19",
@@ -228,7 +219,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Female only",
                 priceFrom = "from €25",
-                category = ServiceCategory.STYLE
+                category = ServiceCategoryEnum.STYLE
             ),
             SalonService(
                 id = "20",
@@ -237,7 +228,7 @@ object MockSalonDetailRepository {
                 serviceCount = 1,
                 genderRestriction = "Female only",
                 priceFrom = "from €30",
-                category = ServiceCategory.STYLE
+                category = ServiceCategoryEnum.STYLE
             ),
             
             // Color Application services
@@ -248,7 +239,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €40",
-                category = ServiceCategory.COLOR_APPLICATION
+                category = ServiceCategoryEnum.COLOR_APPLICATION
             ),
             SalonService(
                 id = "22",
@@ -257,7 +248,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €50",
-                category = ServiceCategory.COLOR_APPLICATION
+                category = ServiceCategoryEnum.COLOR_APPLICATION
             ),
             SalonService(
                 id = "23",
@@ -266,7 +257,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €55",
-                category = ServiceCategory.COLOR_APPLICATION
+                category = ServiceCategoryEnum.COLOR_APPLICATION
             ),
             
             // QIQI Straightening services
@@ -277,7 +268,7 @@ object MockSalonDetailRepository {
                 serviceCount = 4,
                 genderRestriction = "Male only",
                 priceFrom = "€70",
-                category = ServiceCategory.QIQI_STRAIGHTENING
+                category = ServiceCategoryEnum.QIQI_STRAIGHTENING
             ),
             SalonService(
                 id = "25",
@@ -286,7 +277,7 @@ object MockSalonDetailRepository {
                 serviceCount = 6,
                 genderRestriction = null,
                 priceFrom = "from €211",
-                category = ServiceCategory.QIQI_STRAIGHTENING
+                category = ServiceCategoryEnum.QIQI_STRAIGHTENING
             ),
             SalonService(
                 id = "26",
@@ -295,7 +286,7 @@ object MockSalonDetailRepository {
                 serviceCount = 6,
                 genderRestriction = null,
                 priceFrom = "from €241",
-                category = ServiceCategory.QIQI_STRAIGHTENING
+                category = ServiceCategoryEnum.QIQI_STRAIGHTENING
             ),
             
             // Kids services
@@ -306,7 +297,7 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = "Female only",
                 priceFrom = "from €24",
-                category = ServiceCategory.KIDS
+                category = ServiceCategoryEnum.KIDS
             ),
             SalonService(
                 id = "28",
@@ -315,11 +306,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €14",
-                category = ServiceCategory.KIDS
-=======
-                priceFrom = "Free",
-                category = ServiceCategoryEnum.CONSULTATION
->>>>>>> c6f912b7061690bd37a0eb2667fb82cbe0eb4d29
+                category = ServiceCategoryEnum.KIDS
             )
         )
     }
