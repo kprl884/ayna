@@ -8,7 +8,7 @@ import com.techtactoe.ayna.domain.model.SalonAbout
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonService
 import com.techtactoe.ayna.domain.model.SalonStatus
-import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
+import com.techtactoe.ayna.domain.model.ServiceCategory
 import com.techtactoe.ayna.domain.model.TeamMember
 
 object MockSalonDetailRepository {
@@ -41,6 +41,7 @@ object MockSalonDetailRepository {
     
     private fun getSampleServices(): List<SalonService> {
         return listOf(
+            // Featured services
             SalonService(
                 id = "1",
                 name = "CUT",
@@ -48,7 +49,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Male only",
                 priceFrom = "from €20",
-                category = ServiceCategoryEnum.FEATURED
+                category = ServiceCategory.FEATURED
             ),
             SalonService(
                 id = "2",
@@ -57,7 +58,7 @@ object MockSalonDetailRepository {
                 serviceCount = 2,
                 genderRestriction = "Female only",
                 priceFrom = "from €20",
-                category = ServiceCategoryEnum.FEATURED
+                category = ServiceCategory.FEATURED
             ),
             SalonService(
                 id = "3",
@@ -66,25 +67,246 @@ object MockSalonDetailRepository {
                 serviceCount = 3,
                 genderRestriction = null,
                 priceFrom = "from €40",
-                category = ServiceCategoryEnum.FEATURED
+                category = ServiceCategory.FEATURED
             ),
             SalonService(
                 id = "4",
                 name = "COLOR | ROOTS & FINISH",
-                duration = "2 hrs – 3 hrs",
-                serviceCount = 5,
-                genderRestriction = null,
-                priceFrom = "from €60",
-                category = ServiceCategoryEnum.COLOR
+                duration = "1 hr, 40 mins – 1 hr, 50 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €40",
+                category = ServiceCategory.FEATURED
             ),
+            
+            // Consultation services
             SalonService(
                 id = "5",
-                name = "CONSULTATION",
-                duration = "15 mins",
-                serviceCount = 1,
+                name = "EXTENSION CONSULTATION",
+                duration = "10 mins",
+                serviceCount = 0,
                 genderRestriction = null,
-                priceFrom = "Free",
-                category = ServiceCategoryEnum.CONSULTATION
+                priceFrom = "free",
+                category = ServiceCategory.CONSULTATION
+            ),
+            SalonService(
+                id = "6",
+                name = "TREATMENTS CONSULTATION",
+                duration = "15 mins",
+                serviceCount = 0,
+                genderRestriction = null,
+                priceFrom = "€0",
+                category = ServiceCategory.CONSULTATION
+            ),
+            SalonService(
+                id = "7",
+                name = "KERATIN CONSULTATION",
+                duration = "15 mins",
+                serviceCount = 0,
+                genderRestriction = null,
+                priceFrom = "free",
+                category = ServiceCategory.CONSULTATION
+            ),
+            SalonService(
+                id = "8",
+                name = "BALAYAGE | HIGHLIGHTS CONSULTATION",
+                duration = "15 mins",
+                serviceCount = 0,
+                genderRestriction = null,
+                priceFrom = "free",
+                category = ServiceCategory.CONSULTATION
+            ),
+            
+            // Men's Cut services
+            SalonService(
+                id = "9",
+                name = "CUT",
+                duration = "55 mins – 1 hr, 10 mins",
+                serviceCount = 2,
+                genderRestriction = "Male only",
+                priceFrom = "from €20",
+                category = ServiceCategory.MENS_CUT
+            ),
+            SalonService(
+                id = "10",
+                name = "CUT & BEARD",
+                duration = "1 hr, 5 mins – 1 hr, 35 mins",
+                serviceCount = 3,
+                genderRestriction = "Male only",
+                priceFrom = "from €25",
+                category = ServiceCategory.MENS_CUT
+            ),
+            SalonService(
+                id = "11",
+                name = "BUZZ",
+                duration = "30 mins",
+                serviceCount = 2,
+                genderRestriction = "Male only",
+                priceFrom = "from €15",
+                category = ServiceCategory.MENS_CUT
+            ),
+            SalonService(
+                id = "12",
+                name = "BUZZ & BEARD",
+                duration = "45 mins",
+                serviceCount = 2,
+                genderRestriction = "Male only",
+                priceFrom = "from €20",
+                category = ServiceCategory.MENS_CUT
+            ),
+            
+            // Women's Haircut services
+            SalonService(
+                id = "13",
+                name = "HAIRCUT & FINISH",
+                duration = "1 hr, 15 mins – 1 hr, 45 mins",
+                serviceCount = 3,
+                genderRestriction = null,
+                priceFrom = "from €40",
+                category = ServiceCategory.WOMENS_HAIRCUT
+            ),
+            SalonService(
+                id = "14",
+                name = "HAIRCUT & FINISH | CHRIS LEROIS",
+                duration = "1 hr, 15 mins – 1 hr, 45 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €50",
+                category = ServiceCategory.WOMENS_HAIRCUT
+            ),
+            SalonService(
+                id = "15",
+                name = "HAIRCUT & BLOW DRY",
+                duration = "1 hr, 30 mins – 2 hrs",
+                serviceCount = 3,
+                genderRestriction = null,
+                priceFrom = "from €50",
+                category = ServiceCategory.WOMENS_HAIRCUT
+            ),
+            SalonService(
+                id = "16",
+                name = "HAIRCUT & CURLING TONGS | FLAT IRON",
+                duration = "1 hr, 45 mins – 2 hrs, 15 mins",
+                serviceCount = 3,
+                genderRestriction = null,
+                priceFrom = "from €55",
+                category = ServiceCategory.WOMENS_HAIRCUT
+            ),
+            
+            // Style services
+            SalonService(
+                id = "17",
+                name = "FINISH | CHRIS LEROIS",
+                duration = "15 mins",
+                serviceCount = 0,
+                genderRestriction = null,
+                priceFrom = "€15",
+                category = ServiceCategory.STYLE
+            ),
+            SalonService(
+                id = "18",
+                name = "BLOW DRY | BRUSH STYLE",
+                duration = "50 mins – 1 hr, 10 mins",
+                serviceCount = 2,
+                genderRestriction = "Female only",
+                priceFrom = "from €20",
+                category = ServiceCategory.STYLE
+            ),
+            SalonService(
+                id = "19",
+                name = "FLAT IRON | CURLING TONGS",
+                duration = "1 hr – 1 hr, 15 mins",
+                serviceCount = 2,
+                genderRestriction = "Female only",
+                priceFrom = "from €25",
+                category = ServiceCategory.STYLE
+            ),
+            SalonService(
+                id = "20",
+                name = "BOXER BRAIDS – Wet",
+                duration = "45 mins – 1 hr",
+                serviceCount = 1,
+                genderRestriction = "Female only",
+                priceFrom = "from €30",
+                category = ServiceCategory.STYLE
+            ),
+            
+            // Color Application services
+            SalonService(
+                id = "21",
+                name = "COLOR | ROOTS & FINISH",
+                duration = "1 hr, 40 mins – 1 hr, 50 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €40",
+                category = ServiceCategory.COLOR_APPLICATION
+            ),
+            SalonService(
+                id = "22",
+                name = "COLOR | ROOTS & BLOW DRY | BRUSHES STYLE",
+                duration = "1 hr, 55 mins – 2 hrs, 5 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €50",
+                category = ServiceCategory.COLOR_APPLICATION
+            ),
+            SalonService(
+                id = "23",
+                name = "COLOR | ROOTS & CURLING TONGS | FLAT IRON",
+                duration = "2 hrs, 10 mins – 2 hrs, 20 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €55",
+                category = ServiceCategory.COLOR_APPLICATION
+            ),
+            
+            // QIQI Straightening services
+            SalonService(
+                id = "24",
+                name = "QIQI | STRAIGHTENING TREATMENT - MAN",
+                duration = "2 hrs, 20 mins",
+                serviceCount = 4,
+                genderRestriction = "Male only",
+                priceFrom = "€70",
+                category = ServiceCategory.QIQI_STRAIGHTENING
+            ),
+            SalonService(
+                id = "25",
+                name = "QIQI | STRAIGHTENING TREATMENT - SHORT | FINE HAIR",
+                duration = "4 hrs, 30 mins",
+                serviceCount = 6,
+                genderRestriction = null,
+                priceFrom = "from €211",
+                category = ServiceCategory.QIQI_STRAIGHTENING
+            ),
+            SalonService(
+                id = "26",
+                name = "QIQI | STRAIGHTENING TREATMENT - MEDIUM HAIR",
+                duration = "4 hrs, 45 mins",
+                serviceCount = 6,
+                genderRestriction = null,
+                priceFrom = "from €241",
+                category = ServiceCategory.QIQI_STRAIGHTENING
+            ),
+            
+            // Kids services
+            SalonService(
+                id = "27",
+                name = "GIRLS | 1 – 12 Years",
+                duration = "1 hr – 1 hr, 20 mins",
+                serviceCount = 3,
+                genderRestriction = "Female only",
+                priceFrom = "from €24",
+                category = ServiceCategory.KIDS
+            ),
+            SalonService(
+                id = "28",
+                name = "BOYS | 1 – 12 Years",
+                duration = "30 mins – 55 mins",
+                serviceCount = 2,
+                genderRestriction = "Male only",
+                priceFrom = "from €14",
+                category = ServiceCategory.KIDS
             )
         )
     }
