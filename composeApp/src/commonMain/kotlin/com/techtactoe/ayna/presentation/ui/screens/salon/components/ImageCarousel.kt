@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.ui.components
+package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.ui.components
+package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,7 +39,7 @@ fun ServicesSection(
     modifier: Modifier = Modifier
 ) {
     var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
-    
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -52,7 +52,7 @@ fun ServicesSection(
             color = AynaColors.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        
+
         // Filter tabs
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -66,16 +66,16 @@ fun ServicesSection(
                 )
             }
         }
-        
+
         // Service list
         val filteredServices = services.filter { it.category == selectedCategory }
-        
+
         filteredServices.forEach { service ->
             ServiceCard(
                 service = service,
                 onBookClick = { /* Handle booking */ }
             )
-            
+
             if (service != filteredServices.last()) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 16.dp),
@@ -101,7 +101,7 @@ private fun FilterTab(
         ServiceCategoryEnum.STYLING -> "Styling"
         ServiceCategoryEnum.COLOR -> "Color"
     }
-    
+
     Surface(
         modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
@@ -150,15 +150,15 @@ private fun ServiceCard(
                 fontWeight = FontWeight.Bold,
                 color = AynaColors.Black
             )
-            
+
             Spacer(modifier = Modifier.height(4.dp))
-            
+
             Text(
                 text = "${service.duration} • ${service.serviceCount} services",
                 fontSize = 14.sp,
                 color = AynaColors.SecondaryText
             )
-            
+
             service.genderRestriction?.let { restriction ->
                 Text(
                     text = restriction,
@@ -166,9 +166,9 @@ private fun ServiceCard(
                     color = AynaColors.SecondaryText
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = service.priceFrom,
                 fontSize = 16.sp,
@@ -176,7 +176,7 @@ private fun ServiceCard(
                 color = AynaColors.Black
             )
         }
-        
+
         Surface(
             modifier = Modifier.clickable { onBookClick() },
             shape = RoundedCornerShape(20.dp),
@@ -221,7 +221,7 @@ fun ServicesSectionPreview() {
             category = ServiceCategoryEnum.FEATURED
         )
     )
-    
+
     MaterialTheme {
         ServicesSection(services = mockServices)
     }
