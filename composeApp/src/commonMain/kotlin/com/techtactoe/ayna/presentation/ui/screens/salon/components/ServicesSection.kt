@@ -53,7 +53,6 @@ fun ServicesSection(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Filter tabs
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.padding(bottom = 20.dp)
