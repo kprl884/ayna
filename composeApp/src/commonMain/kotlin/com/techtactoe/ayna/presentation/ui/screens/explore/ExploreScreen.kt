@@ -13,14 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.*
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.*
 import kotlinx.coroutines.flow.collectLatest
 
@@ -39,7 +36,7 @@ fun ExploreScreen(
 ) {
     val screenState by rememberUpdatedState(viewModel.screenState)
     val snackbarHostState = remember { SnackbarHostState() }
-    
+
     // Handle events
     LaunchedEffect(viewModel) {
         viewModel.events.collectLatest { event ->
@@ -53,9 +50,9 @@ fun ExploreScreen(
             }
         }
     }
-    
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -83,7 +80,7 @@ fun ExploreScreen(
             modifier = Modifier.padding(paddingValues)
         )
     }
-    
+
     // Bottom sheets
     when (screenState.currentBottomSheet) {
         is BottomSheetType.Sort -> {
@@ -99,6 +96,7 @@ fun ExploreScreen(
                 onDismiss = { viewModel.hideBottomSheet() }
             )
         }
+
         is BottomSheetType.Price -> {
             val currentFilters = getCurrentFilters(screenState.uiState)
             PriceBottomSheet(
@@ -117,6 +115,7 @@ fun ExploreScreen(
                 onDismiss = { viewModel.hideBottomSheet() }
             )
         }
+
         is BottomSheetType.VenueType -> {
             val currentFilters = getCurrentFilters(screenState.uiState)
             VenueTypeBottomSheet(
@@ -130,8 +129,9 @@ fun ExploreScreen(
                 onDismiss = { viewModel.hideBottomSheet() }
             )
         }
+
         is BottomSheetType.Filters -> {
-            val currentFilters = getCurrentFilters(screenState.uiState)
+            getCurrentFilters(screenState.uiState)
             FiltersBottomSheet(
                 currentFilters = screenState.tempFilters,
                 onFiltersChanged = { filters ->
@@ -144,6 +144,7 @@ fun ExploreScreen(
                 onDismiss = { viewModel.hideBottomSheet() }
             )
         }
+
         is BottomSheetType.None -> {
             // No bottom sheet shown
         }
@@ -164,14 +165,14 @@ private fun ExploreTopBar(
     modifier: Modifier = Modifier
 ) {
     val currentFilters = getCurrentFilters(uiState)
-    
+
     Column(
         modifier = modifier
             .background(Color(0xFFF8F9FA))
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         // Search bar
         ExploreSearchBar(
             searchQuery = currentFilters.searchQuery,
@@ -179,9 +180,9 @@ private fun ExploreTopBar(
             onSearchBarClick = onSearchBarClick,
             onMapClick = onMapClick
         )
-        
+
         Spacer(modifier = Modifier.height(12.dp))
-        
+
         // Filter chips
         FilterChipBar(
             filters = currentFilters,
@@ -190,7 +191,7 @@ private fun ExploreTopBar(
             onPriceClick = onPriceClick,
             onTypeClick = onTypeClick
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
     }
 }
@@ -209,6 +210,7 @@ private fun ExploreContent(
         is ExploreUiState.Loading -> {
             LoadingContent(modifier = modifier)
         }
+
         is ExploreUiState.Success -> {
             SuccessContent(
                 venues = uiState.venues,
@@ -221,6 +223,7 @@ private fun ExploreContent(
                 modifier = modifier
             )
         }
+
         is ExploreUiState.Error -> {
             ErrorContent(
                 message = uiState.message,
@@ -228,6 +231,7 @@ private fun ExploreContent(
                 modifier = modifier
             )
         }
+
         is ExploreUiState.Empty -> {
             EmptyContent(
                 message = uiState.message,
@@ -265,8 +269,7 @@ private fun SuccessContent(
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
-    
-    // Auto-load more when reaching end
+
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collect { lastVisibleIndex ->
@@ -275,7 +278,7 @@ private fun SuccessContent(
                 }
             }
     }
-    
+
     LazyColumn(
         state = listState,
         modifier = modifier.fillMaxSize(),
@@ -297,7 +300,7 @@ private fun SuccessContent(
                 )
             }
         }
-        
+
         // Venue cards
         items(venues) { venue ->
             VenueCard(
@@ -306,7 +309,7 @@ private fun SuccessContent(
                 onSeeMoreClick = { onSeeMoreClick(venue) }
             )
         }
-        
+
         // Loading more indicator
         if (hasMorePages && venues.isNotEmpty()) {
             item {
@@ -348,18 +351,18 @@ private fun ErrorContent(
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         Button(
             onClick = onRetry,
             colors = ButtonDefaults.buttonColors(
@@ -392,9 +395,9 @@ private fun EmptyContent(
             modifier = Modifier.size(64.dp),
             tint = Color(0xFF7B61FF)
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         Text(
             text = message,
             style = MaterialTheme.typography.titleLarge.copy(
@@ -403,18 +406,18 @@ private fun EmptyContent(
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = subMessage,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
-        
+
         Spacer(modifier = Modifier.height(24.dp))
-        
+
         Button(
             onClick = onClearSearch,
             colors = ButtonDefaults.buttonColors(
@@ -433,21 +436,5 @@ private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
         is ExploreUiState.Error -> uiState.filters
         is ExploreUiState.Empty -> uiState.filters
         else -> ExploreFilters()
-    }
-}
-
-@Preview
-@Composable
-private fun ExploreScreenPreview() {
-    AynaAppTheme {
-        ExploreScreen()
-    }
-}
-
-@Preview
-@Composable
-private fun ExploreScreenDarkPreview() {
-    AynaAppTheme(darkTheme = true) {
-        ExploreScreen()
     }
 }
