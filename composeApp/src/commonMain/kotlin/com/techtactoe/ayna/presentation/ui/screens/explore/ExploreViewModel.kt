@@ -3,7 +3,7 @@ package com.techtactoe.ayna.presentation.ui.screens.explore
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.techtactoe.ayna.data.MockVenueRepository
+import com.techtactoe.ayna.data.FakeExploreRepository
 import com.techtactoe.ayna.domain.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
