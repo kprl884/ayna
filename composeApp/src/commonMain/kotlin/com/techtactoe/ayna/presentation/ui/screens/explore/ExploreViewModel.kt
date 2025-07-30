@@ -118,7 +118,14 @@ class ExploreViewModel(
         if (reset) {
             currentPage = 0
             allVenues.clear()
-            screenState = screenState.copy(uiState = ExploreUiState.Loading)
+            val currentState = screenState.uiState
+            if (currentState is ExploreUiState.Success) {
+                screenState = screenState.copy(
+                    uiState = currentState.copy(isLoading = true)
+                )
+            } else {
+                screenState = screenState.copy(uiState = ExploreUiState.Loading)
+            }
         }
         
         val currentFilters = getCurrentFilters()
