@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  * ViewModel for the Explore screen handling venue discovery and filtering
  */
 class ExploreViewModel(
-    private val repository: MockVenueRepository = MockVenueRepository()
+    private val repository: FakeExploreRepository = FakeExploreRepository()
 ) {
     var screenState by mutableStateOf(
         ExploreScreenState(
