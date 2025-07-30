@@ -37,7 +37,7 @@ fun AppNavigation() {
         else -> null
     }
 
-    val bottomBarScreens = setOf(Screen.Home, Screen.Search, Screen.Appointments, Screen.Profile)
+    val bottomBarScreens = setOf(Screen.Home, Screen.Search, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     Scaffold(
         bottomBar = {
