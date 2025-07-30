@@ -181,7 +181,7 @@ class ExploreViewModel(
         val currentState = screenState.uiState
         if (currentState is ExploreUiState.Success) {
             screenState = screenState.copy(
-                uiState = currentState.copy(isRefreshing = true)
+                uiState = currentState.copy(isRefreshing = true, isLoading = false)
             )
         }
         loadVenues(reset = true)
