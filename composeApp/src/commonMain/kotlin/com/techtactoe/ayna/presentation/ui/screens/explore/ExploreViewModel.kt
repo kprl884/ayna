@@ -191,7 +191,7 @@ class ExploreViewModel(
         when (val currentState = screenState.uiState) {
             is ExploreUiState.Success -> {
                 screenState = screenState.copy(
-                    uiState = currentState.copy(filters = filters)
+                    uiState = currentState.copy(filters = filters, isLoading = false)
                 )
             }
             is ExploreUiState.Error -> {
