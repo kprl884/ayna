@@ -16,7 +16,7 @@ fun AppBottomNavigation(
     onItemSelected: (Screen) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val navItems = listOf(Screen.Home, Screen.Search, Screen.Appointments, Screen.Profile)
+    val navItems = listOf(Screen.Home, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     NavigationBar(
         modifier = modifier.fillMaxWidth()
@@ -43,4 +43,4 @@ fun AppBottomNavigation(
             )
         }
     }
-} 
+}
