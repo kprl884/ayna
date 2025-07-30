@@ -67,6 +67,27 @@ fun AppNavigation() {
                 })
             }
             composable<Screen.Search> { SearchScreen() }
+            composable<Screen.Explore> {
+                ExploreScreen(
+                    onNavigateToVenueDetail = { venueId ->
+                        navController.navigate(Screen.Detail(venueId))
+                    },
+                    onNavigateToMap = {
+                        navController.navigate(Screen.ExploreMap)
+                    },
+                    onNavigateToAdvancedSearch = {
+                        navController.navigate(Screen.AdvancedSearch)
+                    }
+                )
+            }
+            composable<Screen.ExploreMap> {
+                // TODO: Implement map screen
+                SearchScreen() // Placeholder
+            }
+            composable<Screen.AdvancedSearch> {
+                // TODO: Implement advanced search screen
+                SearchScreen() // Placeholder
+            }
             composable<Screen.Appointments> { AppointmentsScreen() }
             composable<Screen.Profile> { ProfileScreen() }
 
