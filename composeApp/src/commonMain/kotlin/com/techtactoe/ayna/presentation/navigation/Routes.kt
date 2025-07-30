@@ -21,6 +21,21 @@ sealed interface Screen {
     data object Search : Screen {
         override val route: String = "search"
     }
+
+    @Serializable
+    data object Explore : Screen {
+        override val route: String = "explore"
+    }
+
+    @Serializable
+    data object ExploreMap : Screen {
+        override val route: String = "explore_map"
+    }
+
+    @Serializable
+    data object AdvancedSearch : Screen {
+        override val route: String = "advanced_search"
+    }
     @Serializable
     data object Appointments : Screen {
         override val route: String = "appointments"
@@ -55,4 +70,4 @@ val Screen.icon: ImageVector?
         is Screen.Profile -> Icons.Default.AccountCircle
         is Screen.Detail -> null
         is Screen.SalonDetailScreen -> null
-    } 
+    }
