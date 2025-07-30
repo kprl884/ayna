@@ -6,6 +6,7 @@ import com.techtactoe.ayna.domain.model.Venue
 sealed interface ExploreUiState {
     data object Loading : ExploreUiState
     data class Success(
+        val isLoading: Boolean = false,
         val venues: List<Venue>,
         val isRefreshing: Boolean = false,
         val hasMorePages: Boolean = true,
