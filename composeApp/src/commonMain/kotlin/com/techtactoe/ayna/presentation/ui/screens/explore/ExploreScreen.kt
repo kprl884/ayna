@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.*
+import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.*
 import kotlinx.coroutines.flow.collectLatest
 
