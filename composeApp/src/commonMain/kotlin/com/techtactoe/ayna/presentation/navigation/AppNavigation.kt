@@ -18,6 +18,7 @@ import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
+import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 
 @Composable
 fun AppNavigation() {
@@ -29,13 +30,14 @@ fun AppNavigation() {
     val currentScreen: Screen? = when {
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Home") == true -> Screen.Home
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Search") == true -> Screen.Search
+        currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Explore") == true -> Screen.Explore
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Appointments") == true -> Screen.Appointments
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Profile") == true -> Screen.Profile
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Detail") == true -> null // Don't show bottom bar
         else -> null
     }
 
-    val bottomBarScreens = setOf(Screen.Home, Screen.Search, Screen.Appointments, Screen.Profile)
+    val bottomBarScreens = setOf(Screen.Home, Screen.Search, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     Scaffold(
         bottomBar = {
@@ -65,6 +67,27 @@ fun AppNavigation() {
                 })
             }
             composable<Screen.Search> { SearchScreen() }
+            composable<Screen.Explore> {
+                ExploreScreen(
+                    onNavigateToVenueDetail = { venueId ->
+                        navController.navigate(Screen.Detail(venueId))
+                    },
+                    onNavigateToMap = {
+                        navController.navigate(Screen.ExploreMap)
+                    },
+                    onNavigateToAdvancedSearch = {
+                        navController.navigate(Screen.AdvancedSearch)
+                    }
+                )
+            }
+            composable<Screen.ExploreMap> {
+                // TODO: Implement map screen
+                SearchScreen() // Placeholder
+            }
+            composable<Screen.AdvancedSearch> {
+                // TODO: Implement advanced search screen
+                SearchScreen() // Placeholder
+            }
             composable<Screen.Appointments> { AppointmentsScreen() }
             composable<Screen.Profile> { ProfileScreen() }
 

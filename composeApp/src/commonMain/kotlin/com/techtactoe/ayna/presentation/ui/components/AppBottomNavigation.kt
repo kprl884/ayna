@@ -16,7 +16,7 @@ fun AppBottomNavigation(
     onItemSelected: (Screen) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val navItems = listOf(Screen.Home, Screen.Search, Screen.Appointments, Screen.Profile)
+    val navItems = listOf(Screen.Home, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     NavigationBar(
         modifier = modifier.fillMaxWidth()
@@ -34,6 +34,7 @@ fun AppBottomNavigation(
                     val label = when (screen) {
                         is Screen.Home -> "Home"
                         is Screen.Search -> "Search"
+                        is Screen.Explore -> "Explore"
                         is Screen.Appointments -> "Appointments"
                         is Screen.Profile -> "Profile"
                         else -> screen::class.simpleName ?: "Unknown"
@@ -43,4 +44,4 @@ fun AppBottomNavigation(
             )
         }
     }
-} 
+}

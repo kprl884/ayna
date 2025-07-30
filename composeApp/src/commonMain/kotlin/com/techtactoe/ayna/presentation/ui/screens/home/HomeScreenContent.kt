@@ -43,7 +43,7 @@ fun HomeScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            val topPadding = this.maxHeight / 9
+            val topPadding = this.maxHeight / 10
             when {
                 state.isLoading -> {
                     Box(
