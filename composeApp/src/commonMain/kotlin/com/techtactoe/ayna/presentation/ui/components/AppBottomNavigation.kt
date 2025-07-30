@@ -34,6 +34,7 @@ fun AppBottomNavigation(
                     val label = when (screen) {
                         is Screen.Home -> "Home"
                         is Screen.Search -> "Search"
+                        is Screen.Explore -> "Explore"
                         is Screen.Appointments -> "Appointments"
                         is Screen.Profile -> "Profile"
                         else -> screen::class.simpleName ?: "Unknown"
