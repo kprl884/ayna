@@ -11,15 +11,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.*
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Sort options bottom sheet
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SortBottomSheet(
     currentSort: SortOption,
@@ -31,7 +31,8 @@ fun SortBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = WindowInsets(0)
+        // FIXED: Renamed 'windowInsets' to 'contentWindowInsets' and provided it as a lambda.
+        contentWindowInsets = { WindowInsets(0.dp) }
     ) {
         Column(
             modifier = Modifier
@@ -51,7 +52,7 @@ fun SortBottomSheet(
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -60,18 +61,18 @@ fun SortBottomSheet(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Sort options
-            SortOption.values().forEach { option ->
+            SortOption.entries.forEach { option ->
                 RadioButtonItem(
                     text = getSortOptionDisplayName(option),
                     selected = currentSort == option,
                     onClick = { onSortSelected(option) }
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -80,6 +81,7 @@ fun SortBottomSheet(
 /**
  * Price range bottom sheet with slider
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PriceBottomSheet(
     currentPriceRange: PriceRange,
@@ -90,12 +92,13 @@ fun PriceBottomSheet(
     modifier: Modifier = Modifier
 ) {
     var tempMaxPrice by remember { mutableFloatStateOf(currentPriceRange.max.toFloat()) }
-    
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = WindowInsets(0)
+        // FIXED: Renamed 'windowInsets' to 'contentWindowInsets' and provided it as a lambda.
+        contentWindowInsets = { WindowInsets(0.dp) }
     ) {
         Column(
             modifier = Modifier
@@ -115,7 +118,7 @@ fun PriceBottomSheet(
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -124,9 +127,9 @@ fun PriceBottomSheet(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Price label
             Text(
                 text = "Maximum price",
@@ -135,7 +138,7 @@ fun PriceBottomSheet(
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            
+
             // Price value
             Text(
                 text = "₺${(tempMaxPrice / 100).toInt()}",
@@ -145,11 +148,11 @@ fun PriceBottomSheet(
                 color = Color(0xFF7B61FF),
                 modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
             )
-            
+
             // Price slider
             Slider(
                 value = tempMaxPrice,
-                onValueChange = { 
+                onValueChange = {
                     tempMaxPrice = it
                     onPriceRangeChanged(currentPriceRange.copy(max = it.toInt()))
                 },
@@ -162,9 +165,9 @@ fun PriceBottomSheet(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             // Action buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -179,7 +182,7 @@ fun PriceBottomSheet(
                 ) {
                     Text("Clear")
                 }
-                
+
                 Button(
                     onClick = onApply,
                     modifier = Modifier.weight(1f),
@@ -191,7 +194,7 @@ fun PriceBottomSheet(
                     Text("Apply")
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -200,6 +203,7 @@ fun PriceBottomSheet(
 /**
  * Venue type bottom sheet
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VenueTypeBottomSheet(
     currentType: VenueType,
@@ -211,7 +215,8 @@ fun VenueTypeBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = WindowInsets(0)
+        // FIXED: Renamed 'windowInsets' to 'contentWindowInsets' and provided it as a lambda.
+        contentWindowInsets = { WindowInsets(0.dp) }
     ) {
         Column(
             modifier = Modifier
@@ -231,7 +236,7 @@ fun VenueTypeBottomSheet(
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -240,18 +245,18 @@ fun VenueTypeBottomSheet(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             // Venue type options
-            VenueType.values().forEach { type ->
+            VenueType.entries.forEach { type ->
                 RadioButtonItem(
                     text = getVenueTypeDisplayName(type),
                     selected = currentType == type,
                     onClick = { onTypeSelected(type) }
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -260,6 +265,7 @@ fun VenueTypeBottomSheet(
 /**
  * Combined filters bottom sheet
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FiltersBottomSheet(
     currentFilters: ExploreFilters,
@@ -270,12 +276,13 @@ fun FiltersBottomSheet(
     modifier: Modifier = Modifier
 ) {
     var tempFilters by remember { mutableStateOf(currentFilters) }
-    
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         dragHandle = { BottomSheetDefaults.DragHandle() },
-        windowInsets = WindowInsets(0)
+        // FIXED: Renamed 'windowInsets' to 'contentWindowInsets' and provided it as a lambda.
+        contentWindowInsets = { WindowInsets(0.dp) }
     ) {
         Column(
             modifier = Modifier
@@ -295,7 +302,7 @@ fun FiltersBottomSheet(
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                
+
                 IconButton(onClick = onDismiss) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -304,9 +311,9 @@ fun FiltersBottomSheet(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Sort by section
             Text(
                 text = "Sort by",
@@ -315,22 +322,22 @@ fun FiltersBottomSheet(
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
-            SortOption.values().forEach { option ->
+
+            SortOption.entries.forEach { option ->
                 RadioButtonItem(
                     text = getSortOptionDisplayName(option),
                     selected = tempFilters.sortOption == option,
-                    onClick = { 
+                    onClick = {
                         tempFilters = tempFilters.copy(sortOption = option)
                         onFiltersChanged(tempFilters)
                     }
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Maximum price section
             Text(
                 text = "Maximum price",
@@ -339,7 +346,7 @@ fun FiltersBottomSheet(
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            
+
             Text(
                 text = "₺${tempFilters.priceRange.max / 100}",
                 style = MaterialTheme.typography.headlineSmall.copy(
@@ -348,10 +355,10 @@ fun FiltersBottomSheet(
                 color = Color(0xFF7B61FF),
                 modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
             )
-            
+
             Slider(
                 value = tempFilters.priceRange.max.toFloat(),
-                onValueChange = { 
+                onValueChange = {
                     tempFilters = tempFilters.copy(
                         priceRange = tempFilters.priceRange.copy(max = it.toInt())
                     )
@@ -366,9 +373,9 @@ fun FiltersBottomSheet(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Venue type section
             Text(
                 text = "Venue type",
@@ -377,18 +384,18 @@ fun FiltersBottomSheet(
                 ),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             // Venue type chips
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                VenueType.values().forEach { type ->
+                VenueType.entries.forEach { type ->
                     FilterChip(
                         selected = tempFilters.venueType == type,
-                        onClick = { 
+                        onClick = {
                             tempFilters = tempFilters.copy(venueType = type)
                             onFiltersChanged(tempFilters)
                         },
@@ -416,9 +423,9 @@ fun FiltersBottomSheet(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             // Action buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -433,7 +440,7 @@ fun FiltersBottomSheet(
                 ) {
                     Text("Clear all")
                 }
-                
+
                 Button(
                     onClick = onApply,
                     modifier = Modifier.weight(1f),
@@ -445,7 +452,7 @@ fun FiltersBottomSheet(
                     Text("Apply")
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -474,7 +481,7 @@ private fun RadioButtonItem(
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
-        
+
         RadioButton(
             selected = selected,
             onClick = onClick,

@@ -1,25 +1,35 @@
 package com.techtactoe.ayna.presentation.ui.screens.explore.components
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.SortOption
 import com.techtactoe.ayna.domain.model.VenueType
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Filter chip bar component showing filter options
@@ -43,13 +53,13 @@ fun FilterChipBar(
     ) {
         // All filters chip
         FilterChip(
-            icon = Icons.Outlined.Tune,
+            icon = Icons.Outlined.MoreVert,
             text = "",
             isSelected = false,
             onClick = onFiltersClick,
             showIcon = true
         )
-        
+
         // Sort chip
         FilterChip(
             text = getSortDisplayText(filters.sortOption),
@@ -57,7 +67,7 @@ fun FilterChipBar(
             onClick = onSortClick,
             showDropdown = true
         )
-        
+
         // Price chip
         FilterChip(
             text = getPriceDisplayText(filters.priceRange.max),
@@ -65,7 +75,7 @@ fun FilterChipBar(
             onClick = onPriceClick,
             showDropdown = true
         )
-        
+
         // Type chip
         FilterChip(
             text = getTypeDisplayText(filters.venueType),
@@ -108,7 +118,7 @@ private fun FilterChip(
                             fontSize = 14.sp
                         )
                     )
-                    
+
                     if (showDropdown) {
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowDown,
@@ -180,7 +190,7 @@ private fun FilterChipBarPreview() {
                 onPriceClick = { },
                 onTypeClick = { }
             )
-            
+
             // With filters applied
             FilterChipBar(
                 filters = ExploreFilters(
