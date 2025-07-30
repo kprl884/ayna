@@ -212,16 +212,20 @@ private fun ExploreContent(
         }
 
         is ExploreUiState.Success -> {
-            SuccessContent(
-                venues = uiState.venues,
-                isRefreshing = uiState.isRefreshing,
-                hasMorePages = uiState.hasMorePages,
-                onVenueClick = onVenueClick,
-                onSeeMoreClick = onSeeMoreClick,
-                onRefresh = onRefresh,
-                onLoadMore = onLoadMore,
-                modifier = modifier
-            )
+            if (uiState.isLoading) {
+                LoadingContent(modifier = modifier)
+            } else {
+                SuccessContent(
+                    venues = uiState.venues,
+                    isRefreshing = uiState.isRefreshing,
+                    hasMorePages = uiState.hasMorePages,
+                    onVenueClick = onVenueClick,
+                    onSeeMoreClick = onSeeMoreClick,
+                    onRefresh = onRefresh,
+                    onLoadMore = onLoadMore,
+                    modifier = modifier
+                )
+            }
         }
 
         is ExploreUiState.Error -> {
