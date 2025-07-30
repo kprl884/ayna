@@ -17,19 +17,26 @@ import kotlinx.coroutines.launch
 class ExploreViewModel(
     private val repository: MockVenueRepository = MockVenueRepository()
 ) {
-    var screenState by mutableStateOf(ExploreScreenState())
+    var screenState by mutableStateOf(
+        ExploreScreenState(
+            uiState = ExploreUiState.Success(
+                isLoading = false,
+                venues = sampleVenues(),
+                isRefreshing = false,
+                hasMorePages = true,
+                filters = ExploreFilters(),
+                isLocationPermissionGranted = false
+            )
+        )
+    )
         private set
-    
+
     private val _events = MutableSharedFlow<ExploreEvent>()
     val events = _events.asSharedFlow()
-    
+
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private var currentPage = 0
     private val allVenues = mutableListOf<Venue>()
-    
-    init {
-        handleIntent(ExploreIntent.LoadVenues)
-    }
     
     /**
      * Handles user intents and updates the state accordingly
