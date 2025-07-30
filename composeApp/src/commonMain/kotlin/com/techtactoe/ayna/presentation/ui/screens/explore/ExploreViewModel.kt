@@ -148,6 +148,7 @@ class ExploreViewModel(
                             
                             screenState = screenState.copy(
                                 uiState = ExploreUiState.Success(
+                                    isLoading = false,
                                     venues = allVenues.toList(),
                                     hasMorePages = venues.isNotEmpty(),
                                     filters = currentFilters,
