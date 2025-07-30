@@ -18,6 +18,7 @@ import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
+import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 
 @Composable
 fun AppNavigation() {
