@@ -442,3 +442,49 @@ private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
         else -> ExploreFilters()
     }
 }
+
+@Preview
+@Composable
+private fun ExploreScreenPreview() {
+    AynaAppTheme {
+        val sampleUiState = ExploreUiState.Success(
+            isLoading = false,
+            venues = sampleVenues(),
+            isRefreshing = false,
+            hasMorePages = true,
+            filters = ExploreFilters(),
+            isLocationPermissionGranted = false
+        )
+        ExploreContent(
+            uiState = sampleUiState,
+            onVenueClick = { },
+            onSeeMoreClick = { },
+            onRefresh = { },
+            onLoadMore = { },
+            onClearSearch = { }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ExploreScreenDarkPreview() {
+    AynaAppTheme(darkTheme = true) {
+        val sampleUiState = ExploreUiState.Success(
+            isLoading = false,
+            venues = sampleVenues(),
+            isRefreshing = false,
+            hasMorePages = true,
+            filters = ExploreFilters(),
+            isLocationPermissionGranted = false
+        )
+        ExploreContent(
+            uiState = sampleUiState,
+            onVenueClick = { },
+            onSeeMoreClick = { },
+            onRefresh = { },
+            onLoadMore = { },
+            onClearSearch = { }
+        )
+    }
+}
