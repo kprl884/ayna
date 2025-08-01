@@ -86,4 +86,7 @@ val Screen.icon: ImageVector?
         is Screen.SalonDetailScreen -> null
         is Screen.ExploreMap -> null
         is Screen.AdvancedSearch -> null
+        is Screen.SelectTime -> null
+        is Screen.JoinWaitlist -> null
+        is Screen.BookingConfirmation -> null
     }
