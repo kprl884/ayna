@@ -35,7 +35,7 @@ class MockProfileRepositoryImpl : ProfileRepository {
         ),
         favoriteServices = listOf("svc1", "svc7", "svc10"),
         loyaltyPoints = 1250,
-        memberSince = System.currentTimeMillis() - (365 * 24 * 60 * 60 * 1000L) // 1 year ago
+        memberSince = 1754056654975
     )
     
     override suspend fun getUserProfile(userId: String): UserProfile? {
@@ -49,6 +49,7 @@ class MockProfileRepositoryImpl : ProfileRepository {
             userProfile = profile
             true
         } catch (e: Exception) {
+            print(e.message)
             false
         }
     }
@@ -65,6 +66,7 @@ class MockProfileRepositoryImpl : ProfileRepository {
                 false
             }
         } catch (e: Exception) {
+            print(e.message)
             false
         }
     }
@@ -80,6 +82,7 @@ class MockProfileRepositoryImpl : ProfileRepository {
                 false
             }
         } catch (e: Exception) {
+            print(e.message)
             false
         }
     }
@@ -94,6 +97,7 @@ class MockProfileRepositoryImpl : ProfileRepository {
                 false
             }
         } catch (e: Exception) {
+            print(e.message)
             false
         }
     }
