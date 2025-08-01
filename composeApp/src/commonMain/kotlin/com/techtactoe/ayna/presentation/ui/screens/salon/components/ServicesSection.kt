@@ -74,7 +74,7 @@ fun ServicesSection(
             filteredServices.forEachIndexed { index, service ->
                 ServiceCard(
                     service = service,
-                    onBookClick = { /* Handle booking */ }
+                    onBookClick = { onServiceBookClick(service.id) }
                 )
 
                 if (index < filteredServices.size - 1) {
