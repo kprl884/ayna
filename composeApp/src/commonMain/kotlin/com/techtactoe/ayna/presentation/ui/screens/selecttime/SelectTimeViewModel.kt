@@ -158,6 +158,46 @@ class SelectTimeViewModel(
 
         return dateOptions
     }
+
+    /**
+     * Get formatted next available date (skipping Sundays)
+     */
+    private fun getNextAvailableDate(currentDate: Long): String {
+        var nextDate = Instant.fromEpochMilliseconds(currentDate)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        // Find next available date (skip Sunday)
+        do {
+            nextDate = nextDate.plus(1, DateTimeUnit.DAY)
+        } while (nextDate.dayOfWeek == DayOfWeek.SUNDAY)
+
+        val dayOfWeekText = when (nextDate.dayOfWeek) {
+            DayOfWeek.MONDAY -> "Mon"
+            DayOfWeek.TUESDAY -> "Tue"
+            DayOfWeek.WEDNESDAY -> "Wed"
+            DayOfWeek.THURSDAY -> "Thu"
+            DayOfWeek.FRIDAY -> "Fri"
+            DayOfWeek.SATURDAY -> "Sat"
+            else -> ""
+        }
+
+        val monthText = when (nextDate.month) {
+            kotlinx.datetime.Month.JANUARY -> "Jan"
+            kotlinx.datetime.Month.FEBRUARY -> "Feb"
+            kotlinx.datetime.Month.MARCH -> "Mar"
+            kotlinx.datetime.Month.APRIL -> "Apr"
+            kotlinx.datetime.Month.MAY -> "May"
+            kotlinx.datetime.Month.JUNE -> "Jun"
+            kotlinx.datetime.Month.JULY -> "Jul"
+            kotlinx.datetime.Month.AUGUST -> "Aug"
+            kotlinx.datetime.Month.SEPTEMBER -> "Sep"
+            kotlinx.datetime.Month.OCTOBER -> "Oct"
+            kotlinx.datetime.Month.NOVEMBER -> "Nov"
+            kotlinx.datetime.Month.DECEMBER -> "Dec"
+        }
+
+        return "$dayOfWeekText, $monthText ${nextDate.dayOfMonth}"
+    }
 }
 
 /**
