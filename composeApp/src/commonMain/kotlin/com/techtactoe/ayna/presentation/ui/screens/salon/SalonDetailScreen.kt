@@ -91,7 +91,10 @@ fun SalonDetailScreen(
 
                 // Services section
                 item {
-                    ServicesSection(services = salonDetail.services)
+                    ServicesSection(
+                        services = salonDetail.services,
+                        onServiceBookClick = onServiceBookClick
+                    )
                 }
 
                 // Team section
