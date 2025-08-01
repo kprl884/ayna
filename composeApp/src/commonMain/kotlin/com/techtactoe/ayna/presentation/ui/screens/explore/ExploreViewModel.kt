@@ -75,7 +75,9 @@ class ExploreViewModel(
      * Hides currently shown bottom sheet
      */
     fun hideBottomSheet() {
-        screenState = screenState.copy(currentBottomSheet = BottomSheetType.None)
+        _screenState.update { currentState ->
+            currentState.copy(currentBottomSheet = BottomSheetType.None)
+        }
     }
     
     /**
