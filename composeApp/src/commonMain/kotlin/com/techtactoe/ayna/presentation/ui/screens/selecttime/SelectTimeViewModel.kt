@@ -150,7 +150,7 @@ class SelectTimeViewModel(
                     date = dateTimeInMillis,
                     dayOfMonth = currentDate.dayOfMonth,
                     dayOfWeek = dayOfWeekText,
-                    isSelected = dateTimeInMillis == _uiState.value.selectedDate,
+                    isSelected = dateTimeInMillis == selectedDate,
                     isDisabled = currentDate.dayOfWeek == DayOfWeek.SUNDAY
                 )
             )
