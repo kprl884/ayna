@@ -93,7 +93,7 @@ class ExploreViewModel(
      * Applies temporary filters to actual filters
      */
     fun applyTempFilters() {
-        updateFilters(screenState.tempFilters)
+        updateFilters(_screenState.value.tempFilters)
         hideBottomSheet()
     }
     
