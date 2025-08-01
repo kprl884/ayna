@@ -8,32 +8,32 @@ import com.techtactoe.ayna.typography.FontProvider
  * Enterprise-level font system with system font fallbacks
  */
 object AppFontFamilies {
-    
+
     // MARK: - Roboto (System Default)
     val roboto: FontFamily by lazy {
         FontProvider.getSystemFontFamily("Roboto")
     }
-    
+
     // MARK: - Bodoni Moda (Elegant Serif)
     val bodoniModa: FontFamily by lazy {
         FontProvider.getSystemFontFamily("BodoniModa")
     }
-    
+
     // MARK: - Inter (Modern Sans-Serif)
     val inter: FontFamily by lazy {
         FontProvider.getSystemFontFamily("Inter")
     }
-    
+
     // MARK: - Poppins (Friendly Rounded)
     val poppins: FontFamily by lazy {
         FontProvider.getSystemFontFamily("Poppins")
     }
-    
+
     // MARK: - Playfair Display (Elegant Display)
     val playfairDisplay: FontFamily by lazy {
         FontProvider.getSystemFontFamily("PlayfairDisplay")
     }
-    
+
     // MARK: - Fallback Fonts
     val fallbackFont: FontFamily = FontFamily.Default
 }

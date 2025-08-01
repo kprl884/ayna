@@ -120,10 +120,6 @@ fun SalonDetailScreen(
                     )
                 }
 
-                // Bottom padding for the floating bar
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
             }
 
             // Sticky tab bar

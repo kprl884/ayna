@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.designsystem.button.PrimaryButton
 import com.techtactoe.ayna.presentation.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -29,19 +28,18 @@ fun FloatingBookingBar(
         modifier = modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars),
-        shadowElevation = 8.dp,
         color = AynaColors.White
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "$serviceCount services available",
-                fontSize = 12.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 color = AynaColors.SecondaryText
             )
 

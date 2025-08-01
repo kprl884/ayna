@@ -5,7 +5,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.presentation.typography.AynaTypography
 
 /**
@@ -102,42 +101,6 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = Color(0xFF037AFF),
 )
 
-// MARK: - Spacing System
-object Spacing {
-    val xs = 4.dp
-    val sm = 8.dp
-    val md = 16.dp
-    val lg = 24.dp
-    val xl = 32.dp
-    val xxl = 48.dp
-    val xxxl = 64.dp
-}
-
-// MARK: - Corner Radius
-object CornerRadius {
-    val xs = 4.dp
-    val sm = 8.dp
-    val md = 12.dp
-    val lg = 16.dp
-    val xl = 24.dp
-    val round = 50.dp
-}
-
-// MARK: - Elevation
-object Elevation {
-    val xs = 1.dp
-    val sm = 2.dp
-    val md = 4.dp
-    val lg = 8.dp
-    val xl = 16.dp
-}
-
-// MARK: - Animation Durations
-object AnimationDuration {
-    const val fast = 150
-    const val normal = 300
-    const val slow = 500
-}
 
 @Composable
 fun AynaAppTheme(
