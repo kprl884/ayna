@@ -125,7 +125,7 @@ class SelectTimeViewModel(
     /**
      * Get generated date options for the date selector
      */
-    fun getDateOptions(): List<DateOption> {
+    fun getDateOptions(selectedDate: Long = _uiState.value.selectedDate): List<DateOption> {
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dateOptions = mutableListOf<DateOption>()
 
