@@ -225,8 +225,27 @@ private fun AppointmentCard(
     appointment: Appointment,
     modifier: Modifier = Modifier
 ) {
-    val dateFormat = SimpleDateFormat("MMM dd, yyyy 'at' h:mm a", Locale.getDefault())
-    val formattedDate = dateFormat.format(Date(appointment.appointmentDateTime))
+    val appointmentDateTime = Instant.fromEpochMilliseconds(appointment.appointmentDateTime)
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+
+    val month = when (appointmentDateTime.month) {
+        Month.JANUARY -> "Jan"
+        Month.FEBRUARY -> "Feb"
+        Month.MARCH -> "Mar"
+        Month.APRIL -> "Apr"
+        Month.MAY -> "May"
+        Month.JUNE -> "Jun"
+        Month.JULY -> "Jul"
+        Month.AUGUST -> "Aug"
+        Month.SEPTEMBER -> "Sep"
+        Month.OCTOBER -> "Oct"
+        Month.NOVEMBER -> "Nov"
+        Month.DECEMBER -> "Dec"
+    }
+
+    val hour = if (appointmentDateTime.hour == 0) 12 else if (appointmentDateTime.hour > 12) appointmentDateTime.hour - 12 else appointmentDateTime.hour
+    val amPm = if (appointmentDateTime.hour < 12) "AM" else "PM"
+    val formattedDate = "$month ${appointmentDateTime.dayOfMonth}, ${appointmentDateTime.year} at $hour:${appointmentDateTime.minute.toString().padStart(2, '0')} $amPm"
 
     val statusColor = when (appointment.status) {
         AppointmentStatus.UPCOMING -> Color(0xFF4CAF50)
