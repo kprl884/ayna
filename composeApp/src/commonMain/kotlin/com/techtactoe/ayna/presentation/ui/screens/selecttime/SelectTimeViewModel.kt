@@ -117,34 +117,34 @@ class SelectTimeViewModel(
      * Get generated date options for the date selector
      */
     fun getDateOptions(): List<DateOption> {
-        val calendar = Calendar.getInstance()
-        val today = calendar.timeInMillis
+        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dateOptions = mutableListOf<DateOption>()
-        
+
         for (i in 0..6) { // Show 7 days
-            calendar.timeInMillis = today + (i * 24 * 60 * 60 * 1000)
-            val dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
-                Calendar.MONDAY -> "Mon"
-                Calendar.TUESDAY -> "Tue"
-                Calendar.WEDNESDAY -> "Wed"
-                Calendar.THURSDAY -> "Thu"
-                Calendar.FRIDAY -> "Fri"
-                Calendar.SATURDAY -> "Sat"
-                Calendar.SUNDAY -> "Sun"
-                else -> ""
+            val currentDate = today.plus(i, DateTimeUnit.DAY)
+            val dayOfWeekText = when (currentDate.dayOfWeek) {
+                DayOfWeek.MONDAY -> "Mon"
+                DayOfWeek.TUESDAY -> "Tue"
+                DayOfWeek.WEDNESDAY -> "Wed"
+                DayOfWeek.THURSDAY -> "Thu"
+                DayOfWeek.FRIDAY -> "Fri"
+                DayOfWeek.SATURDAY -> "Sat"
+                DayOfWeek.SUNDAY -> "Sun"
             }
-            
+
+            val dateTimeInMillis = currentDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+
             dateOptions.add(
                 DateOption(
-                    date = calendar.timeInMillis,
-                    dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH),
-                    dayOfWeek = dayOfWeek,
-                    isSelected = calendar.timeInMillis == _uiState.value.selectedDate,
-                    isDisabled = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+                    date = dateTimeInMillis,
+                    dayOfMonth = currentDate.dayOfMonth,
+                    dayOfWeek = dayOfWeekText,
+                    isSelected = dateTimeInMillis == _uiState.value.selectedDate,
+                    isDisabled = currentDate.dayOfWeek == DayOfWeek.SUNDAY
                 )
             )
         }
-        
+
         return dateOptions
     }
 }
