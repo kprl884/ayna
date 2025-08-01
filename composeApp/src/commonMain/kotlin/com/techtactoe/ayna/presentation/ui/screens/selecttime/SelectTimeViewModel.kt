@@ -40,7 +40,9 @@ class SelectTimeViewModel(
         val selectedTimeSlot: TimeSlot? = null,
         val error: String? = null,
         val isFullyBooked: Boolean = false,
-        val nextAvailableDate: String = ""
+        val nextAvailableDate: String = "",
+        val isCreatingAppointment: Boolean = false,
+        val appointmentCreated: String? = null // Contains appointment ID when created
     )
 
     private val _uiState = MutableStateFlow(SelectTimeUiState())
