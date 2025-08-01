@@ -94,15 +94,16 @@ class SelectTimeViewModel(
      * Go to the next available date
      */
     fun goToNextAvailableDate() {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = _uiState.value.selectedDate
-        
+        var currentDate = Instant.fromEpochMilliseconds(_uiState.value.selectedDate)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+
         // Find next available date (skip Sunday)
         do {
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        } while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
-        
-        loadTimeSlots(calendar.timeInMillis)
+            currentDate = currentDate.plus(1, DateTimeUnit.DAY)
+        } while (currentDate.dayOfWeek == DayOfWeek.SUNDAY)
+
+        val nextDateTime = currentDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+        loadTimeSlots(nextDateTime.toEpochMilliseconds())
     }
 
     /**
