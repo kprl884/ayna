@@ -1,6 +1,8 @@
 package com.techtactoe.ayna.domain.repository
 
 import com.techtactoe.ayna.domain.model.Appointment
+import com.techtactoe.ayna.domain.model.TimeSlot
+import com.techtactoe.ayna.domain.model.WaitlistRequest
 
 /**
  * Repository interface for appointment data operations
