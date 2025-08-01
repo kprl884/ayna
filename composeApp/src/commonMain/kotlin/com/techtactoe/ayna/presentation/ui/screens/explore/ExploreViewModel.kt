@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class ExploreViewModel(
     private val repository: FakeExploreRepository = FakeExploreRepository()
 ) {
-    var screenState by mutableStateOf(
+    private val _screenState = MutableStateFlow(
         ExploreScreenState(
             uiState = ExploreUiState.Success(
                 isLoading = false,
@@ -33,7 +33,7 @@ class ExploreViewModel(
             )
         )
     )
-        private set
+    val screenState: StateFlow<ExploreScreenState> = _screenState.asStateFlow()
 
     private val _events = MutableSharedFlow<ExploreEvent>()
     val events = _events.asSharedFlow()
