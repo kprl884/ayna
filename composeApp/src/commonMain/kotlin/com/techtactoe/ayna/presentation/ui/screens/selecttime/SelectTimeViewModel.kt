@@ -153,7 +153,7 @@ class SelectTimeViewModel(
                 employeeId = "default", // Could be selected by user in future
                 employeeName = "Available Staff",
                 appointmentDateTime = selectedSlot.dateTime,
-                status = AppointmentStatus.CONFIRMED,
+                status = AppointmentStatus.COMPLETED,
                 price = 50.0, // Could be passed from service selection
                 durationInMinutes = 60,
                 notes = ""
@@ -164,13 +164,16 @@ class SelectTimeViewModel(
                     is Resource.Loading -> {
                         // Already set loading above
                     }
+
                     is Resource.Success -> {
-                        val appointmentId = "${System.currentTimeMillis()}" // Mock ID generation
+                        val appointmentId =
+                            "${Clock.System.now().toEpochMilliseconds()}" // Mock ID generation
                         _uiState.value = _uiState.value.copy(
                             isCreatingAppointment = false,
                             appointmentCreated = appointmentId
                         )
                     }
+
                     is Resource.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isCreatingAppointment = false,
@@ -254,6 +257,7 @@ class SelectTimeViewModel(
             kotlinx.datetime.Month.OCTOBER -> "Oct"
             kotlinx.datetime.Month.NOVEMBER -> "Nov"
             kotlinx.datetime.Month.DECEMBER -> "Dec"
+            else -> ""
         }
 
         return "$dayOfWeekText, $monthText ${nextDate.dayOfMonth}"

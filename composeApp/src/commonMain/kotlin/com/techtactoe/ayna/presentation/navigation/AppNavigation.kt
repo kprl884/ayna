@@ -17,14 +17,14 @@ import com.techtactoe.ayna.data.MockSalonDetailRepository
 import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
+import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
+import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
-import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeScreen
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistScreen
-import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 
 @Composable
 fun AppNavigation() {
@@ -43,7 +43,8 @@ fun AppNavigation() {
         else -> null
     }
 
-    val bottomBarScreens = setOf(Screen.Home, Screen.Search, Screen.Explore, Screen.Appointments, Screen.Profile)
+    val bottomBarScreens =
+        setOf(Screen.Home, Screen.Search, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     Scaffold(
         bottomBar = {
@@ -135,7 +136,12 @@ fun AppNavigation() {
                         viewModel.createAppointment("Sample Salon", "Sample Service")
                     },
                     onJoinWaitlistClick = {
-                        navController.navigate(Screen.JoinWaitlist(screen.salonId, screen.serviceId))
+                        navController.navigate(
+                            Screen.JoinWaitlist(
+                                screen.salonId,
+                                screen.serviceId
+                            )
+                        )
                     }
                 )
 
@@ -161,7 +167,11 @@ fun AppNavigation() {
                     onCloseClick = { navController.popBackStack() },
                     onContinueClick = {
                         // TODO: Navigate to booking confirmation or handle waitlist submission
-                    }
+                    },
+                    onBookNowClick = {
+
+                    },
+                    onSeeAvailableTimesClick = {}
                 )
             }
 
@@ -170,13 +180,8 @@ fun AppNavigation() {
 
                 BookingConfirmationScreen(
                     appointmentId = screen.appointmentId,
-                    onBackToHome = {
-                        navController.navigate(Screen.Home) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                inclusive = false
-                            }
-                        }
-                    }
+                    onGoToAppointmentsClick = { },
+                    onDoneClick = {},
                 )
             }
         }
