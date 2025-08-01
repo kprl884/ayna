@@ -9,7 +9,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * ViewModel for the Select Time screen
@@ -24,7 +31,7 @@ class SelectTimeViewModel(
     data class SelectTimeUiState(
         val isLoading: Boolean = true,
         val availableSlots: List<TimeSlot> = emptyList(),
-        val selectedDate: Long = System.currentTimeMillis(),
+        val selectedDate: Long = Clock.System.now().toEpochMilliseconds(),
         val selectedTimeSlot: TimeSlot? = null,
         val error: String? = null,
         val isFullyBooked: Boolean = false,
@@ -60,10 +67,11 @@ class SelectTimeViewModel(
                     is Resource.Loading -> {
                         _uiState.value = _uiState.value.copy(isLoading = true)
                     }
+
                     is Resource.Success -> {
                         val slots = result.data ?: emptyList()
                         val isFullyBooked = slots.isEmpty()
-                        
+
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             availableSlots = slots,
@@ -72,6 +80,7 @@ class SelectTimeViewModel(
                             error = null
                         )
                     }
+
                     is Resource.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
@@ -130,9 +139,11 @@ class SelectTimeViewModel(
                 DayOfWeek.FRIDAY -> "Fri"
                 DayOfWeek.SATURDAY -> "Sat"
                 DayOfWeek.SUNDAY -> "Sun"
+                else -> ""
             }
 
-            val dateTimeInMillis = currentDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+            val dateTimeInMillis =
+                currentDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
 
             dateOptions.add(
                 DateOption(

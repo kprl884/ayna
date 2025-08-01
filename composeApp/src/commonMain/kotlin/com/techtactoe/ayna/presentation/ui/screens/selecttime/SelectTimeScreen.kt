@@ -3,7 +3,15 @@ package com.techtactoe.ayna.presentation.ui.screens.selecttime
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -11,21 +19,34 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Screen for selecting appointment time
@@ -43,7 +64,7 @@ fun SelectTimeScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(salonId, serviceId) {
         viewModel.initialize(salonId, serviceId)
     }
@@ -79,7 +100,7 @@ fun SelectTimeScreen(
                 ),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            
+
             // Date selector
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -88,7 +109,7 @@ fun SelectTimeScreen(
                 items(viewModel.getDateOptions()) { dateOption ->
                     DateChip(
                         dateOption = dateOption,
-                        onClick = { 
+                        onClick = {
                             if (!dateOption.isDisabled) {
                                 viewModel.loadTimeSlots(dateOption.date)
                             }
@@ -96,18 +117,20 @@ fun SelectTimeScreen(
                     )
                 }
             }
-            
+
             // Content based on state
             when {
                 uiState.isLoading -> {
                     LoadingContent()
                 }
+
                 uiState.error != null -> {
                     ErrorContent(
-                        message = uiState.error,
+                        message = uiState.error!!,
                         onRetry = { viewModel.loadTimeSlots(uiState.selectedDate) }
                     )
                 }
+
                 uiState.isFullyBooked -> {
                     FullyBookedContent(
                         nextAvailableDate = uiState.nextAvailableDate,
@@ -115,6 +138,7 @@ fun SelectTimeScreen(
                         onJoinWaitlist = onJoinWaitlistClick
                     )
                 }
+
                 else -> {
                     TimeSlotsList(
                         timeSlots = uiState.availableSlots,
@@ -141,13 +165,13 @@ private fun DateChip(
         dateOption.isDisabled -> Color.Transparent
         else -> Color.Transparent
     }
-    
+
     val textColor = when {
         dateOption.isSelected -> Color.White
         dateOption.isDisabled -> Color.Gray
         else -> MaterialTheme.colorScheme.onSurface
     }
-    
+
     val borderColor = when {
         dateOption.isSelected -> Color.Transparent
         dateOption.isDisabled -> Color.Transparent
@@ -174,9 +198,9 @@ private fun DateChip(
                 color = textColor
             )
         }
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = dateOption.dayOfWeek,
             style = MaterialTheme.typography.bodyMedium,
@@ -211,7 +235,7 @@ private fun ErrorContent(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        
+
         Button(onClick = onRetry) {
             Text("Try again")
         }
@@ -230,14 +254,14 @@ private fun FullyBookedContent(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            imageVector = Icons.Default.CalendarToday,
+            imageVector = Icons.Default.DateRange,
             contentDescription = null,
             tint = Color(0xFF7B61FF),
             modifier = Modifier
                 .size(64.dp)
                 .padding(bottom = 24.dp)
         )
-        
+
         Text(
             text = "Selected professional is fully booked on this date",
             style = MaterialTheme.typography.titleLarge.copy(
@@ -246,7 +270,7 @@ private fun FullyBookedContent(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
+
         Text(
             text = "Available from $nextAvailableDate",
             style = MaterialTheme.typography.bodyLarge,
@@ -254,7 +278,7 @@ private fun FullyBookedContent(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        
+
         OutlinedButton(
             onClick = onGoToNextDate,
             modifier = Modifier
@@ -263,7 +287,7 @@ private fun FullyBookedContent(
         ) {
             Text("Go to next available date")
         }
-        
+
         OutlinedButton(
             onClick = onJoinWaitlist,
             modifier = Modifier.fillMaxWidth()
@@ -303,7 +327,7 @@ private fun TimeSlotItem(
     } else {
         MaterialTheme.colorScheme.surface
     }
-    
+
     val borderColor = if (isSelected) {
         Color(0xFF7B61FF)
     } else {

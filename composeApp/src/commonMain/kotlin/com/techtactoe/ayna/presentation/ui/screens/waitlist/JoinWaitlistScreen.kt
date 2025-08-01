@@ -1,26 +1,56 @@
 package com.techtactoe.ayna.presentation.ui.screens.waitlist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Screen for joining waitlist when no appointments are available
@@ -39,7 +69,7 @@ fun JoinWaitlistScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(salonId, serviceId) {
         viewModel.initialize(salonId, serviceId)
     }
@@ -84,9 +114,9 @@ fun JoinWaitlistScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    
+
                     Button(
-                        onClick = { 
+                        onClick = {
                             if (uiState.hasAvailableSlots) {
                                 onBookNowClick()
                             } else {
@@ -127,14 +157,14 @@ fun JoinWaitlistScreen(
                 ),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            
+
             Text(
                 text = "Select your preferred dates and time. We'll notify you if a time slot becomes available",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
-            
+
             // Date and Time selectors
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -148,13 +178,13 @@ fun JoinWaitlistScreen(
                         ),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    
+
                     DateSelector(
                         selectedDate = viewModel.getFormattedDate(),
                         onClick = { /* TODO: Open date picker */ }
                     )
                 }
-                
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Time",
@@ -163,7 +193,7 @@ fun JoinWaitlistScreen(
                         ),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    
+
                     TimeRangeSelector(
                         selectedTimeRange = uiState.selectedTimeRange,
                         options = viewModel.getTimeRangeOptions(),
@@ -173,9 +203,9 @@ fun JoinWaitlistScreen(
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
-            
+
             // Add another time option
             OutlinedButton(
                 onClick = { /* TODO: Add another time option */ },
@@ -188,9 +218,9 @@ fun JoinWaitlistScreen(
                 )
                 Text("Add another time")
             }
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             // Available slots notification
             if (uiState.hasAvailableSlots) {
                 Card(
@@ -208,7 +238,7 @@ fun JoinWaitlistScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
-                        
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -224,9 +254,9 @@ fun JoinWaitlistScreen(
                         }
                     }
                 }
-                
+
                 Spacer(modifier = Modifier.height(24.dp))
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -235,7 +265,7 @@ fun JoinWaitlistScreen(
                         text = "Changed your mind? ",
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    
+
                     TextButton(
                         onClick = onSeeAvailableTimesClick,
                         contentPadding = PaddingValues(0.dp)
@@ -248,7 +278,7 @@ fun JoinWaitlistScreen(
                     }
                 }
             }
-            
+
             // Error handling
             if (uiState.error != null) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -258,7 +288,7 @@ fun JoinWaitlistScreen(
                     )
                 ) {
                     Text(
-                        text = uiState.error,
+                        text = uiState.error!!,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         modifier = Modifier.padding(16.dp)
@@ -311,7 +341,7 @@ private fun TimeRangeSelector(
     onOptionSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    
+
     Box {
         Box(
             modifier = Modifier
@@ -341,7 +371,7 @@ private fun TimeRangeSelector(
                 )
             }
         }
-        
+
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }

@@ -1,26 +1,48 @@
 package com.techtactoe.ayna.presentation.ui.screens.appointments
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import kotlinx.datetime.*
+import kotlinx.datetime.Instant
+import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Screen displaying user appointments with empty state
@@ -57,17 +79,20 @@ fun AppointmentsScreen(
                 uiState.isLoading -> {
                     LoadingContent()
                 }
+
                 uiState.error != null -> {
                     ErrorContent(
-                        message = uiState.error,
+                        message = uiState.error!!,
                         onRetry = { viewModel.refreshAppointments() }
                     )
                 }
+
                 uiState.isEmpty -> {
                     EmptyAppointmentsContent(
                         onSearchSalonsClick = onSearchSalonsClick
                     )
                 }
+
                 else -> {
                     AppointmentsContent(
                         upcomingAppointments = uiState.upcomingAppointments,
@@ -138,7 +163,7 @@ private fun EmptyAppointmentsContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    imageVector = Icons.Default.CalendarToday,
+                    imageVector = Icons.Default.DateRange,
                     contentDescription = null,
                     tint = Color(0xFF7B61FF),
                     modifier = Modifier
@@ -209,7 +234,10 @@ private fun AppointmentsContent(
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    modifier = Modifier.padding(top = if (upcomingAppointments.isNotEmpty()) 16.dp else 0.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(
+                        top = if (upcomingAppointments.isNotEmpty()) 16.dp else 0.dp,
+                        bottom = 8.dp
+                    )
                 )
             }
 
@@ -241,11 +269,16 @@ private fun AppointmentCard(
         Month.OCTOBER -> "Oct"
         Month.NOVEMBER -> "Nov"
         Month.DECEMBER -> "Dec"
+        else -> {}
     }
 
-    val hour = if (appointmentDateTime.hour == 0) 12 else if (appointmentDateTime.hour > 12) appointmentDateTime.hour - 12 else appointmentDateTime.hour
+    val hour =
+        if (appointmentDateTime.hour == 0) 12 else if (appointmentDateTime.hour > 12) appointmentDateTime.hour - 12 else appointmentDateTime.hour
     val amPm = if (appointmentDateTime.hour < 12) "AM" else "PM"
-    val formattedDate = "$month ${appointmentDateTime.dayOfMonth}, ${appointmentDateTime.year} at $hour:${appointmentDateTime.minute.toString().padStart(2, '0')} $amPm"
+    val formattedDate =
+        "$month ${appointmentDateTime.dayOfMonth}, ${appointmentDateTime.year} at $hour:${
+            appointmentDateTime.minute.toString().padStart(2, '0')
+        } $amPm"
 
     val statusColor = when (appointment.status) {
         AppointmentStatus.UPCOMING -> Color(0xFF4CAF50)
@@ -297,7 +330,8 @@ private fun AppointmentCard(
                     shape = RoundedCornerShape(4.dp)
                 ) {
                     Text(
-                        text = appointment.status.name.lowercase().replaceFirstChar { it.uppercase() },
+                        text = appointment.status.name.lowercase()
+                            .replaceFirstChar { it.uppercase() },
                         style = MaterialTheme.typography.labelSmall,
                         color = statusColor,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)

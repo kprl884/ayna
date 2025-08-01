@@ -5,8 +5,13 @@ import com.techtactoe.ayna.domain.model.AppointmentStatus
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.domain.model.WaitlistRequest
 import com.techtactoe.ayna.domain.repository.AppointmentRepository
-import kotlinx.datetime.*
 import kotlinx.coroutines.delay
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Mock implementation of AppointmentRepository with realistic hardcoded data
@@ -132,14 +137,19 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
         }
     }
 
-    override suspend fun getAvailableTimeSlots(salonId: String, serviceId: String, date: Long): List<TimeSlot> {
+    override suspend fun getAvailableTimeSlots(
+        salonId: String,
+        serviceId: String,
+        date: Long
+    ): List<TimeSlot> {
         delay(1200) // Simulate network latency
 
-        val requestedDate = Instant.fromEpochMilliseconds(date).toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val requestedDate = Instant.fromEpochMilliseconds(date)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dayOfWeek = requestedDate.dayOfWeek
 
         // Return empty list for Sundays to simulate "fully booked" scenario
-        if (dayOfWeek == DayOfWeek.SUNDAY) {
+        if (dayOfWeek == kotlinx.datetime.DayOfWeek.SUNDAY) {
             return emptyList()
         }
 
@@ -195,6 +205,7 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
             // For now, just simulate success
             true
         } catch (e: Exception) {
+            print(e.message)
             false
         }
     }
