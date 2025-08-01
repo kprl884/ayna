@@ -37,4 +37,14 @@ interface AppointmentRepository {
      * Reschedule an appointment
      */
     suspend fun rescheduleAppointment(appointmentId: String, newDateTime: Long): Boolean
+
+    /**
+     * Get available time slots for a specific salon, service and date
+     */
+    suspend fun getAvailableTimeSlots(salonId: String, serviceId: String, date: Long): List<TimeSlot>
+
+    /**
+     * Join waitlist when no slots are available
+     */
+    suspend fun joinWaitlist(request: WaitlistRequest): Boolean
 }
