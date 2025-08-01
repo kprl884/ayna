@@ -63,10 +63,12 @@ class ExploreViewModel(
      * Shows bottom sheet with specified type
      */
     fun showBottomSheet(type: BottomSheetType) {
-        screenState = screenState.copy(
-            currentBottomSheet = type,
-            tempFilters = getCurrentFilters()
-        )
+        _screenState.update { currentState ->
+            currentState.copy(
+                currentBottomSheet = type,
+                tempFilters = getCurrentFilters(currentState.uiState)
+            )
+        }
     }
     
     /**
