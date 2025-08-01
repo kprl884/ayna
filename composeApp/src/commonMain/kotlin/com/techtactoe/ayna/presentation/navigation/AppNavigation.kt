@@ -115,6 +115,14 @@ fun AppNavigation() {
                     }
                 )
             }
+
+            composable<Screen.SelectTime> { backStackEntry ->
+                val screen: Screen.SelectTime = backStackEntry.toRoute()
+
+                SelectTimeScreen(
+                    viewModel = DataModule.createSelectTimeViewModel()
+                )
+            }
         }
     }
 }
