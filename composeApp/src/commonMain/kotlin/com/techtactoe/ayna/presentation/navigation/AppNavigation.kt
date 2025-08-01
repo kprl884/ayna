@@ -108,7 +108,10 @@ fun AppNavigation() {
                     onBackClick = { navController.popBackStack() },
                     onShareClick = { /* Handle share */ },
                     onFavoriteClick = { /* Handle favorite */ },
-                    onBookNowClick = { /* Handle booking */ }
+                    onBookNowClick = { /* Handle booking */ },
+                    onServiceBookClick = { serviceId ->
+                        navController.navigate(Screen.SelectTime(salonId, serviceId))
+                    }
                 )
             }
         }
