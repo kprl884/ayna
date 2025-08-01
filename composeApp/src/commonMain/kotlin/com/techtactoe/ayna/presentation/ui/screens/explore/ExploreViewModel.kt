@@ -84,7 +84,9 @@ class ExploreViewModel(
      * Updates temporary filters for bottom sheet
      */
     fun updateTempFilters(filters: ExploreFilters) {
-        screenState = screenState.copy(tempFilters = filters)
+        _screenState.update { currentState ->
+            currentState.copy(tempFilters = filters)
+        }
     }
     
     /**
