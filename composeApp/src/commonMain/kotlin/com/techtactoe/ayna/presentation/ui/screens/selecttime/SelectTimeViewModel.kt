@@ -76,7 +76,7 @@ class SelectTimeViewModel(
                             isLoading = false,
                             availableSlots = slots,
                             isFullyBooked = isFullyBooked,
-                            nextAvailableDate = if (isFullyBooked) "Sat, Aug 2" else "",
+                            nextAvailableDate = if (isFullyBooked) getNextAvailableDate(date) else "",
                             error = null
                         )
                     }
