@@ -164,6 +164,21 @@ fun AppNavigation() {
                     }
                 )
             }
+
+            composable<Screen.BookingConfirmation> { backStackEntry ->
+                val screen: Screen.BookingConfirmation = backStackEntry.toRoute()
+
+                BookingConfirmationScreen(
+                    appointmentId = screen.appointmentId,
+                    onBackToHome = {
+                        navController.navigate(Screen.Home) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = false
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }
