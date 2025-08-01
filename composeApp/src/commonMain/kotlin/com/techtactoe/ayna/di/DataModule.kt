@@ -31,6 +31,9 @@ object DataModule {
     val bookAppointmentUseCase = BookAppointmentUseCase(appointmentRepository)
     val cancelAppointmentUseCase = CancelAppointmentUseCase(appointmentRepository)
     val getUserProfileUseCase = GetUserProfileUseCase(profileRepository)
+    val getAvailableTimeSlotsUseCase = GetAvailableTimeSlotsUseCase(appointmentRepository)
+    val joinWaitlistUseCase = JoinWaitlistUseCase(appointmentRepository)
+    val createAppointmentUseCase = CreateAppointmentUseCase(appointmentRepository)
     
     // ViewModel factory function
     fun createHomeViewModel(): HomeViewModelV2 {
