@@ -69,7 +69,7 @@ fun ExploreScreen(
     onNavigateToAdvancedSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val screenState by rememberUpdatedState(viewModel.screenState)
+    val screenState by viewModel.screenState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle events
