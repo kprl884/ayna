@@ -21,6 +21,7 @@ import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeScreen
+import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistScreen
 
 @Composable
 fun AppNavigation() {
