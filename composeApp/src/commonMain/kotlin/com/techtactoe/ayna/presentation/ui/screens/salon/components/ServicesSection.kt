@@ -257,6 +257,9 @@ fun ServicesSectionPreview() {
     )
 
     MaterialTheme {
-        ServicesSection(services = mockServices)
+        ServicesSection(
+            services = mockServices,
+            onServiceBookClick = { serviceId -> /* Preview callback */ }
+        )
     }
 }
