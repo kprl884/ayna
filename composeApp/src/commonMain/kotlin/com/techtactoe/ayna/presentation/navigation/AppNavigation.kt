@@ -134,6 +134,21 @@ fun AppNavigation() {
                     }
                 )
             }
+
+            composable<Screen.JoinWaitlist> { backStackEntry ->
+                val screen: Screen.JoinWaitlist = backStackEntry.toRoute()
+
+                JoinWaitlistScreen(
+                    viewModel = DataModule.createJoinWaitlistViewModel(),
+                    salonId = screen.salonId,
+                    serviceId = screen.serviceId,
+                    onBackClick = { navController.popBackStack() },
+                    onCloseClick = { navController.popBackStack() },
+                    onContinueClick = {
+                        // TODO: Navigate to booking confirmation or handle waitlist submission
+                    }
+                )
+            }
         }
     }
 }
