@@ -128,13 +128,15 @@ class ExploreViewModel(
         if (reset) {
             currentPage = 0
             allVenues.clear()
-            val currentState = screenState.uiState
-            if (currentState is ExploreUiState.Success) {
-                screenState = screenState.copy(
-                    uiState = currentState.copy(isLoading = true)
-                )
-            } else {
-                screenState = screenState.copy(uiState = ExploreUiState.Loading)
+            _screenState.update { currentState ->
+                val currentUiState = currentState.uiState
+                if (currentUiState is ExploreUiState.Success) {
+                    currentState.copy(
+                        uiState = currentUiState.copy(isLoading = true)
+                    )
+                } else {
+                    currentState.copy(uiState = ExploreUiState.Loading)
+                }
             }
         }
         
