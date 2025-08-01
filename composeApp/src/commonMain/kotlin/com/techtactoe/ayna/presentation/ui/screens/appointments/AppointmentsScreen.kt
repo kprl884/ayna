@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.datetime.*
 
 /**
  * Screen displaying user appointments with empty state
