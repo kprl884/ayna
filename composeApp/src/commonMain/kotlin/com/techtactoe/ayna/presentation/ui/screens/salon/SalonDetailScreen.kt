@@ -39,6 +39,7 @@ fun SalonDetailScreen(
     onShareClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     onBookNowClick: () -> Unit,
+    onServiceBookClick: (serviceId: String) -> Unit = { },
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberLazyListState()
