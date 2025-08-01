@@ -8,6 +8,9 @@ import com.techtactoe.ayna.domain.repository.ProfileRepository
 import com.techtactoe.ayna.domain.repository.SalonRepositoryV2
 import com.techtactoe.ayna.domain.usecase.*
 import com.techtactoe.ayna.presentation.viewmodel.HomeViewModelV2
+import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsViewModel
+import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeViewModel
+import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistViewModel
 
 /**
  * Dependency injection configuration for the Clean Architecture layers
