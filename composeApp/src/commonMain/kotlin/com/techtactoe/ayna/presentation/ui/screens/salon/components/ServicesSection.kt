@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ServicesSection(
     services: List<SalonService>,
+    onServiceBookClick: (serviceId: String) -> Unit = { },
     modifier: Modifier = Modifier
 ) {
     var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
