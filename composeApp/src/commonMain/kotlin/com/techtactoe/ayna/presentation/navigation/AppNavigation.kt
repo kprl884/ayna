@@ -120,20 +120,32 @@ fun AppNavigation() {
 
             composable<Screen.SelectTime> { backStackEntry ->
                 val screen: Screen.SelectTime = backStackEntry.toRoute()
+                val viewModel = DataModule.createSelectTimeViewModel()
 
                 SelectTimeScreen(
-                    viewModel = DataModule.createSelectTimeViewModel(),
+                    viewModel = viewModel,
                     salonId = screen.salonId,
                     serviceId = screen.serviceId,
                     onBackClick = { navController.popBackStack() },
                     onCloseClick = { navController.popBackStack() },
                     onTimeSelected = { timeSlot ->
-                        // TODO: Navigate to booking confirmation or handle selected time
+                        // Create appointment and navigate to confirmation
+                        viewModel.createAppointment("Sample Salon", "Sample Service")
                     },
                     onJoinWaitlistClick = {
                         navController.navigate(Screen.JoinWaitlist(screen.salonId, screen.serviceId))
                     }
                 )
+
+                // Listen for appointment creation success
+                val uiState by viewModel.uiState.collectAsState()
+                LaunchedEffect(uiState.appointmentCreated) {
+                    uiState.appointmentCreated?.let { appointmentId ->
+                        navController.navigate(Screen.BookingConfirmation(appointmentId)) {
+                            popUpTo<Screen.SelectTime> { inclusive = true }
+                        }
+                    }
+                }
             }
 
             composable<Screen.JoinWaitlist> { backStackEntry ->
