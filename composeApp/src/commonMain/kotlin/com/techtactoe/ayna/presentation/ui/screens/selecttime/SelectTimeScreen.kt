@@ -26,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Screen for selecting appointment time
