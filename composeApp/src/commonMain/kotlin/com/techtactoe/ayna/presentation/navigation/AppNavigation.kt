@@ -89,7 +89,11 @@ fun AppNavigation() {
                 // TODO: Implement advanced search screen
                 SearchScreen() // Placeholder
             }
-            composable<Screen.Appointments> { AppointmentsScreen() }
+            composable<Screen.Appointments> {
+                AppointmentsScreen(
+                    viewModel = DataModule.createAppointmentsViewModel()
+                )
+            }
             composable<Screen.Profile> { ProfileScreen() }
 
             composable<Screen.Detail> { backStackEntry ->
