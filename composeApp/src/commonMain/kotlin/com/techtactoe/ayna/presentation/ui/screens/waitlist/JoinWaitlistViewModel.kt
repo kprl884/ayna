@@ -104,11 +104,11 @@ class JoinWaitlistViewModel(
     private fun checkAvailableSlots() {
         // Simulate checking for available slots
         // In this example, we'll say there are available slots for Saturday
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = _uiState.value.selectedDate
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        
-        if (dayOfWeek == Calendar.SATURDAY) {
+        val selectedDate = Instant.fromEpochMilliseconds(_uiState.value.selectedDate)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val dayOfWeek = selectedDate.dayOfWeek
+
+        if (dayOfWeek == DayOfWeek.SATURDAY) {
             _uiState.value = _uiState.value.copy(
                 hasAvailableSlots = true,
                 availableSlotsMessage = "There are time slots available to book on the selected dates, adjust your selection or book now."
