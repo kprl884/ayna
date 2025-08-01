@@ -35,8 +35,20 @@ object DataModule {
     val joinWaitlistUseCase = JoinWaitlistUseCase(appointmentRepository)
     val createAppointmentUseCase = CreateAppointmentUseCase(appointmentRepository)
     
-    // ViewModel factory function
+    // ViewModel factory functions
     fun createHomeViewModel(): HomeViewModelV2 {
         return HomeViewModelV2(getRecommendedSalonsUseCase)
+    }
+
+    fun createAppointmentsViewModel(): AppointmentsViewModel {
+        return AppointmentsViewModel(getUserAppointmentsUseCase)
+    }
+
+    fun createSelectTimeViewModel(): SelectTimeViewModel {
+        return SelectTimeViewModel(getAvailableTimeSlotsUseCase)
+    }
+
+    fun createJoinWaitlistViewModel(): JoinWaitlistViewModel {
+        return JoinWaitlistViewModel(joinWaitlistUseCase)
     }
 }
