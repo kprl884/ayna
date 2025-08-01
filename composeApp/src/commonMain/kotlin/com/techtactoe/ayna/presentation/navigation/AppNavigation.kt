@@ -120,7 +120,17 @@ fun AppNavigation() {
                 val screen: Screen.SelectTime = backStackEntry.toRoute()
 
                 SelectTimeScreen(
-                    viewModel = DataModule.createSelectTimeViewModel()
+                    viewModel = DataModule.createSelectTimeViewModel(),
+                    salonId = screen.salonId,
+                    serviceId = screen.serviceId,
+                    onBackClick = { navController.popBackStack() },
+                    onCloseClick = { navController.popBackStack() },
+                    onTimeSelected = { timeSlot ->
+                        // TODO: Navigate to booking confirmation or handle selected time
+                    },
+                    onJoinWaitlistClick = {
+                        navController.navigate(Screen.JoinWaitlist(screen.salonId, screen.serviceId))
+                    }
                 )
             }
         }
