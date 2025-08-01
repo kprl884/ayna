@@ -125,8 +125,35 @@ class JoinWaitlistViewModel(
      * Get formatted date string
      */
     fun getFormattedDate(): String {
-        val dateFormat = SimpleDateFormat("EEE, MMM d", Locale.getDefault())
-        return dateFormat.format(Date(_uiState.value.selectedDate))
+        val selectedDate = Instant.fromEpochMilliseconds(_uiState.value.selectedDate)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        val dayOfWeek = when (selectedDate.dayOfWeek) {
+            DayOfWeek.MONDAY -> "Mon"
+            DayOfWeek.TUESDAY -> "Tue"
+            DayOfWeek.WEDNESDAY -> "Wed"
+            DayOfWeek.THURSDAY -> "Thu"
+            DayOfWeek.FRIDAY -> "Fri"
+            DayOfWeek.SATURDAY -> "Sat"
+            DayOfWeek.SUNDAY -> "Sun"
+        }
+
+        val month = when (selectedDate.month) {
+            Month.JANUARY -> "Jan"
+            Month.FEBRUARY -> "Feb"
+            Month.MARCH -> "Mar"
+            Month.APRIL -> "Apr"
+            Month.MAY -> "May"
+            Month.JUNE -> "Jun"
+            Month.JULY -> "Jul"
+            Month.AUGUST -> "Aug"
+            Month.SEPTEMBER -> "Sep"
+            Month.OCTOBER -> "Oct"
+            Month.NOVEMBER -> "Nov"
+            Month.DECEMBER -> "Dec"
+        }
+
+        return "$dayOfWeek, $month ${selectedDate.dayOfMonth}"
     }
 
     /**
