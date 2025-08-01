@@ -46,6 +46,9 @@ class SelectTimeViewModel(
     private var salonId: String = ""
     private var serviceId: String = ""
 
+    // Job for managing loading operations
+    private var currentLoadingJob: Job? = null
+
     fun initialize(salonId: String, serviceId: String) {
         this.salonId = salonId
         this.serviceId = serviceId
