@@ -26,7 +26,8 @@ import kotlinx.datetime.toLocalDateTime
  * ViewModel for the Select Time screen
  */
 class SelectTimeViewModel(
-    private val getAvailableTimeSlotsUseCase: GetAvailableTimeSlotsUseCase
+    private val getAvailableTimeSlotsUseCase: GetAvailableTimeSlotsUseCase,
+    private val createAppointmentUseCase: CreateAppointmentUseCase
 ) : ViewModel() {
 
     /**
