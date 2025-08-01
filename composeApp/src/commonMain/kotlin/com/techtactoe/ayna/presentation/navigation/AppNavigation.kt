@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.techtactoe.ayna.data.MockSalonDetailRepository
+import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
@@ -19,6 +20,7 @@ import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
+import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeScreen
 
 @Composable
 fun AppNavigation() {
@@ -88,7 +90,11 @@ fun AppNavigation() {
                 // TODO: Implement advanced search screen
                 SearchScreen() // Placeholder
             }
-            composable<Screen.Appointments> { AppointmentsScreen() }
+            composable<Screen.Appointments> {
+                AppointmentsScreen(
+                    viewModel = DataModule.createAppointmentsViewModel()
+                )
+            }
             composable<Screen.Profile> { ProfileScreen() }
 
             composable<Screen.Detail> { backStackEntry ->
@@ -103,7 +109,28 @@ fun AppNavigation() {
                     onBackClick = { navController.popBackStack() },
                     onShareClick = { /* Handle share */ },
                     onFavoriteClick = { /* Handle favorite */ },
-                    onBookNowClick = { /* Handle booking */ }
+                    onBookNowClick = { /* Handle booking */ },
+                    onServiceBookClick = { serviceId ->
+                        navController.navigate(Screen.SelectTime(salonId, serviceId))
+                    }
+                )
+            }
+
+            composable<Screen.SelectTime> { backStackEntry ->
+                val screen: Screen.SelectTime = backStackEntry.toRoute()
+
+                SelectTimeScreen(
+                    viewModel = DataModule.createSelectTimeViewModel(),
+                    salonId = screen.salonId,
+                    serviceId = screen.serviceId,
+                    onBackClick = { navController.popBackStack() },
+                    onCloseClick = { navController.popBackStack() },
+                    onTimeSelected = { timeSlot ->
+                        // TODO: Navigate to booking confirmation or handle selected time
+                    },
+                    onJoinWaitlistClick = {
+                        navController.navigate(Screen.JoinWaitlist(screen.salonId, screen.serviceId))
+                    }
                 )
             }
         }

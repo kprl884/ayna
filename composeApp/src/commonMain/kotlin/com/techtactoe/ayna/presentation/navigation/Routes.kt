@@ -56,7 +56,20 @@ sealed interface Screen {
         override val route: String = "salon_detail"
     }
 
+    @Serializable
+    data class SelectTime(val salonId: String, val serviceId: String) : Screen {
+        override val route: String = "select_time"
+    }
 
+    @Serializable
+    data class JoinWaitlist(val salonId: String, val serviceId: String) : Screen {
+        override val route: String = "join_waitlist"
+    }
+
+    @Serializable
+    data class BookingConfirmation(val appointmentId: String) : Screen {
+        override val route: String = "booking_confirmation"
+    }
 }
 
 /**
@@ -73,4 +86,7 @@ val Screen.icon: ImageVector?
         is Screen.SalonDetailScreen -> null
         is Screen.ExploreMap -> null
         is Screen.AdvancedSearch -> null
+        is Screen.SelectTime -> null
+        is Screen.JoinWaitlist -> null
+        is Screen.BookingConfirmation -> null
     }

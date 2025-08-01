@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ServicesSection(
     services: List<SalonService>,
+    onServiceBookClick: (serviceId: String) -> Unit = { },
     modifier: Modifier = Modifier
 ) {
     var selectedCategory by remember { mutableStateOf(ServiceCategoryEnum.FEATURED) }
@@ -73,7 +74,7 @@ fun ServicesSection(
             filteredServices.forEachIndexed { index, service ->
                 ServiceCard(
                     service = service,
-                    onBookClick = { /* Handle booking */ }
+                    onBookClick = { onServiceBookClick(service.id) }
                 )
 
                 if (index < filteredServices.size - 1) {
@@ -256,6 +257,9 @@ fun ServicesSectionPreview() {
     )
 
     MaterialTheme {
-        ServicesSection(services = mockServices)
+        ServicesSection(
+            services = mockServices,
+            onServiceBookClick = { serviceId -> /* Preview callback */ }
+        )
     }
 }

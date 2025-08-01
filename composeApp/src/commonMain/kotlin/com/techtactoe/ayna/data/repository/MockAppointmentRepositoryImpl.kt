@@ -2,8 +2,16 @@ package com.techtactoe.ayna.data.repository
 
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
+import com.techtactoe.ayna.domain.model.TimeSlot
+import com.techtactoe.ayna.domain.model.WaitlistRequest
 import com.techtactoe.ayna.domain.repository.AppointmentRepository
 import kotlinx.coroutines.delay
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Mock implementation of AppointmentRepository with realistic hardcoded data
@@ -123,6 +131,79 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
             } else {
                 false
             }
+        } catch (e: Exception) {
+            print(e.message)
+            false
+        }
+    }
+
+    override suspend fun getAvailableTimeSlots(
+        salonId: String,
+        serviceId: String,
+        date: Long
+    ): List<TimeSlot> {
+        delay(1200) // Simulate network latency
+
+        val requestedDate = Instant.fromEpochMilliseconds(date)
+            .toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val dayOfWeek = requestedDate.dayOfWeek
+
+        // Return empty list for Sundays to simulate "fully booked" scenario
+        if (dayOfWeek == kotlinx.datetime.DayOfWeek.SUNDAY) {
+            return emptyList()
+        }
+
+        // Generate realistic time slots for the day
+        val timeSlots = mutableListOf<TimeSlot>()
+
+        // Morning slots (10:30 AM - 11:30 AM)
+        val morningSlots = listOf(
+            LocalTime(10, 30) to "10:30 AM",
+            LocalTime(11, 0) to "11:00 AM",
+            LocalTime(11, 30) to "11:30 AM"
+        )
+
+        morningSlots.forEach { (time, formattedTime) ->
+            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
+            timeSlots.add(
+                TimeSlot(
+                    dateTime = dateTime.toEpochMilliseconds(),
+                    isAvailable = true,
+                    formattedTime = formattedTime
+                )
+            )
+        }
+
+        // Afternoon slots (4:00 PM - 5:15 PM)
+        val afternoonSlots = listOf(
+            LocalTime(16, 0) to "4:00 PM",
+            LocalTime(16, 15) to "4:15 PM",
+            LocalTime(16, 30) to "4:30 PM",
+            LocalTime(16, 45) to "4:45 PM",
+            LocalTime(17, 0) to "5:00 PM",
+            LocalTime(17, 15) to "5:15 PM"
+        )
+
+        afternoonSlots.forEach { (time, formattedTime) ->
+            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
+            timeSlots.add(
+                TimeSlot(
+                    dateTime = dateTime.toEpochMilliseconds(),
+                    isAvailable = true,
+                    formattedTime = formattedTime
+                )
+            )
+        }
+
+        return timeSlots
+    }
+
+    override suspend fun joinWaitlist(request: WaitlistRequest): Boolean {
+        delay(1000) // Simulate network latency
+        return try {
+            // In a real implementation, this would save to database
+            // For now, just simulate success
+            true
         } catch (e: Exception) {
             print(e.message)
             false
