@@ -128,4 +128,71 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
             false
         }
     }
+
+    override suspend fun getAvailableTimeSlots(salonId: String, serviceId: String, date: Long): List<TimeSlot> {
+        delay(1200) // Simulate network latency
+
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+        // Return empty list for Sundays to simulate "fully booked" scenario
+        if (dayOfWeek == Calendar.SUNDAY) {
+            return emptyList()
+        }
+
+        // Generate realistic time slots for the day
+        val timeSlots = mutableListOf<TimeSlot>()
+        val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+
+        // Morning slots (10:00 AM - 12:00 PM)
+        val morningSlots = listOf("10:30", "11:00", "11:30")
+        morningSlots.forEach { time ->
+            val (hour, minute) = time.split(":").map { it.toInt() }
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+
+            timeSlots.add(
+                TimeSlot(
+                    dateTime = calendar.timeInMillis,
+                    isAvailable = true,
+                    formattedTime = timeFormat.format(calendar.time)
+                )
+            )
+        }
+
+        // Afternoon slots (4:00 PM - 6:00 PM)
+        val afternoonSlots = listOf("16:00", "16:15", "16:30", "16:45", "17:00", "17:15")
+        afternoonSlots.forEach { time ->
+            val (hour, minute) = time.split(":").map { it.toInt() }
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+
+            timeSlots.add(
+                TimeSlot(
+                    dateTime = calendar.timeInMillis,
+                    isAvailable = true,
+                    formattedTime = timeFormat.format(calendar.time)
+                )
+            )
+        }
+
+        return timeSlots
+    }
+
+    override suspend fun joinWaitlist(request: WaitlistRequest): Boolean {
+        delay(1000) // Simulate network latency
+        return try {
+            // In a real implementation, this would save to database
+            // For now, just simulate success
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
