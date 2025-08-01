@@ -55,17 +55,21 @@ class SelectTimeViewModel(
      * Load available time slots for the selected date
      */
     fun loadTimeSlots(date: Long) {
-        viewModelScope.launch {
+        // Cancel any previous loading job
+        currentLoadingJob?.cancel()
+
+        currentLoadingJob = viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
                 selectedDate = date,
                 isLoading = true,
-                error = null
+                error = null,
+                selectedTimeSlot = null // Clear selection when changing dates
             )
 
             getAvailableTimeSlotsUseCase(salonId, serviceId, date).collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _uiState.value = _uiState.value.copy(isLoading = true)
+                        // Already set loading to true above
                     }
 
                     is Resource.Success -> {
