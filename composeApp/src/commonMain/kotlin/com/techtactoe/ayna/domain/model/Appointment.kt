@@ -1,15 +1,6 @@
 package com.techtactoe.ayna.domain.model
 
 /**
- * Represents the status of an appointment
- */
-enum class AppointmentStatus {
-    UPCOMING,
-    COMPLETED,
-    CANCELLED
-}
-
-/**
  * Represents a user's appointment at a salon
  */
 data class Appointment(

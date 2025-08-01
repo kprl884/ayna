@@ -1,14 +1,20 @@
 package com.techtactoe.ayna.data.repository
 
-import com.techtactoe.ayna.domain.model.*
+import com.techtactoe.ayna.domain.model.DayOfWeek
+import com.techtactoe.ayna.domain.model.Employee
+import com.techtactoe.ayna.domain.model.Location
+import com.techtactoe.ayna.domain.model.SalonV2
+import com.techtactoe.ayna.domain.model.Service
 import com.techtactoe.ayna.domain.repository.SalonRepositoryV2
 import kotlinx.coroutines.delay
+import kotlin.math.exp
+import kotlin.math.sqrt
 
 /**
  * Mock implementation of SalonRepositoryV2 with realistic hardcoded data
  */
 class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
-    
+
     private val mockSalons = listOf(
         SalonV2(
             id = "1",
@@ -36,13 +42,45 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 DayOfWeek.SUNDAY to "Closed"
             ),
             employees = listOf(
-                Employee("emp1", "Emre Demir", "Master Barber", "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400", 4.9, 45),
-                Employee("emp2", "Ali Yılmaz", "Hair Stylist", "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400", 4.8, 32)
+                Employee(
+                    "emp1",
+                    "Emre Demir",
+                    "Master Barber",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+                    4.9,
+                    45
+                ),
+                Employee(
+                    "emp2",
+                    "Ali Yılmaz",
+                    "Hair Stylist",
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400",
+                    4.8,
+                    32
+                )
             ),
             services = listOf(
-                Service("svc1", "Haircut / Saç Kesimi", "Professional men's haircut with styling", 700.0, 60),
-                Service("svc2", "Haircut & Shave / Saç Kesimi & Sakal Tıraşı", "Complete grooming package", 1175.0, 90),
-                Service("svc3", "Full Service / Komple Bakım", "Premium grooming experience", 1880.0, 120)
+                Service(
+                    "svc1",
+                    "Haircut / Saç Kesimi",
+                    "Professional men's haircut with styling",
+                    700.0,
+                    60
+                ),
+                Service(
+                    "svc2",
+                    "Haircut & Shave / Saç Kesimi & Sakal Tıraşı",
+                    "Complete grooming package",
+                    1175.0,
+                    90
+                ),
+                Service(
+                    "svc3",
+                    "Full Service / Komple Bakım",
+                    "Premium grooming experience",
+                    1880.0,
+                    120
+                )
             ),
             description = "Traditional Turkish barbershop offering premium men's grooming services in the heart of Dolapdere.",
             phoneNumber = "+90 212 555 0101"
@@ -72,12 +110,38 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 DayOfWeek.SUNDAY to "11:00 AM - 7:00 PM"
             ),
             employees = listOf(
-                Employee("emp3", "Ayla Kaya", "Senior Nail Artist", "https://images.unsplash.com/photo-1494790108755-2616b612b3-2?w=400", 4.9, 78),
-                Employee("emp4", "Zeynep Özkan", "Beauty Specialist", "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400", 4.8, 56)
+                Employee(
+                    "emp3",
+                    "Ayla Kaya",
+                    "Senior Nail Artist",
+                    "https://images.unsplash.com/photo-1494790108755-2616b612b3-2?w=400",
+                    4.9,
+                    78
+                ),
+                Employee(
+                    "emp4",
+                    "Zeynep Özkan",
+                    "Beauty Specialist",
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400",
+                    4.8,
+                    56
+                )
             ),
             services = listOf(
-                Service("svc4", "Spa Pedikür (Spa Pedicure)", "Relaxing spa pedicure treatment", 950.0, 55),
-                Service("svc5", "SMART Manikür + Kalıcı Oje", "Smart manicure with gel polish", 1200.0, 100),
+                Service(
+                    "svc4",
+                    "Spa Pedikür (Spa Pedicure)",
+                    "Relaxing spa pedicure treatment",
+                    950.0,
+                    55
+                ),
+                Service(
+                    "svc5",
+                    "SMART Manikür + Kalıcı Oje",
+                    "Smart manicure with gel polish",
+                    1200.0,
+                    100
+                ),
                 Service("svc6", "Nail Art", "Creative nail art designs", 0.0, 20)
             ),
             description = "Premium beauty studio specializing in nail care and beauty treatments.",
@@ -108,11 +172,31 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 DayOfWeek.SUNDAY to "9:00 AM - 9:00 PM"
             ),
             employees = listOf(
-                Employee("emp5", "Mehmet Güler", "Massage Therapist", "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400", 4.9, 89),
-                Employee("emp6", "Fatma Yıldız", "Wellness Specialist", "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400", 4.7, 67)
+                Employee(
+                    "emp5",
+                    "Mehmet Güler",
+                    "Massage Therapist",
+                    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+                    4.9,
+                    89
+                ),
+                Employee(
+                    "emp6",
+                    "Fatma Yıldız",
+                    "Wellness Specialist",
+                    "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400",
+                    4.7,
+                    67
+                )
             ),
             services = listOf(
-                Service("svc7", "60 Min Thai with Oil Massage", "Traditional Thai massage with aromatic oils", 1600.0, 75),
+                Service(
+                    "svc7",
+                    "60 Min Thai with Oil Massage",
+                    "Traditional Thai massage with aromatic oils",
+                    1600.0,
+                    75
+                ),
                 Service("svc8", "30 Min Foot Massage", "Relaxing foot massage therapy", 800.0, 30),
                 Service("svc9", "60 Min Oil Massage", "Full body oil massage", 1600.0, 75)
             ),
@@ -143,11 +227,31 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 DayOfWeek.SUNDAY to "Closed"
             ),
             employees = listOf(
-                Employee("emp7", "Canan Arslan", "Senior Hair Stylist", "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400", 4.8, 92),
-                Employee("emp8", "Deniz Koç", "Color Specialist", "https://images.unsplash.com/photo-1494790108755-2616b612b3da?w=400", 4.6, 73)
+                Employee(
+                    "emp7",
+                    "Canan Arslan",
+                    "Senior Hair Stylist",
+                    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+                    4.8,
+                    92
+                ),
+                Employee(
+                    "emp8",
+                    "Deniz Koç",
+                    "Color Specialist",
+                    "https://images.unsplash.com/photo-1494790108755-2616b612b3da?w=400",
+                    4.6,
+                    73
+                )
             ),
             services = listOf(
-                Service("svc10", "Women's Cut & Style", "Professional women's haircut and styling", 2000.0, 90),
+                Service(
+                    "svc10",
+                    "Women's Cut & Style",
+                    "Professional women's haircut and styling",
+                    2000.0,
+                    90
+                ),
                 Service("svc11", "Color Treatment", "Hair coloring and highlights", 3500.0, 180),
                 Service("svc12", "Blowout", "Professional hair blowout", 1000.0, 45)
             ),
@@ -155,12 +259,12 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
             phoneNumber = "+90 212 555 0404"
         )
     )
-    
+
     override suspend fun getRecommendedSalons(): List<SalonV2> {
         delay(1500) // Simulate network latency
         return mockSalons
     }
-    
+
     override suspend fun searchSalons(query: String): List<SalonV2> {
         delay(1000) // Simulate network latency
         return mockSalons.filter { salon ->
@@ -169,24 +273,28 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                     salon.employees.any { it.name.contains(query, ignoreCase = true) }
         }
     }
-    
+
     override suspend fun getSalonDetails(id: String): SalonV2? {
         delay(800) // Simulate network latency
         return mockSalons.find { it.id == id }
     }
-    
-    override suspend fun getSalonsNearLocation(latitude: Double, longitude: Double, radiusKm: Int): List<SalonV2> {
+
+    override suspend fun getSalonsNearLocation(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Int
+    ): List<SalonV2> {
         delay(1200) // Simulate network latency
         // Simple distance calculation (in real app would use proper geolocation)
         return mockSalons.filter { salon ->
-            val distance = kotlin.math.sqrt(
-                kotlin.math.pow(salon.location.latitude - latitude, 2.0) +
-                        kotlin.math.pow(salon.location.longitude - longitude, 2.0)
+            val distance = sqrt(
+                exp(salon.location.latitude - latitude) +
+                        exp(salon.location.longitude - longitude)
             ) * 111 // Rough conversion to km
             distance <= radiusKm
         }
     }
-    
+
     override suspend fun getSalonsByCategory(category: String): List<SalonV2> {
         delay(900) // Simulate network latency
         return mockSalons.filter { salon ->
