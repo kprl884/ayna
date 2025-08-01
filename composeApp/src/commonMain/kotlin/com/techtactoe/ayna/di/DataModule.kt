@@ -45,7 +45,7 @@ object DataModule {
     }
 
     fun createSelectTimeViewModel(): SelectTimeViewModel {
-        return SelectTimeViewModel(getAvailableTimeSlotsUseCase)
+        return SelectTimeViewModel(getAvailableTimeSlotsUseCase, createAppointmentUseCase)
     }
 
     fun createJoinWaitlistViewModel(): JoinWaitlistViewModel {
