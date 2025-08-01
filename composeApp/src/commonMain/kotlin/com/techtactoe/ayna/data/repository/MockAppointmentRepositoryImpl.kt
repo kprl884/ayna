@@ -135,52 +135,52 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
     override suspend fun getAvailableTimeSlots(salonId: String, serviceId: String, date: Long): List<TimeSlot> {
         delay(1200) // Simulate network latency
 
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = date
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+        val requestedDate = Instant.fromEpochMilliseconds(date).toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val dayOfWeek = requestedDate.dayOfWeek
 
         // Return empty list for Sundays to simulate "fully booked" scenario
-        if (dayOfWeek == Calendar.SUNDAY) {
+        if (dayOfWeek == DayOfWeek.SUNDAY) {
             return emptyList()
         }
 
         // Generate realistic time slots for the day
         val timeSlots = mutableListOf<TimeSlot>()
-        val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
 
-        // Morning slots (10:00 AM - 12:00 PM)
-        val morningSlots = listOf("10:30", "11:00", "11:30")
-        morningSlots.forEach { time ->
-            val (hour, minute) = time.split(":").map { it.toInt() }
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
+        // Morning slots (10:30 AM - 11:30 AM)
+        val morningSlots = listOf(
+            LocalTime(10, 30) to "10:30 AM",
+            LocalTime(11, 0) to "11:00 AM",
+            LocalTime(11, 30) to "11:30 AM"
+        )
 
+        morningSlots.forEach { (time, formattedTime) ->
+            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
             timeSlots.add(
                 TimeSlot(
-                    dateTime = calendar.timeInMillis,
+                    dateTime = dateTime.toEpochMilliseconds(),
                     isAvailable = true,
-                    formattedTime = timeFormat.format(calendar.time)
+                    formattedTime = formattedTime
                 )
             )
         }
 
-        // Afternoon slots (4:00 PM - 6:00 PM)
-        val afternoonSlots = listOf("16:00", "16:15", "16:30", "16:45", "17:00", "17:15")
-        afternoonSlots.forEach { time ->
-            val (hour, minute) = time.split(":").map { it.toInt() }
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
+        // Afternoon slots (4:00 PM - 5:15 PM)
+        val afternoonSlots = listOf(
+            LocalTime(16, 0) to "4:00 PM",
+            LocalTime(16, 15) to "4:15 PM",
+            LocalTime(16, 30) to "4:30 PM",
+            LocalTime(16, 45) to "4:45 PM",
+            LocalTime(17, 0) to "5:00 PM",
+            LocalTime(17, 15) to "5:15 PM"
+        )
 
+        afternoonSlots.forEach { (time, formattedTime) ->
+            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
             timeSlots.add(
                 TimeSlot(
-                    dateTime = calendar.timeInMillis,
+                    dateTime = dateTime.toEpochMilliseconds(),
                     isAvailable = true,
-                    formattedTime = timeFormat.format(calendar.time)
+                    formattedTime = formattedTime
                 )
             )
         }
