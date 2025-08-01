@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.domain.usecase.GetAvailableTimeSlotsUseCase
 import com.techtactoe.ayna.domain.util.Resource
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
