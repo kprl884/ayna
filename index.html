@@ -244,14 +244,15 @@
         </div>
         
         <div class="new-feature">
-            <h4>🆕 LATEST: Complete Salon Detail Screen Integration!</h4>
-            <p>Fully integrated salon detail screen with navigation system:</p>
+            <h4>🆕 LATEST: Complete Explore/Keşfet Screen Implementation!</h4>
+            <p>Production-ready venue discovery screen with comprehensive filtering:</p>
             <ul>
-                <li><strong>Seamless Navigation:</strong> Tap any salon card to view full details</li>
-                <li><strong>Back Navigation:</strong> Proper back stack management and gesture support</li>
-                <li><strong>Context-Aware UI:</strong> Bottom navigation hides on detail screen</li>
-                <li><strong>Live Data:</strong> Connected to mock repository with realistic salon data</li>
-                <li><strong>Interactive Elements:</strong> Functional share, favorite, and booking buttons</li>
+                <li><strong>Sticky Header:</strong> Search bar with location display and map navigation</li>
+                <li><strong>Filter Chips:</strong> Sort, Price, Type filters with bottom sheet interactions</li>
+                <li><strong>Venue Cards:</strong> Image carousels with dots, ratings, services, and pricing</li>
+                <li><strong>Bottom Sheets:</strong> Sort options, price slider, venue type selection</li>
+                <li><strong>Immediate Data:</strong> Shows mock venues instantly without loading delays</li>
+                <li><strong>Turkish Localization:</strong> TRY currency, Istanbul locations, Turkish service names</li>
             </ul>
         </div>
         
@@ -290,6 +291,10 @@
                 <span class="tech-tag">ViewModel</span>
                 <span class="tech-tag">StateFlow</span>
                 <span class="tech-tag">Coroutines</span>
+                <span class="tech-tag">BottomSheet</span>
+                <span class="tech-tag">FilterChip</span>
+                <span class="tech-tag">Coil Image Loading</span>
+                <span class="tech-tag">MVI Pattern</span>
             </div>
         </div>
         
@@ -308,6 +313,13 @@
                     <div class="screen-info">
                         <h4>Search Screen <span class="status-badge">READY</span></h4>
                         <p>Search and filter salons by location, services, ratings, and availability</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🗺️</div>
+                    <div class="screen-info">
+                        <h4>Explore Screen <span class="status-badge">NEW!</span></h4>
+                        <p>Complete venue discovery with sticky search bar, filter chips, image carousels, and bottom sheets</p>
                     </div>
                 </div>
                 <div class="screen-item">
@@ -392,6 +404,34 @@
                     <div class="screen-info">
                         <h4>System-Aware Navigation <span class="status-badge">COMPLETE</span></h4>
                         <p>Material 3 NavigationBar with proper safe area handling and gesture support</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🔍</div>
+                    <div class="screen-info">
+                        <h4>Explore Search Bar <span class="status-badge">NEW!</span></h4>
+                        <p>Rounded search input with location indicator and map navigation button</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🎛️</div>
+                    <div class="screen-info">
+                        <h4>Filter Chip Bar <span class="status-badge">NEW!</span></h4>
+                        <p>Horizontal scrolling filter chips with active state styling and dropdown indicators</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">🏪</div>
+                    <div class="screen-info">
+                        <h4>Venue Cards <span class="status-badge">NEW!</span></h4>
+                        <p>Swipeable image carousels, star ratings, location info, and service listings</p>
+                    </div>
+                </div>
+                <div class="screen-item">
+                    <div class="screen-emoji">📋</div>
+                    <div class="screen-info">
+                        <h4>Filter Bottom Sheets <span class="status-badge">NEW!</span></h4>
+                        <p>Modal sheets for Sort (radio), Price (slider), Type (radio), and combined filters</p>
                     </div>
                 </div>
             </div>
