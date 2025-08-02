@@ -330,18 +330,20 @@ fun JoinWaitlistScreen(
             }
 
             // Error handling
-            if (uiState.error != null) {
-                Spacer(modifier = Modifier.height(16.dp))
+            uiState.errorMessage?.let { error ->
+                Spacer(modifier = Modifier.height(Spacing.md))
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { onEvent(JoinWaitlistContract.UiEvent.OnClearError) }
                 ) {
                     Text(
-                        text = uiState.error!!,
+                        text = error,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(Spacing.md)
                     )
                 }
             }
