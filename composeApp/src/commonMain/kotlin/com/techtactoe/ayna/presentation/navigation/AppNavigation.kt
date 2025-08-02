@@ -165,9 +165,13 @@ fun AppNavigation() {
                     serviceId = screen.serviceId,
                     onBackClick = { navController.popBackStack() },
                     onCloseClick = { navController.popBackStack() },
-                    onContinueClick = { },
-                    onBookNowClick = { },
-                    onSeeAvailableTimesClick = { },
+                    onContinueClick = {
+                        // TODO: Navigate to booking confirmation or handle waitlist submission
+                    },
+                    onBookNowClick = {
+
+                    },
+                    onSeeAvailableTimesClick = {}
                 )
             }
 
@@ -177,7 +181,7 @@ fun AppNavigation() {
                 BookingConfirmationScreen(
                     appointmentId = screen.appointmentId,
                     onGoToAppointmentsClick = { },
-                    onDoneClick = { },
+                    onDoneClick = {},
                 )
             }
         }

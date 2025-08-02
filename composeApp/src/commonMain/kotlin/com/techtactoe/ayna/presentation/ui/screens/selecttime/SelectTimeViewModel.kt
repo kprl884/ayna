@@ -164,13 +164,16 @@ class SelectTimeViewModel(
                     is Resource.Loading -> {
                         // Already set loading above
                     }
+
                     is Resource.Success -> {
-                        val appointmentId = "${Clock.System.now().toEpochMilliseconds()}" // Mock ID generation
+                        val appointmentId =
+                            "${Clock.System.now().toEpochMilliseconds()}" // Mock ID generation
                         _uiState.value = _uiState.value.copy(
                             isCreatingAppointment = false,
                             appointmentCreated = appointmentId
                         )
                     }
+
                     is Resource.Error -> {
                         _uiState.value = _uiState.value.copy(
                             isCreatingAppointment = false,
