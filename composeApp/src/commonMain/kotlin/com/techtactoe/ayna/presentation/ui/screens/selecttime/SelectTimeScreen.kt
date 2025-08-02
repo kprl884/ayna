@@ -46,6 +46,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.presentation.theme.AynaShapes
+import com.techtactoe.ayna.presentation.theme.BorderThickness
+import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.presentation.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
