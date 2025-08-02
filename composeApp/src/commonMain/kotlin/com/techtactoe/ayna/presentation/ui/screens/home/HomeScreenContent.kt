@@ -36,7 +36,7 @@ fun HomeScreenContent(
     onEvent: (HomeContract.UiEvent) -> Unit
 ) {
     Scaffold(
-        containerColor = AynaColors.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         BoxWithConstraints(
             modifier = Modifier
@@ -45,7 +45,7 @@ fun HomeScreenContent(
         ) {
             val topPadding = this.maxHeight / 10
             when {
-                state.isLoading -> {
+                uiState.isLoading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
