@@ -481,14 +481,7 @@ private fun EmptyContent(
     }
 }
 
-private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
-    return when (uiState) {
-        is ExploreUiState.Success -> uiState.filters
-        is ExploreUiState.Error -> uiState.filters
-        is ExploreUiState.Empty -> uiState.filters
-        else -> ExploreFilters()
-    }
-}
+
 
 @Preview
 @Composable
