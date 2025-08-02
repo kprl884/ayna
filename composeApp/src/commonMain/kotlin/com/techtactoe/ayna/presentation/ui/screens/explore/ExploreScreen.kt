@@ -501,16 +501,34 @@ private fun ExploreScreenPreview() {
 @Composable
 private fun ExploreScreenDarkPreview() {
     AynaAppTheme(darkTheme = true) {
-        val sampleUiState = ExploreUiState.Success(
-            isLoading = false,
-            venues = sampleVenues(),
-            isRefreshing = false,
-            hasMorePages = true,
-            filters = ExploreFilters(),
-            isLocationPermissionGranted = false
-        )
         ExploreContent(
-            uiState = sampleUiState,
+            uiState = sampleVenues().let { venues ->
+                ExploreUiState.Success(
+                    isLoading = false,
+                    venues = venues,
+                    isRefreshing = false,
+                    hasMorePages = true,
+                    filters = ExploreFilters(),
+                    isLocationPermissionGranted = false
+                )
+            },
+            onVenueClick = { },
+            onSeeMoreClick = { },
+            onRefresh = { },
+            onLoadMore = { },
+            onClearSearch = { }
+        )
+    }
+}
+
+@Preview()
+@Composable
+private fun ExploreContentStatesPreview(
+    @PreviewParameter(ExploreScreenPreviewProvider::class) uiState: ExploreUiState
+) {
+    AynaAppTheme {
+        ExploreContent(
+            uiState = uiState,
             onVenueClick = { },
             onSeeMoreClick = { },
             onRefresh = { },
