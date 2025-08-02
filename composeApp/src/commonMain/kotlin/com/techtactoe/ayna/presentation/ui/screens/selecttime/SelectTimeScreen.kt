@@ -94,7 +94,7 @@ fun SelectTimeScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(Spacing.md)
         ) {
             // Month/Year header
             Text(
@@ -102,14 +102,14 @@ fun SelectTimeScreen(
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = Spacing.md)
             )
 
             // Date selector
             val dateOptions = viewModel.getDateOptions(uiState.selectedDate)
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(bottom = 24.dp)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+                modifier = Modifier.padding(bottom = Spacing.lg)
             ) {
                 items(dateOptions) { dateOption ->
                     DateChip(
