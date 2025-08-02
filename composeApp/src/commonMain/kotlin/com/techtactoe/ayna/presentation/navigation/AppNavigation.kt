@@ -152,7 +152,7 @@ fun AppNavigation() {
 
             composable<Screen.SelectTime> { backStackEntry ->
                 val screen: Screen.SelectTime = backStackEntry.toRoute()
-                val viewModel = DataModule.createSelectTimeViewModel()
+                val viewModel = remember { DataModule.createSelectTimeViewModel() }
 
                 SelectTimeScreen(
                     viewModel = viewModel,
