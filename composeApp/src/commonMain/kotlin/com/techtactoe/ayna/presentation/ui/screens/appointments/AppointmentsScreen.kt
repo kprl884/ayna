@@ -199,7 +199,7 @@ private fun EmptyAppointmentsContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(Spacing.xl),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -208,30 +208,30 @@ private fun EmptyAppointmentsContent(
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            shape = RoundedCornerShape(16.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = Elevation.xs),
+            shape = MaterialTheme.shapes.large
         ) {
             Column(
-                modifier = Modifier.padding(32.dp),
+                modifier = Modifier.padding(Spacing.xl),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = null,
-                    tint = Color(0xFF7B61FF),
+                    tint = MaterialTheme.colorScheme.brandPurple,
                     modifier = Modifier
-                        .size(64.dp)
-                        .padding(bottom = 24.dp)
+                        .size(Spacing.xxxl)
+                        .padding(bottom = Spacing.lg)
                 )
 
                 Text(
                     text = "No appointments",
                     style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 24.sp
+                        fontWeight = FontWeight.SemiBold
                     ),
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = Spacing.sm)
                 )
 
                 Text(
@@ -239,14 +239,18 @@ private fun EmptyAppointmentsContent(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 32.dp)
+                    modifier = Modifier.padding(bottom = Spacing.xl)
                 )
 
                 OutlinedButton(
                     onClick = onSearchSalonsClick,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 ) {
-                    Text("Search salons")
+                    Text(
+                        "Search salons",
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
         }
