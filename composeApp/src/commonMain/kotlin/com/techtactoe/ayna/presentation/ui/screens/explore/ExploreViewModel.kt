@@ -153,69 +153,49 @@ class ExploreViewModel(
         if (reset) {
             currentPage = 0
             allVenues.clear()
-            _screenState.update { currentState ->
-                val currentUiState = currentState.uiState
-                if (currentUiState is ExploreUiState.Success) {
-                    currentState.copy(
-                        uiState = currentUiState.copy(isLoading = true)
-                    )
-                } else {
-                    currentState.copy(uiState = ExploreUiState.Loading)
-                }
-            }
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
         }
 
-        val currentFilters = getCurrentFilters(_screenState.value.uiState)
+        val currentFilters = _uiState.value.filters
 
         viewModelScope.launch {
             try {
                 val result = repository.getVenues(currentFilters, currentPage)
                 result.fold(
                     onSuccess = { venues ->
-                        if (venues.isEmpty() && allVenues.isEmpty()) {
-                            _screenState.update { currentState ->
-                                currentState.copy(
-                                    uiState = ExploreUiState.Empty(filters = currentFilters)
-                                )
-                            }
-                        } else {
-                            if (reset) {
-                                allVenues.clear()
-                            }
-                            allVenues.addAll(venues)
-                            currentPage++
+                        if (reset) {
+                            allVenues.clear()
+                        }
+                        allVenues.addAll(venues)
+                        currentPage++
 
-                            _screenState.update { currentState ->
-                                currentState.copy(
-                                    uiState = ExploreUiState.Success(
-                                        isLoading = false,
-                                        venues = allVenues.toList(),
-                                        hasMorePages = venues.isNotEmpty(),
-                                        filters = currentFilters,
-                                        isRefreshing = false
-                                    )
-                                )
-                            }
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                venues = allVenues.toList(),
+                                hasMorePages = venues.isNotEmpty(),
+                                isRefreshing = false,
+                                isSuccess = true,
+                                errorMessage = null
+                            )
                         }
                     },
                     onFailure = { exception ->
-                        _screenState.update { currentState ->
-                            currentState.copy(
-                                uiState = ExploreUiState.Error(
-                                    message = exception.message ?: "An error occurred",
-                                    filters = currentFilters
-                                )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = exception.message ?: "An error occurred",
+                                isRefreshing = false
                             )
                         }
                     }
                 )
             } catch (e: Exception) {
-                _screenState.update { currentState ->
-                    currentState.copy(
-                        uiState = ExploreUiState.Error(
-                            message = e.message ?: "An error occurred",
-                            filters = currentFilters
-                        )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = e.message ?: "An error occurred",
+                        isRefreshing = false
                     )
                 }
             }
@@ -223,61 +203,8 @@ class ExploreViewModel(
     }
 
     private fun refreshVenues() {
-        _screenState.update { screenState ->
-            val currentUiState = screenState.uiState
-            if (currentUiState is ExploreUiState.Success) {
-                screenState.copy(
-                    uiState = currentUiState.copy(isRefreshing = true, isLoading = false)
-                )
-            } else {
-                screenState
-            }
-        }
+        _uiState.update { it.copy(isRefreshing = true, isLoading = false) }
         loadVenues(reset = true)
-    }
-
-    private fun updateFilters(filters: ExploreFilters) {
-        _screenState.update { screenState ->
-            when (val currentUiState = screenState.uiState) {
-                is ExploreUiState.Success -> {
-                    screenState.copy(
-                        uiState = currentUiState.copy(filters = filters, isLoading = false)
-                    )
-                }
-
-                is ExploreUiState.Error -> {
-                    screenState.copy(
-                        uiState = currentUiState.copy(filters = filters)
-                    )
-                }
-
-                is ExploreUiState.Empty -> {
-                    screenState.copy(
-                        uiState = currentUiState.copy(filters = filters)
-                    )
-                }
-
-                else -> {
-                    // For loading state, just load with new filters
-                    screenState
-                }
-            }
-        }
-        loadVenues(reset = true)
-    }
-
-    private fun updateSearchQuery(query: String) {
-        val currentFilters = getCurrentFilters(_screenState.value.uiState)
-        updateFilters(currentFilters.copy(searchQuery = query))
-    }
-
-    private fun updateSelectedCity(city: String) {
-        val currentFilters = getCurrentFilters(_screenState.value.uiState)
-        updateFilters(currentFilters.copy(selectedCity = city))
-    }
-
-    private fun clearFilters() {
-        updateFilters(ExploreFilters())
     }
 
     private fun bookmarkVenue(venueId: String) {
