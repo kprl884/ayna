@@ -101,7 +101,7 @@ fun AppNavigation() {
                 SearchScreen() // Placeholder
             }
             composable<Screen.Appointments> {
-                val viewModel = DataModule.createAppointmentsViewModel()
+                val viewModel = remember { DataModule.createAppointmentsViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 AppointmentsScreen(
