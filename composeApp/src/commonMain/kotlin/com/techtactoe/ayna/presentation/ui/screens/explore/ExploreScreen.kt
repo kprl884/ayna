@@ -299,11 +299,11 @@ private fun LoadingContent(
 @Composable
 private fun SuccessContent(
     venues: List<Venue>,
-    isRefreshing: Boolean,
+    @Suppress("UNUSED_PARAMETER") isRefreshing: Boolean,
     hasMorePages: Boolean,
     onVenueClick: (Venue) -> Unit,
     onSeeMoreClick: (Venue) -> Unit,
-    onRefresh: () -> Unit,
+    @Suppress("UNUSED_PARAMETER") onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
