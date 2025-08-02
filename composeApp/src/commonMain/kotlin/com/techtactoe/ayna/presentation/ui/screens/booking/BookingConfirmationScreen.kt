@@ -125,62 +125,120 @@ private fun ConfirmationContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(Spacing.xl),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Default.CheckCircle,
             contentDescription = null,
-            tint = Color(0xFF4CAF50),
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(80.dp)
-                .padding(bottom = 32.dp)
+                .size(Spacing.xxxl + Spacing.md)
+                .padding(bottom = Spacing.xl)
         )
-        
+
         Text(
             text = "Booking Confirmed!",
             style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp
+                fontWeight = FontWeight.Bold
             ),
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = Spacing.md)
         )
-        
+
         Text(
             text = "Your appointment has been successfully booked. You'll receive a confirmation email shortly.",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = Spacing.xl)
         )
-        
+
+        // Appointment details
+        if (uiState.salonName.isNotEmpty()) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = Spacing.lg),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Column(
+                    modifier = Modifier.padding(Spacing.md)
+                ) {
+                    Text(
+                        text = uiState.salonName,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = uiState.serviceName,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = Spacing.xs)
+                    )
+
+                    Text(
+                        text = uiState.appointmentDateTime,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = Spacing.xs)
+                    )
+
+                    if (uiState.price.isNotEmpty()) {
+                        Text(
+                            text = uiState.price,
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(top = Spacing.sm)
+                        )
+                    }
+                }
+            }
+        }
+
         Text(
-            text = "Appointment ID: $appointmentId",
+            text = "Appointment ID: ${uiState.appointmentId}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = Spacing.xl)
         )
-        
+
         Button(
-            onClick = onGoToAppointmentsClick,
+            onClick = { onEvent(BookingConfirmationContract.UiEvent.OnGoToAppointmentsClick) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(bottom = Spacing.md),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF7B61FF)
+                containerColor = MaterialTheme.colorScheme.brandPurple
+            ),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(
+                "View My Appointments",
+                style = MaterialTheme.typography.labelLarge
             )
-        ) {
-            Text("View My Appointments")
         }
-        
+
         OutlinedButton(
-            onClick = onDoneClick,
-            modifier = Modifier.fillMaxWidth()
+            onClick = { onEvent(BookingConfirmationContract.UiEvent.OnDoneClick) },
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium
         ) {
-            Text("Done")
+            Text(
+                "Done",
+                style = MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
