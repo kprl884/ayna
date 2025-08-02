@@ -127,17 +127,16 @@ fun SelectTimeScreen(
             )
 
             // Date selector
-            val dateOptions = viewModel.getDateOptions(uiState.selectedDate)
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.md),
                 modifier = Modifier.padding(bottom = Spacing.lg)
             ) {
-                items(dateOptions) { dateOption ->
+                items(uiState.dateOptions) { dateOption ->
                     DateChip(
                         dateOption = dateOption,
                         onClick = {
                             if (!dateOption.isDisabled) {
-                                viewModel.loadTimeSlots(dateOption.date)
+                                viewModel.onEvent(SelectTimeContract.UiEvent.OnDateSelected(dateOption.date))
                             }
                         }
                     )
