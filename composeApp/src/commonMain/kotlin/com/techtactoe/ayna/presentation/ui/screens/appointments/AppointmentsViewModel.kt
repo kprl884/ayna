@@ -90,7 +90,7 @@ class AppointmentsViewModel(
                                 appointments = appointments,
                                 upcomingAppointments = upcoming,
                                 pastAppointments = past,
-                                isEmpty = true, // Force empty state for Figma design
+                                isEmpty = appointments.isEmpty() && upcoming.isEmpty() && past.isEmpty(),
                                 errorMessage = null
                             )
                         }

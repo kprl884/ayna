@@ -1,20 +1,11 @@
 package com.techtactoe.ayna.presentation.ui.screens.appointments
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -25,18 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.techtactoe.ayna.designsystem.ErrorContent
 import com.techtactoe.ayna.designsystem.LoadingContent
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import com.techtactoe.ayna.presentation.theme.Spacing
-import com.techtactoe.ayna.presentation.ui.screens.appointments.component.PurpleCalendarIcon
+import com.techtactoe.ayna.presentation.ui.screens.appointments.component.EmptyAppointmentsContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -146,56 +131,6 @@ fun AppointmentsScreen(
     }
 }
 
-@Composable
-fun EmptyAppointmentsContent(
-    onSearchSalonsClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = Spacing.lg),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Custom purple gradient calendar icon matching the Figma design
-        PurpleCalendarIcon(
-            modifier = Modifier.padding(bottom = Spacing.xl)
-        )
-
-        Text(
-            text = "No appointments",
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.md)
-        )
-
-        Text(
-            text = "Your upcoming and past appointments\nwill appear here when you book",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xxl)
-        )
-
-        OutlinedButton(
-            onClick = onSearchSalonsClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Spacing.xl),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Text(
-                "Search salons",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(vertical = Spacing.xs)
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun EmptyAppointmentsScreenPreview() {
@@ -215,18 +150,6 @@ private fun AppointmentsScreenPreview() {
             ) {
                 EmptyAppointmentsContent(onSearchSalonsClick = {})
             }
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PurpleCalendarIconPreview() {
-    AynaAppTheme {
-        Surface(
-            modifier = Modifier.padding(Spacing.lg)
-        ) {
-            PurpleCalendarIcon()
         }
     }
 }

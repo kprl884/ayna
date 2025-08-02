@@ -26,7 +26,6 @@ fun EmptyAppointmentsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Custom purple gradient calendar icon matching the Figma design
         PurpleCalendarIcon(
             modifier = Modifier.padding(bottom = Spacing.xl)
         )
