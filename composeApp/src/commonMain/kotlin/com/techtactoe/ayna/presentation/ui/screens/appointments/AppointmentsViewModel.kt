@@ -2,7 +2,7 @@ package com.techtactoe.ayna.presentation.ui.screens.appointments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techtactoe.ayna.domain.model.AppointmentStatus
+import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.usecase.GetUserAppointmentsUseCase
 import com.techtactoe.ayna.domain.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,28 +36,35 @@ class AppointmentsViewModel(
             is AppointmentsContract.UiEvent.OnInitialize -> {
                 loadAppointments()
             }
+
             is AppointmentsContract.UiEvent.OnRefresh -> {
                 refreshAppointments()
             }
+
             is AppointmentsContract.UiEvent.OnTabSelected -> {
                 _uiState.update { it.copy(selectedTab = event.tab) }
             }
+
             is AppointmentsContract.UiEvent.OnAppointmentClicked -> {
                 _uiState.update { it.copy(navigateToAppointmentDetail = event.appointmentId) }
             }
+
             is AppointmentsContract.UiEvent.OnNavigateToSearch -> {
                 _uiState.update { it.copy(navigateToSearch = true) }
             }
+
             is AppointmentsContract.UiEvent.OnNavigationHandled -> {
                 when (event.resetNavigation) {
                     AppointmentsContract.NavigationReset.SEARCH -> {
                         _uiState.update { it.copy(navigateToSearch = false) }
                     }
+
                     AppointmentsContract.NavigationReset.APPOINTMENT_DETAIL -> {
                         _uiState.update { it.copy(navigateToAppointmentDetail = null) }
                     }
                 }
             }
+
             is AppointmentsContract.UiEvent.OnClearError -> {
                 _uiState.update { it.copy(errorMessage = null) }
             }
@@ -73,7 +80,6 @@ class AppointmentsViewModel(
                 when (result) {
                     is Resource.Loading -> {}
                     is Resource.Success -> {
-                        // Temporarily force empty state for Figma implementation
                         val appointments = emptyList<Appointment>()
                         val upcoming = emptyList<Appointment>()
                         val past = emptyList<Appointment>()
@@ -89,6 +95,7 @@ class AppointmentsViewModel(
                             )
                         }
                     }
+
                     is Resource.Error -> {
                         _uiState.update {
                             it.copy(
