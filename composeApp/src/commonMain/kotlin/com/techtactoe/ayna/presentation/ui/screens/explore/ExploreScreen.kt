@@ -30,9 +30,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,7 +69,7 @@ fun ExploreScreen(
     onNavigateToAdvancedSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val screenState by rememberUpdatedState(viewModel.screenState)
+    val screenState by viewModel.screenState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle events
@@ -482,21 +482,16 @@ private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
 @Composable
 private fun ExploreScreenPreview() {
     AynaAppTheme {
-        val sampleUiState = ExploreUiState.Success(
-            isLoading = false,
-            venues = sampleVenues(),
-            isRefreshing = false,
-            hasMorePages = true,
-            filters = ExploreFilters(),
-            isLocationPermissionGranted = false
-        )
-        ExploreContent(
-            uiState = sampleUiState,
-            onVenueClick = { },
-            onSeeMoreClick = { },
-            onRefresh = { },
-            onLoadMore = { },
-            onClearSearch = { }
+        // Create a mock ViewModel with Sort bottom sheet active
+        val mockViewModel = ExploreViewModel().apply {
+            showBottomSheet(BottomSheetType.Sort)
+        }
+
+        ExploreScreen(
+            viewModel = mockViewModel,
+            onNavigateToVenueDetail = { },
+            onNavigateToMap = { },
+            onNavigateToAdvancedSearch = { }
         )
     }
 }

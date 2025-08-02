@@ -1,6 +1,11 @@
 package com.techtactoe.ayna.presentation.ui.screens.explore
 
-import com.techtactoe.ayna.domain.model.*
+import com.techtactoe.ayna.domain.model.ExploreFilters
+import com.techtactoe.ayna.domain.model.Venue
+import com.techtactoe.ayna.domain.model.VenueLocation
+import com.techtactoe.ayna.domain.model.VenueService
+import com.techtactoe.ayna.domain.model.VenueType
+import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 /**
  * Sample data provider for previews and testing
@@ -105,7 +110,7 @@ fun sampleVenues(): List<Venue> = listOf(
 /**
  * Preview parameter provider for ExploreScreen previews
  */
-class ExploreScreenPreviewProvider : androidx.compose.ui.tooling.preview.PreviewParameterProvider<ExploreUiState> {
+class ExploreScreenPreviewProvider : PreviewParameterProvider<ExploreUiState> {
     override val values: Sequence<ExploreUiState> = sequenceOf(
         // Default state with venues
         ExploreUiState.Success(
