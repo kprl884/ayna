@@ -28,12 +28,12 @@ import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
-import com.techtactoe.ayna.presentation.viewmodel.HomeScreenState
+import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 
 @Composable
 fun HomeScreenContent(
-    state: HomeScreenState,
-    onSalonClick: (String) -> Unit = {}
+    uiState: HomeContract.UiState,
+    onEvent: (HomeContract.UiEvent) -> Unit
 ) {
     Scaffold(
         containerColor = AynaColors.White
