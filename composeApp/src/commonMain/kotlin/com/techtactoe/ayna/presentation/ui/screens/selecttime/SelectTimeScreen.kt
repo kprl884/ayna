@@ -93,12 +93,18 @@ fun SelectTimeScreen(
             TopAppBar(
                 title = { Text("Select time") },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = {
+                        viewModel.onEvent(SelectTimeContract.UiEvent.OnBackClicked)
+                        onBackClick()
+                    }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = onCloseClick) {
+                    IconButton(onClick = {
+                        viewModel.onEvent(SelectTimeContract.UiEvent.OnCloseClicked)
+                        onCloseClick()
+                    }) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 }
