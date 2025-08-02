@@ -69,7 +69,7 @@ fun AppNavigation() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable<Screen.Home> {
-                val viewModel = DataModule.createHomeViewModel()
+                val viewModel = remember { DataModule.createHomeViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 HomeScreen(
