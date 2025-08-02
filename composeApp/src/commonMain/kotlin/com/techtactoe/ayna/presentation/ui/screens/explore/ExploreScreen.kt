@@ -487,16 +487,17 @@ private fun EmptyContent(
 @Composable
 private fun ExploreScreenPreview() {
     AynaAppTheme {
-        // Create a mock ViewModel with Sort bottom sheet active
-        val mockViewModel = ExploreViewModel().apply {
-            showBottomSheet(BottomSheetType.Sort)
-        }
-
-        ExploreScreen(
-            viewModel = mockViewModel,
-            onNavigateToVenueDetail = { },
-            onNavigateToMap = { },
-            onNavigateToAdvancedSearch = { }
+        ExploreContent(
+            venues = sampleVenues(),
+            isLoading = false,
+            isRefreshing = false,
+            hasMorePages = true,
+            errorMessage = null,
+            onVenueClick = { },
+            onSeeMoreClick = { },
+            onRefresh = { },
+            onLoadMore = { },
+            onClearSearch = { }
         )
     }
 }
@@ -506,16 +507,11 @@ private fun ExploreScreenPreview() {
 private fun ExploreScreenDarkPreview() {
     AynaAppTheme(darkTheme = true) {
         ExploreContent(
-            uiState = sampleVenues().let { venues ->
-                ExploreUiState.Success(
-                    isLoading = false,
-                    venues = venues,
-                    isRefreshing = false,
-                    hasMorePages = true,
-                    filters = ExploreFilters(),
-                    isLocationPermissionGranted = false
-                )
-            },
+            venues = sampleVenues(),
+            isLoading = false,
+            isRefreshing = false,
+            hasMorePages = true,
+            errorMessage = null,
             onVenueClick = { },
             onSeeMoreClick = { },
             onRefresh = { },
