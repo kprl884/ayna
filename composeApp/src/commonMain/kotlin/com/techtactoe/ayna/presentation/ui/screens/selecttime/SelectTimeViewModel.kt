@@ -160,7 +160,7 @@ class SelectTimeViewModel(
     /**
      * Create appointment with selected time slot
      */
-    private fun createAppointment(salonName: String, serviceName: String) {
+    fun createAppointment(salonName: String, serviceName: String) {
         val selectedSlot = _uiState.value.selectedTimeSlot ?: return
 
         viewModelScope.launch {
@@ -303,14 +303,3 @@ class SelectTimeViewModel(
         return "$dayOfWeekText, $monthText ${nextDate.dayOfMonth}"
     }
 }
-
-/**
- * Data class for date selector options
- */
-data class DateOption(
-    val date: Long,
-    val dayOfMonth: Int,
-    val dayOfWeek: String,
-    val isSelected: Boolean = false,
-    val isDisabled: Boolean = false
-)
