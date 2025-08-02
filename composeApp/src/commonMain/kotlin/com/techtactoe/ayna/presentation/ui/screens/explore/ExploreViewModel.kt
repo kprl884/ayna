@@ -270,11 +270,11 @@ class ExploreViewModel(
         }
     }
     
-    private fun getCurrentFilters(): ExploreFilters {
-        return when (val currentState = screenState.uiState) {
-            is ExploreUiState.Success -> currentState.filters
-            is ExploreUiState.Error -> currentState.filters
-            is ExploreUiState.Empty -> currentState.filters
+    private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
+        return when (uiState) {
+            is ExploreUiState.Success -> uiState.filters
+            is ExploreUiState.Error -> uiState.filters
+            is ExploreUiState.Empty -> uiState.filters
             else -> ExploreFilters()
         }
     }
