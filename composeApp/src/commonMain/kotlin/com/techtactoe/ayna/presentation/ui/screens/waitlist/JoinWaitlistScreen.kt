@@ -54,24 +54,60 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Screen for joining waitlist when no appointments are available
+ * Following the golden standard MVVM pattern
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JoinWaitlistScreen(
-    viewModel: JoinWaitlistViewModel,
+    uiState: JoinWaitlistContract.UiState,
+    onEvent: (JoinWaitlistContract.UiEvent) -> Unit,
     salonId: String,
     serviceId: String,
-    onBackClick: () -> Unit,
-    onCloseClick: () -> Unit,
-    onContinueClick: () -> Unit,
-    onBookNowClick: () -> Unit,
-    onSeeAvailableTimesClick: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateClose: () -> Unit,
+    onNavigateToContinue: () -> Unit,
+    onNavigateToBooking: () -> Unit,
+    onNavigateToSelectTime: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
+    // Initialize with salon and service IDs
     LaunchedEffect(salonId, serviceId) {
-        viewModel.initialize(salonId, serviceId)
+        onEvent(JoinWaitlistContract.UiEvent.OnInitialize(salonId, serviceId))
+    }
+
+    // Handle navigation effects
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) {
+            onNavigateBack()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.BACK))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToClose) {
+        if (uiState.navigateToClose) {
+            onNavigateClose()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.CLOSE))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToBooking) {
+        if (uiState.navigateToBooking) {
+            onNavigateToBooking()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.BOOKING))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToSelectTime) {
+        if (uiState.navigateToSelectTime) {
+            onNavigateToSelectTime()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.SELECT_TIME))
+        }
+    }
+
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            onNavigateToContinue()
+        }
     }
 
     Scaffold(
