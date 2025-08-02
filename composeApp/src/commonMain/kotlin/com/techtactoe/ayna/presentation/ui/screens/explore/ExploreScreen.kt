@@ -70,20 +70,36 @@ fun ExploreScreen(
     onNavigateToAdvancedSearch: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val screenState by viewModel.screenState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Handle events
-    LaunchedEffect(viewModel) {
-        viewModel.events.collectLatest { event ->
-            when (event) {
-                is ExploreEvent.NavigateToVenueDetail -> onNavigateToVenueDetail(event.venueId)
-                is ExploreEvent.NavigateToMap -> onNavigateToMap()
-                is ExploreEvent.NavigateToAdvancedSearch -> onNavigateToAdvancedSearch()
-                is ExploreEvent.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(event.message)
-                }
-            }
+    // Handle navigation events
+    LaunchedEffect(uiState.navigateToVenueDetail) {
+        uiState.navigateToVenueDetail?.let { venueId ->
+            onNavigateToVenueDetail(venueId)
+            viewModel.onEvent(ExploreContract.UiEvent.OnNavigationHandled(ExploreContract.NavigationReset.VENUE_DETAIL))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToMap) {
+        if (uiState.navigateToMap) {
+            onNavigateToMap()
+            viewModel.onEvent(ExploreContract.UiEvent.OnNavigationHandled(ExploreContract.NavigationReset.MAP))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToAdvancedSearch) {
+        if (uiState.navigateToAdvancedSearch) {
+            onNavigateToAdvancedSearch()
+            viewModel.onEvent(ExploreContract.UiEvent.OnNavigationHandled(ExploreContract.NavigationReset.ADVANCED_SEARCH))
+        }
+    }
+
+    // Handle snackbar messages
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            viewModel.onEvent(ExploreContract.UiEvent.OnSnackbarDismissed)
         }
     }
 
