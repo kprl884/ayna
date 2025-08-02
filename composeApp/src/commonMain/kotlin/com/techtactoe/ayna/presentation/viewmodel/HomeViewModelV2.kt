@@ -2,65 +2,104 @@ package com.techtactoe.ayna.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techtactoe.ayna.domain.model.SalonV2
 import com.techtactoe.ayna.domain.usecase.GetRecommendedSalonsUseCase
 import com.techtactoe.ayna.domain.util.Resource
+import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * Enhanced ViewModel for the Home screen using Clean Architecture patterns
+ * ViewModel for the Home screen following the golden standard MVVM pattern
  */
 class HomeViewModelV2(
     private val getRecommendedSalonsUseCase: GetRecommendedSalonsUseCase
 ) : ViewModel() {
 
-    /**
-     * Data class representing the UI state for the Home screen
-     */
-    data class HomeUiState(
-        val isLoading: Boolean = false,
-        val salons: List<SalonV2> = emptyList(),
-        val error: String? = null,
-        val isRefreshing: Boolean = false
-    )
-
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(HomeContract.UiState())
+    val uiState: StateFlow<HomeContract.UiState> = _uiState.asStateFlow()
 
     init {
         loadRecommendedSalons()
     }
 
     /**
+     * Handle all user events from the UI
+     */
+    fun onEvent(event: HomeContract.UiEvent) {
+        when (event) {
+            is HomeContract.UiEvent.OnInitialize -> {
+                loadRecommendedSalons()
+            }
+            is HomeContract.UiEvent.OnRefresh -> {
+                refreshSalons()
+            }
+            is HomeContract.UiEvent.OnSearchQueryChanged -> {
+                _uiState.update { it.copy(searchQuery = event.query) }
+            }
+            is HomeContract.UiEvent.OnSearchClick -> {
+                _uiState.update { it.copy(navigateToSearch = true) }
+            }
+            is HomeContract.UiEvent.OnSalonClick -> {
+                _uiState.update { it.copy(navigateToSalonDetail = event.salonId) }
+            }
+            is HomeContract.UiEvent.OnProfileClick -> {
+                _uiState.update { it.copy(navigateToProfile = true) }
+            }
+            is HomeContract.UiEvent.OnNavigationHandled -> {
+                when (event.resetNavigation) {
+                    HomeContract.NavigationReset.SALON_DETAIL -> {
+                        _uiState.update { it.copy(navigateToSalonDetail = null) }
+                    }
+                    HomeContract.NavigationReset.SEARCH -> {
+                        _uiState.update { it.copy(navigateToSearch = false) }
+                    }
+                    HomeContract.NavigationReset.PROFILE -> {
+                        _uiState.update { it.copy(navigateToProfile = false) }
+                    }
+                }
+            }
+            is HomeContract.UiEvent.OnClearError -> {
+                _uiState.update { it.copy(errorMessage = null) }
+            }
+        }
+    }
+
+    /**
      * Load recommended salons from the repository
      */
-    fun loadRecommendedSalons() {
+    private fun loadRecommendedSalons() {
         viewModelScope.launch {
             getRecommendedSalonsUseCase().collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = true,
-                            error = null
-                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = true,
+                                errorMessage = null
+                            )
+                        }
                     }
                     is Resource.Success -> {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            salons = result.data ?: emptyList(),
-                            error = null,
-                            isRefreshing = false
-                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isRefreshing = false,
+                                salons = result.data ?: emptyList(),
+                                errorMessage = null
+                            )
+                        }
                     }
                     is Resource.Error -> {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            error = result.message,
-                            isRefreshing = false
-                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isRefreshing = false,
+                                errorMessage = result.message
+                            )
+                        }
                     }
                 }
             }
@@ -68,25 +107,10 @@ class HomeViewModelV2(
     }
 
     /**
-     * Refresh the recommended salons list
+     * Refresh salons
      */
-    fun refreshSalons() {
-        _uiState.value = _uiState.value.copy(isRefreshing = true)
+    private fun refreshSalons() {
+        _uiState.update { it.copy(isRefreshing = true) }
         loadRecommendedSalons()
-    }
-
-    /**
-     * Clear any error messages
-     */
-    fun clearError() {
-        _uiState.value = _uiState.value.copy(error = null)
-    }
-
-    /**
-     * Handle salon selection
-     */
-    fun onSalonSelected(salon: SalonV2) {
-        // Handle salon selection logic here
-        // This could navigate to salon details or perform other actions
     }
 }
