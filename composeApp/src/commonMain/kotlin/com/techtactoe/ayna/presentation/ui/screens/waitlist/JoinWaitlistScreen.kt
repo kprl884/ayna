@@ -247,58 +247,64 @@ fun JoinWaitlistScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(Spacing.lg))
 
             // Add another time option
             OutlinedButton(
-                onClick = { /* TODO: Add another time option */ },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { onEvent(JoinWaitlistContract.UiEvent.OnAddAnotherTime) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = Spacing.sm)
                 )
-                Text("Add another time")
+                Text(
+                    "Add another time",
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(Spacing.xl))
 
             // Available slots notification
             if (uiState.hasAvailableSlots) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFF3E5F5)
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(Spacing.md)
                     ) {
                         Text(
                             text = uiState.availableSlotsMessage,
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = Spacing.md)
                         )
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            TextButton(onClick = onBookNowClick) {
+                            TextButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnBookNow) }) {
                                 Text(
                                     text = "Book now →",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontWeight = FontWeight.Medium
-                                    )
+                                    ),
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(Spacing.lg))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -306,17 +312,18 @@ fun JoinWaitlistScreen(
                 ) {
                     Text(
                         text = "Changed your mind? ",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     TextButton(
-                        onClick = onSeeAvailableTimesClick,
+                        onClick = { onEvent(JoinWaitlistContract.UiEvent.OnSeeAvailableTimes) },
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         Text(
                             text = "See available times to book",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF7B61FF)
+                            color = MaterialTheme.colorScheme.brandPurple
                         )
                     }
                 }
