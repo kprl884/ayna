@@ -111,10 +111,34 @@ fun ExploreScreen(
                 scrollBehavior = scrollBehavior,
                 onSearchBarClick = { viewModel.onEvent(ExploreContract.UiEvent.OnNavigateToAdvancedSearch) },
                 onMapClick = { viewModel.onEvent(ExploreContract.UiEvent.OnNavigateToMap) },
-                onFiltersClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Filters)) },
-                onSortClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Sort)) },
-                onPriceClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Price)) },
-                onTypeClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.VenueType)) }
+                onFiltersClick = {
+                    viewModel.onEvent(
+                        ExploreContract.UiEvent.OnShowBottomSheet(
+                            BottomSheetType.Filters
+                        )
+                    )
+                },
+                onSortClick = {
+                    viewModel.onEvent(
+                        ExploreContract.UiEvent.OnShowBottomSheet(
+                            BottomSheetType.Sort
+                        )
+                    )
+                },
+                onPriceClick = {
+                    viewModel.onEvent(
+                        ExploreContract.UiEvent.OnShowBottomSheet(
+                            BottomSheetType.Price
+                        )
+                    )
+                },
+                onTypeClick = {
+                    viewModel.onEvent(
+                        ExploreContract.UiEvent.OnShowBottomSheet(
+                            BottomSheetType.VenueType
+                        )
+                    )
+                }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -127,7 +151,13 @@ fun ExploreScreen(
             hasMorePages = uiState.hasMorePages,
             errorMessage = uiState.errorMessage,
             onVenueClick = { venue -> viewModel.onEvent(ExploreContract.UiEvent.OnVenueClicked(venue.id)) },
-            onSeeMoreClick = { venue -> viewModel.onEvent(ExploreContract.UiEvent.OnVenueClicked(venue.id)) },
+            onSeeMoreClick = { venue ->
+                viewModel.onEvent(
+                    ExploreContract.UiEvent.OnVenueClicked(
+                        venue.id
+                    )
+                )
+            },
             onRefresh = { viewModel.onEvent(ExploreContract.UiEvent.OnRefreshVenues) },
             onLoadMore = { viewModel.onEvent(ExploreContract.UiEvent.OnLoadMoreVenues) },
             onClearSearch = { viewModel.onEvent(ExploreContract.UiEvent.OnClearFilters) },
@@ -478,8 +508,6 @@ private fun EmptyContent(
         }
     }
 }
-
-
 
 @Preview
 @Composable

@@ -1,6 +1,6 @@
 package com.techtactoe.ayna.presentation.ui.screens.home
 
-import com.techtactoe.ayna.domain.model.SalonV2
+import com.techtactoe.ayna.domain.model.Salon
 
 /**
  * Contract defining the UI state and events for the Home screen
@@ -13,7 +13,7 @@ interface HomeContract {
      */
     data class UiState(
         // Data
-        val salons: List<SalonV2> = emptyList(),
+        val salons: List<Salon> = emptyList(),
         
         // Loading states
         val isLoading: Boolean = false,

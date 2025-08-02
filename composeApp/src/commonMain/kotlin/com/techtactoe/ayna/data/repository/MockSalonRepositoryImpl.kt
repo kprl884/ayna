@@ -3,9 +3,9 @@ package com.techtactoe.ayna.data.repository
 import com.techtactoe.ayna.domain.model.DayOfWeek
 import com.techtactoe.ayna.domain.model.Employee
 import com.techtactoe.ayna.domain.model.Location
-import com.techtactoe.ayna.domain.model.SalonV2
+import com.techtactoe.ayna.domain.model.Salon
 import com.techtactoe.ayna.domain.model.Service
-import com.techtactoe.ayna.domain.repository.SalonRepositoryV2
+import com.techtactoe.ayna.domain.repository.SalonRepository
 import kotlinx.coroutines.delay
 import kotlin.math.exp
 import kotlin.math.sqrt
@@ -13,10 +13,10 @@ import kotlin.math.sqrt
 /**
  * Mock implementation of SalonRepositoryV2 with realistic hardcoded data
  */
-class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
+class MockSalonRepositoryImpl : SalonRepository {
 
     private val mockSalons = listOf(
-        SalonV2(
+        Salon(
             id = "1",
             name = "Emre's Barbershop Dolapdere",
             location = Location(
@@ -83,9 +83,13 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 )
             ),
             description = "Traditional Turkish barbershop offering premium men's grooming services in the heart of Dolapdere.",
-            phoneNumber = "+90 212 555 0101"
+            phoneNumber = "+90 212 555 0101",
+            isOpen = true,
+            address = "Dolapdere Mahallesi, 34384 Istanbul",
+            imageUrl = "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800",
+            tags = listOf("Barbershop", "Traditional")
         ),
-        SalonV2(
+        Salon(
             id = "2",
             name = "Ayna Beauty Studio",
             location = Location(
@@ -145,9 +149,13 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 Service("svc6", "Nail Art", "Creative nail art designs", 0.0, 20)
             ),
             description = "Premium beauty studio specializing in nail care and beauty treatments.",
-            phoneNumber = "+90 216 555 0202"
+            phoneNumber = "+90 216 555 0202",
+            isOpen = true,
+            address = "Fenerbahçe Mah",
+            imageUrl = "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800",
+            tags = listOf("Beauty Studio", "Nail Salon")
         ),
-        SalonV2(
+        Salon(
             id = "3",
             name = "Serenity Spa & Wellness",
             location = Location(
@@ -201,9 +209,13 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 Service("svc9", "60 Min Oil Massage", "Full body oil massage", 1600.0, 75)
             ),
             description = "Luxury spa offering traditional and modern wellness treatments in Bebek.",
-            phoneNumber = "+90 212 555 0303"
+            phoneNumber = "+90 212 555 0303",
+            isOpen = true,
+            address = "Bebek Mahallesi, 34342 Istanbul",
+            imageUrl = "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800",
+            tags = listOf("Spa", "Wellness")
         ),
-        SalonV2(
+        Salon(
             id = "4",
             name = "Elite Hair Studio",
             location = Location(
@@ -256,16 +268,220 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
                 Service("svc12", "Blowout", "Professional hair blowout", 1000.0, 45)
             ),
             description = "High-end hair studio in Nişantaşı offering premium hair services for women.",
-            phoneNumber = "+90 212 555 0404"
+            phoneNumber = "+90 212 555 0404",
+            isOpen = true,
+            address = "Nişantaşı Mahallesi, 34365 Istanbul",
+            imageUrl = "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800",
+            tags = listOf("Hair Salon", "Professional")
         )
     )
 
-    override suspend fun getRecommendedSalons(): List<SalonV2> {
+    override suspend fun getNearbySalons(): List<Salon> {
+        return listOf(
+            Salon(
+                id = "4",
+                name = "Elite Hair Studio",
+                location = Location(
+                    address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                    city = "Istanbul",
+                    latitude = 41.0460,
+                    longitude = 28.9940
+                ),
+                imageUrls = listOf(
+                    "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800"
+                ),
+                rating = 4.7,
+                reviewCount = 89,
+                operatingHours = mapOf(
+                    DayOfWeek.MONDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.TUESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.WEDNESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.THURSDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.FRIDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SATURDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SUNDAY to "Closed"
+                ),
+                employees = listOf(
+                    Employee(
+                        "emp7",
+                        "Canan Arslan",
+                        "Senior Hair Stylist",
+                        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+                        4.8,
+                        92
+                    ),
+                    Employee(
+                        "emp8",
+                        "Deniz Koç",
+                        "Color Specialist",
+                        "https://images.unsplash.com/photo-1494790108755-2616b612b3da?w=400",
+                        4.6,
+                        73
+                    )
+                ),
+                services = listOf(
+                    Service(
+                        "svc10",
+                        "Women's Cut & Style",
+                        "Professional women's haircut and styling",
+                        2000.0,
+                        90
+                    ),
+                    Service(
+                        "svc11",
+                        "Color Treatment",
+                        "Hair coloring and highlights",
+                        3500.0,
+                        180
+                    ),
+                    Service("svc12", "Blowout", "Professional hair blowout", 1000.0, 45)
+                ),
+                description = "High-end hair studio in Nişantaşı offering premium hair services for women.",
+                phoneNumber = "+90 212 555 0404",
+                isOpen = true,
+                address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                imageUrl = "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800",
+                tags = listOf("Hair Salon", "Professional")
+            ),
+            Salon(
+                id = "4",
+                name = "Elite Hair Studio",
+                location = Location(
+                    address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                    city = "Istanbul",
+                    latitude = 41.0460,
+                    longitude = 28.9940
+                ),
+                imageUrls = listOf(
+                    "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800"
+                ),
+                rating = 4.7,
+                reviewCount = 89,
+                operatingHours = mapOf(
+                    DayOfWeek.MONDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.TUESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.WEDNESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.THURSDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.FRIDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SATURDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SUNDAY to "Closed"
+                ),
+                employees = listOf(
+                    Employee(
+                        "emp7",
+                        "Canan Arslan",
+                        "Senior Hair Stylist",
+                        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+                        4.8,
+                        92
+                    ),
+                    Employee(
+                        "emp8",
+                        "Deniz Koç",
+                        "Color Specialist",
+                        "https://images.unsplash.com/photo-1494790108755-2616b612b3da?w=400",
+                        4.6,
+                        73
+                    )
+                ),
+                services = listOf(
+                    Service(
+                        "svc10",
+                        "Women's Cut & Style",
+                        "Professional women's haircut and styling",
+                        2000.0,
+                        90
+                    ),
+                    Service(
+                        "svc11",
+                        "Color Treatment",
+                        "Hair coloring and highlights",
+                        3500.0,
+                        180
+                    ),
+                    Service("svc12", "Blowout", "Professional hair blowout", 1000.0, 45)
+                ),
+                description = "High-end hair studio in Nişantaşı offering premium hair services for women.",
+                phoneNumber = "+90 212 555 0404",
+                isOpen = true,
+                address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                imageUrl = "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800",
+                tags = listOf("Hair Salon", "Professional")
+            ),
+            Salon(
+                id = "4",
+                name = "Elite Hair Studio",
+                location = Location(
+                    address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                    city = "Istanbul",
+                    latitude = 41.0460,
+                    longitude = 28.9940
+                ),
+                imageUrls = listOf(
+                    "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800"
+                ),
+                rating = 4.7,
+                reviewCount = 89,
+                operatingHours = mapOf(
+                    DayOfWeek.MONDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.TUESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.WEDNESDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.THURSDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.FRIDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SATURDAY to "9:00 AM - 8:00 PM",
+                    DayOfWeek.SUNDAY to "Closed"
+                ),
+                employees = listOf(
+                    Employee(
+                        "emp7",
+                        "Canan Arslan",
+                        "Senior Hair Stylist",
+                        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+                        4.8,
+                        92
+                    ),
+                    Employee(
+                        "emp8",
+                        "Deniz Koç",
+                        "Color Specialist",
+                        "https://images.unsplash.com/photo-1494790108755-2616b612b3da?w=400",
+                        4.6,
+                        73
+                    )
+                ),
+                services = listOf(
+                    Service(
+                        "svc10",
+                        "Women's Cut & Style",
+                        "Professional women's haircut and styling",
+                        2000.0,
+                        90
+                    ),
+                    Service(
+                        "svc11",
+                        "Color Treatment",
+                        "Hair coloring and highlights",
+                        3500.0,
+                        180
+                    ),
+                    Service("svc12", "Blowout", "Professional hair blowout", 1000.0, 45)
+                ),
+                description = "High-end hair studio in Nişantaşı offering premium hair services for women.",
+                phoneNumber = "+90 212 555 0404",
+                isOpen = true,
+                address = "Nişantaşı Mahallesi, 34365 Istanbul",
+                imageUrl = "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800",
+                tags = listOf("Hair Salon", "Professional")
+            )
+        )
+    }
+
+    override suspend fun getRecommendedSalons(): List<Salon> {
         delay(1500) // Simulate network latency
         return mockSalons
     }
 
-    override suspend fun searchSalons(query: String): List<SalonV2> {
+    override suspend fun searchSalons(query: String): List<Salon> {
         delay(1000) // Simulate network latency
         return mockSalons.filter { salon ->
             salon.name.contains(query, ignoreCase = true) ||
@@ -274,7 +490,7 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
         }
     }
 
-    override suspend fun getSalonDetails(id: String): SalonV2? {
+    override suspend fun getSalonDetails(id: String): Salon? {
         delay(800) // Simulate network latency
         return mockSalons.find { it.id == id }
     }
@@ -283,7 +499,7 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
         latitude: Double,
         longitude: Double,
         radiusKm: Int
-    ): List<SalonV2> {
+    ): List<Salon> {
         delay(1200) // Simulate network latency
         // Simple distance calculation (in real app would use proper geolocation)
         return mockSalons.filter { salon ->
@@ -295,7 +511,7 @@ class MockSalonRepositoryV2Impl : SalonRepositoryV2 {
         }
     }
 
-    override suspend fun getSalonsByCategory(category: String): List<SalonV2> {
+    override suspend fun getSalonsByCategory(category: String): List<Salon> {
         delay(900) // Simulate network latency
         return mockSalons.filter { salon ->
             salon.services.any { it.category.equals(category, ignoreCase = true) }

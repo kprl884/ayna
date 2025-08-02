@@ -117,7 +117,7 @@ fun AppNavigation() {
                 val salonId = screen.salonId
 
                 // Get salon detail data
-                val salonDetail = MockSalonDetailRepository.getSalonDetail(salonId)
+                MockSalonDetailRepository.getSalonDetail(salonId)
 
                 val viewModel = DataModule.createSalonDetailViewModel()
                 val uiState by viewModel.uiState.collectAsState()
@@ -166,21 +166,18 @@ fun AppNavigation() {
             }
 
             composable<Screen.JoinWaitlist> { backStackEntry ->
-                val screen: Screen.JoinWaitlist = backStackEntry.toRoute()
-
+                backStackEntry.toRoute()
+                val viewModel = DataModule.createJoinWaitlistViewModel()
                 JoinWaitlistScreen(
-                    viewModel = DataModule.createJoinWaitlistViewModel(),
-                    salonId = screen.salonId,
-                    serviceId = screen.serviceId,
-                    onBackClick = { navController.popBackStack() },
-                    onCloseClick = { navController.popBackStack() },
-                    onContinueClick = {
-                        // TODO: Navigate to booking confirmation or handle waitlist submission
-                    },
-                    onBookNowClick = {
-
-                    },
-                    onSeeAvailableTimesClick = {}
+                    uiState = TODO(),
+                    onEvent = viewModel::onEvent,
+                    salonId = TODO(),
+                    serviceId = TODO(),
+                    onNavigateBack = TODO(),
+                    onNavigateClose = TODO(),
+                    onNavigateToContinue = TODO(),
+                    onNavigateToBooking = TODO(),
+                    onNavigateToSelectTime = TODO()
                 )
             }
 

@@ -1,8 +1,11 @@
 package com.techtactoe.ayna.domain.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * Represents a salon employee/specialist
  */
+@Serializable
 data class Employee(
     val id: String,
     val name: String,

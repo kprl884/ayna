@@ -1,13 +1,14 @@
 package com.techtactoe.ayna.presentation.ui.screens.waitlist
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Contract defining the UI state and events for the JoinWaitlist screen
  * Following the standardized MVVM pattern
  */
 interface JoinWaitlistContract {
-    
+
     /**
      * Single source of truth for all UI state in the JoinWaitlist screen
      */
@@ -16,19 +17,19 @@ interface JoinWaitlistContract {
         val selectedDate: Long = Clock.System.now().toEpochMilliseconds(),
         val selectedTimeRange: String = "Any time",
         val timeRangeOptions: List<String> = listOf("Any time", "Morning", "Afternoon", "Evening"),
-        
+
         // Loading states
         val isLoading: Boolean = false,
         val isSubmitting: Boolean = false,
-        
+
         // Success states
         val isSuccess: Boolean = false,
         val hasAvailableSlots: Boolean = false,
         val availableSlotsMessage: String = "",
-        
+
         // Error state
         val errorMessage: String? = null,
-        
+
         // Navigation flags
         val navigateToBooking: Boolean = false,
         val navigateToSelectTime: Boolean = false,
@@ -48,6 +49,7 @@ interface JoinWaitlistContract {
                     kotlinx.datetime.DayOfWeek.FRIDAY -> "Fri"
                     kotlinx.datetime.DayOfWeek.SATURDAY -> "Sat"
                     kotlinx.datetime.DayOfWeek.SUNDAY -> "Sun"
+                    else -> {}
                 }
 
                 val month = when (selectedDate.month) {
@@ -63,38 +65,39 @@ interface JoinWaitlistContract {
                     kotlinx.datetime.Month.OCTOBER -> "Oct"
                     kotlinx.datetime.Month.NOVEMBER -> "Nov"
                     kotlinx.datetime.Month.DECEMBER -> "Dec"
+                    else -> {}
                 }
 
                 return "$dayOfWeek, $month ${selectedDate.dayOfMonth}"
             }
     }
-    
+
     /**
      * All possible user interactions with the JoinWaitlist screen
      */
     sealed interface UiEvent {
         // Initialization
         data class OnInitialize(val salonId: String, val serviceId: String) : UiEvent
-        
+
         // Form events
         data class OnDateSelected(val date: Long) : UiEvent
         data class OnTimeRangeSelected(val timeRange: String) : UiEvent
         data object OnAddAnotherTime : UiEvent
-        
+
         // Action events
         data object OnJoinWaitlist : UiEvent
         data object OnBookNow : UiEvent
         data object OnSeeAvailableTimes : UiEvent
-        
+
         // Navigation events
         data object OnBackClick : UiEvent
         data object OnCloseClick : UiEvent
         data class OnNavigationHandled(val resetNavigation: NavigationReset) : UiEvent
-        
+
         // Error handling
         data object OnClearError : UiEvent
     }
-    
+
     /**
      * Navigation reset options
      */

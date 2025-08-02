@@ -21,19 +21,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.techtactoe.ayna.presentation.theme.Spacing
 import com.techtactoe.ayna.presentation.theme.brandPurple
 import com.techtactoe.ayna.presentation.ui.components.AboutSection
 import com.techtactoe.ayna.presentation.ui.components.BuySection
 import com.techtactoe.ayna.presentation.ui.components.FloatingBookingBar
-import com.techtactoe.ayna.presentation.ui.screens.salon.components.ImageCarousel
 import com.techtactoe.ayna.presentation.ui.components.ReviewsSection
-import com.techtactoe.ayna.presentation.ui.components.SalonDetailTab
-import com.techtactoe.ayna.presentation.ui.screens.salon.components.ServicesSection
 import com.techtactoe.ayna.presentation.ui.components.StickyTabBar
 import com.techtactoe.ayna.presentation.ui.components.TeamSection
+import com.techtactoe.ayna.presentation.ui.screens.salon.components.ImageCarousel
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.SalonBasicInfo
+import com.techtactoe.ayna.presentation.ui.screens.salon.components.ServicesSection
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -99,6 +99,7 @@ fun SalonDetailScreen(
         uiState.isLoading -> {
             LoadingContent()
         }
+
         uiState.errorMessage != null -> {
             ErrorContent(
                 message = uiState.errorMessage,
@@ -106,6 +107,7 @@ fun SalonDetailScreen(
                 onClearError = { onEvent(SalonDetailContract.UiEvent.OnClearError) }
             )
         }
+
         uiState.salonDetail != null -> {
             SalonDetailContent(
                 uiState = uiState,

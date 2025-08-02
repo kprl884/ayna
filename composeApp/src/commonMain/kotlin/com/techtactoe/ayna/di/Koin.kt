@@ -2,10 +2,10 @@ package com.techtactoe.ayna.di
 
 import com.techtactoe.ayna.data.InMemoryMuseumStorage
 import com.techtactoe.ayna.data.KtorMuseumApi
-import com.techtactoe.ayna.data.MockSalonRepository
 import com.techtactoe.ayna.data.MuseumApi
 import com.techtactoe.ayna.data.MuseumRepository
 import com.techtactoe.ayna.data.MuseumStorage
+import com.techtactoe.ayna.data.repository.MockSalonRepositoryImpl
 import com.techtactoe.ayna.domain.repository.SalonRepository
 import com.techtactoe.ayna.domain.usecase.GetNearbySalonsUseCase
 import io.ktor.client.HttpClient
@@ -35,6 +35,6 @@ val dataModule = module {
     }
 
     // Salon repository ve use case'leri
-    single<SalonRepository> { MockSalonRepository() }
+    single<SalonRepository> { MockSalonRepositoryImpl() }
     single { GetNearbySalonsUseCase(get()) }
 }
