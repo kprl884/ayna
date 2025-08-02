@@ -211,10 +211,10 @@ class ExploreViewModel(
         viewModelScope.launch {
             try {
                 repository.bookmarkVenue(venueId)
-                _events.emit(ExploreEvent.ShowSnackbar("Venue bookmarked"))
+                _uiState.update { it.copy(snackbarMessage = "Venue bookmarked") }
             } catch (e: Exception) {
                 println("Failed to bookmark venue: $e")
-                _events.emit(ExploreEvent.ShowSnackbar("Failed to bookmark venue"))
+                _uiState.update { it.copy(snackbarMessage = "Failed to bookmark venue") }
             }
         }
     }
@@ -229,36 +229,25 @@ class ExploreViewModel(
 
                 if (isGranted) {
                     // Update state to reflect permission granted
-                    _screenState.update { currentState ->
-                        when (val uiState = currentState.uiState) {
-                            is ExploreUiState.Success -> {
-                                currentState.copy(
-                                    uiState = uiState.copy(isLocationPermissionGranted = true)
-                                )
-                            }
-
-                            else -> currentState
-                        }
+                    _uiState.update {
+                        it.copy(
+                            isLocationPermissionGranted = true,
+                            snackbarMessage = "Location access granted"
+                        )
                     }
-                    _events.emit(ExploreEvent.ShowSnackbar("Location access granted"))
                     // Reload venues with location-based results
                     loadVenues(reset = true)
                 } else {
-                    _events.emit(ExploreEvent.ShowSnackbar("Location permission denied. Showing general results."))
+                    _uiState.update {
+                        it.copy(snackbarMessage = "Location permission denied. Showing general results.")
+                    }
                 }
             } catch (e: Exception) {
                 println("Failed to request location permission: ${e.message}")
-                _events.emit(ExploreEvent.ShowSnackbar("Failed to request location permission"))
+                _uiState.update {
+                    it.copy(snackbarMessage = "Failed to request location permission")
+                }
             }
-        }
-    }
-
-    private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
-        return when (uiState) {
-            is ExploreUiState.Success -> uiState.filters
-            is ExploreUiState.Error -> uiState.filters
-            is ExploreUiState.Empty -> uiState.filters
-            else -> ExploreFilters()
         }
     }
 }
