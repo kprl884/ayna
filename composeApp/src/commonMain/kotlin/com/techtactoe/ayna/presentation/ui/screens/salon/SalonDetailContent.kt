@@ -114,7 +114,6 @@ fun SalonDetailContent(
                     }
                 }
             }
-            // Sticky tab bar
             if (uiState.showStickyTabBar) {
                 log(LogLevel.DEBUG, "alpstein", "if (uiState.showStickyTabBar) {" +  uiState.showStickyTabBar)
 

@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,10 +26,18 @@ import com.techtactoe.ayna.presentation.ui.screens.salon.model.SalonDetailEffect
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeScreen
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistScreen
+import com.techtactoe.ayna.util.LogLevel
+import com.techtactoe.ayna.util.log
 
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController()
+    val navController = rememberNavController().apply {
+        currentBackStack
+            .collectAsStateWithLifecycle()
+            .value
+            .map { it.destination.route?.substringAfterLast('.') }
+            .also { infoLog -> log(LogLevel.DEBUG, "InfoTag (NavTracker)", infoLog.toString()) }
+    }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val currentRoute = navBackStackEntry?.destination?.route
@@ -39,12 +48,12 @@ fun AppNavigation() {
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Explore") == true -> Screen.Explore
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Appointments") == true -> Screen.Appointments
         currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Profile") == true -> Screen.Profile
-        currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Detail") == true -> null // Don't show bottom bar
+        currentRoute?.contains("com.techtactoe.ayna.presentation.navigation.Screen.Detail") == true -> null
         else -> null
     }
 
     val bottomBarScreens =
-        setOf(Screen.Home, Screen.Search, Screen.Explore, Screen.Appointments, Screen.Profile)
+        setOf(Screen.Home, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     Scaffold(
         bottomBar = {
@@ -92,14 +101,6 @@ fun AppNavigation() {
                     }
                 )
             }
-            composable<Screen.ExploreMap> {
-                // TODO: Implement map screen
-                SearchScreen() // Placeholder
-            }
-            composable<Screen.AdvancedSearch> {
-                // TODO: Implement advanced search screen
-                SearchScreen() // Placeholder
-            }
             composable<Screen.Appointments> {
                 val viewModel = DataModule.createAppointmentsViewModel()
                 val uiState by viewModel.uiState.collectAsState()
@@ -116,7 +117,6 @@ fun AppNavigation() {
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
 
-                // ViewModel is created here
                 val viewModel = DataModule.createSalonDetailViewModel(salonId)
                 val uiState by viewModel.uiState.collectAsState()
 

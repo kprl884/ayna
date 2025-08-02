@@ -2,7 +2,6 @@ package com.techtactoe.ayna.presentation.ui.screens.appointments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
 import com.techtactoe.ayna.domain.usecase.GetUserAppointmentsUseCase
 import com.techtactoe.ayna.domain.util.Resource
@@ -72,14 +71,7 @@ class AppointmentsViewModel(
         viewModelScope.launch {
             getUserAppointmentsUseCase(currentUserId).collect { result ->
                 when (result) {
-                    is Resource.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true,
-                                errorMessage = null
-                            )
-                        }
-                    }
+                    is Resource.Loading -> {}
                     is Resource.Success -> {
                         val appointments = result.data ?: emptyList()
                         val upcoming = appointments.filter { it.status == AppointmentStatus.UPCOMING }

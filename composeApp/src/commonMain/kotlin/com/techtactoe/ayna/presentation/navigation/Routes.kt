@@ -50,7 +50,6 @@ sealed interface Screen {
 val Screen.icon: ImageVector?
     get() = when (this) {
         is Screen.Home -> Icons.Default.Home
-        is Screen.Search -> Icons.Default.Search
         is Screen.Explore -> Icons.Default.Search
         is Screen.Appointments -> Icons.Default.DateRange
         is Screen.Profile -> Icons.Default.AccountCircle
