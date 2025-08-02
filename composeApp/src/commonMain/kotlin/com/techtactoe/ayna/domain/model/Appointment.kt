@@ -6,11 +6,11 @@ package com.techtactoe.ayna.domain.model
 data class Appointment(
     val id: String,
     val salonId: String,
-    val salonName: String, // Denormalized for easy display
-    val serviceName: String, // Denormalized for easy display
+    val salonName: String,
+    val serviceName: String,
     val employeeId: String,
-    val employeeName: String, // Denormalized for easy display
-    val appointmentDateTime: Long, // UTC Timestamp
+    val employeeName: String,
+    val appointmentDateTime: Long,
     val status: AppointmentStatus,
     val price: Double,
     val durationInMinutes: Int,

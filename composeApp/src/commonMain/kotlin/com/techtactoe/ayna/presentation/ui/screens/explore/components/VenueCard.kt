@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -270,36 +270,4 @@ private fun formatDuration(minutes: Int): String {
     }
 }
 
-@Preview
-@Composable
-private fun VenueCardPreview() {
-    AynaAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFFF8F9FA))
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            VenueCard(
-                venue = Venue(
-                    id = "1",
-                    name = "Emre's Barbershop Dolapdere",
-                    rating = 5.0,
-                    reviewCount = 69,
-                    district = "Dolapdere",
-                    city = "Istanbul",
-                    images = listOf("https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800"),
-                    services = listOf(
-                        VenueService("1", "Haircut / Saç Kesimi", 70000, 60),
-                        VenueService("2", "Haircut & Shave / Saç Kesimi & Sakal Tıraşı", 117500, 90),
-                        VenueService("3", "Full Service / Komple Bakım", 188000, 120)
-                    ),
-                    venueType = VenueType.MALE_ONLY
-                ),
-                onVenueClick = { },
-                onSeeMoreClick = { }
-            )
-        }
-    }
-}
+// Preview moved to androidMain for platform compatibility
