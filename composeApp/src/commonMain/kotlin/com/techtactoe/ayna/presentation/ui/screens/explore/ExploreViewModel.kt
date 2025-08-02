@@ -265,8 +265,33 @@ class ExploreViewModel(
     
     private fun requestLocationPermission() {
         // This would be implemented with actual location permission logic
+        // In a real app, this would call platform-specific permission request methods
         viewModelScope.launch {
-            _events.emit(ExploreEvent.ShowSnackbar("Fresha doesn't have permission to access your location"))
+            try {
+                // Simulate permission request process
+                val isGranted = true // Mock - would be actual permission result
+
+                if (isGranted) {
+                    // Update state to reflect permission granted
+                    _screenState.update { currentState ->
+                        when (val uiState = currentState.uiState) {
+                            is ExploreUiState.Success -> {
+                                currentState.copy(
+                                    uiState = uiState.copy(isLocationPermissionGranted = true)
+                                )
+                            }
+                            else -> currentState
+                        }
+                    }
+                    _events.emit(ExploreEvent.ShowSnackbar("Location access granted"))
+                    // Reload venues with location-based results
+                    loadVenues(reset = true)
+                } else {
+                    _events.emit(ExploreEvent.ShowSnackbar("Location permission denied. Showing general results."))
+                }
+            } catch (e: Exception) {
+                _events.emit(ExploreEvent.ShowSnackbar("Failed to request location permission"))
+            }
         }
     }
     
