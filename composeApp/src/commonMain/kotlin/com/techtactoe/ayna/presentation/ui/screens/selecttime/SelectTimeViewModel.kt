@@ -35,85 +35,74 @@ class SelectTimeViewModel(
     private val _uiState = MutableStateFlow(SelectTimeContract.UiState())
     val uiState: StateFlow<SelectTimeContract.UiState> = _uiState.asStateFlow()
 
-    // Parameters passed from navigation
-    private var salonId: String = ""
-    private var serviceId: String = ""
-
     // Job for managing loading operations
     private var currentLoadingJob: Job? = null
 
-    fun initialize(salonId: String, serviceId: String) {
-        this.salonId = salonId
-        this.serviceId = serviceId
-        loadTimeSlots(_uiState.value.selectedDate)
-    }
-
     /**
-     * Load available time slots for the selected date
+     * Single entry point for all user interactions with the SelectTime screen
+     * Following the golden standard MVVM pattern
      */
-    fun loadTimeSlots(date: Long) {
-        // Cancel any previous loading job
-        currentLoadingJob?.cancel()
+    fun onEvent(event: SelectTimeContract.UiEvent) {
+        when (event) {
+            // Initialization
+            is SelectTimeContract.UiEvent.OnInitialize -> {
+                _uiState.update {
+                    it.copy(
+                        salonId = event.salonId,
+                        serviceId = event.serviceId,
+                        dateOptions = getDateOptions(it.selectedDate)
+                    )
+                }
+                loadTimeSlots(_uiState.value.selectedDate)
+            }
 
-        currentLoadingJob = viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                selectedDate = date,
-                isLoading = true,
-                error = null,
-                selectedTimeSlot = null // Clear selection when changing dates
-            )
+            // Date selection
+            is SelectTimeContract.UiEvent.OnDateSelected -> {
+                loadTimeSlots(event.date)
+            }
+            is SelectTimeContract.UiEvent.OnGoToNextAvailableDate -> {
+                goToNextAvailableDate()
+            }
 
-            getAvailableTimeSlotsUseCase(salonId, serviceId, date).collect { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                        // Already set loading to true above
+            // Time slot selection
+            is SelectTimeContract.UiEvent.OnTimeSlotSelected -> {
+                _uiState.update { it.copy(selectedTimeSlot = event.timeSlot) }
+            }
+
+            // Appointment creation
+            is SelectTimeContract.UiEvent.OnCreateAppointment -> {
+                createAppointment(event.salonName, event.serviceName)
+            }
+
+            // Navigation events
+            is SelectTimeContract.UiEvent.OnJoinWaitlistClicked -> {
+                _uiState.update { it.copy(navigateToWaitlist = true) }
+            }
+            is SelectTimeContract.UiEvent.OnBackClicked -> {
+                // Handle back navigation - typically handled by navigation component
+            }
+            is SelectTimeContract.UiEvent.OnCloseClicked -> {
+                // Handle close navigation - typically handled by navigation component
+            }
+            is SelectTimeContract.UiEvent.OnNavigationHandled -> {
+                when (event.resetNavigation) {
+                    SelectTimeContract.NavigationReset.APPOINTMENT_CREATED -> {
+                        _uiState.update { it.copy(appointmentCreated = null) }
                     }
-
-                    is Resource.Success -> {
-                        val slots = result.data ?: emptyList()
-                        val isFullyBooked = slots.isEmpty()
-
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            availableSlots = slots,
-                            isFullyBooked = isFullyBooked,
-                            nextAvailableDate = if (isFullyBooked) getNextAvailableDate(date) else "",
-                            error = null
-                        )
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            error = result.message
-                        )
+                    SelectTimeContract.NavigationReset.WAITLIST -> {
+                        _uiState.update { it.copy(navigateToWaitlist = false) }
                     }
                 }
             }
+
+            // Error handling
+            is SelectTimeContract.UiEvent.OnClearError -> {
+                _uiState.update { it.copy(errorMessage = null) }
+            }
+            is SelectTimeContract.UiEvent.OnRetryLoadSlots -> {
+                loadTimeSlots(_uiState.value.selectedDate)
+            }
         }
-    }
-
-    /**
-     * Select a specific time slot
-     */
-    fun selectTimeSlot(timeSlot: TimeSlot) {
-        _uiState.value = _uiState.value.copy(selectedTimeSlot = timeSlot)
-    }
-
-    /**
-     * Go to the next available date
-     */
-    fun goToNextAvailableDate() {
-        var currentDate = Instant.fromEpochMilliseconds(_uiState.value.selectedDate)
-            .toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-        // Find next available date (skip Sunday)
-        do {
-            currentDate = currentDate.plus(1, DateTimeUnit.DAY)
-        } while (currentDate.dayOfWeek == DayOfWeek.SUNDAY)
-
-        val nextDateTime = currentDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-        loadTimeSlots(nextDateTime.toEpochMilliseconds())
     }
 
     /**
