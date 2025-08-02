@@ -328,13 +328,13 @@ private fun TimeSlotItem(
     onClick: () -> Unit
 ) {
     val backgroundColor = if (isSelected) {
-        Color(0xFF7B61FF).copy(alpha = 0.1f)
+        MaterialTheme.colorScheme.brandPurple.copy(alpha = 0.1f)
     } else {
         MaterialTheme.colorScheme.surface
     }
 
     val borderColor = if (isSelected) {
-        Color(0xFF7B61FF)
+        MaterialTheme.colorScheme.brandPurple
     } else {
         MaterialTheme.colorScheme.outline
     }
@@ -344,13 +344,13 @@ private fun TimeSlotItem(
             .fillMaxWidth()
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        border = androidx.compose.foundation.BorderStroke(1.dp, borderColor),
-        shape = RoundedCornerShape(12.dp)
+        border = androidx.compose.foundation.BorderStroke(BorderThickness.extraSmall, borderColor),
+        shape = AynaShapes.medium
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(Spacing.lg),
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
