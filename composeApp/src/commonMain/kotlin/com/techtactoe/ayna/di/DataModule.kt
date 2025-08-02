@@ -57,4 +57,8 @@ object DataModule {
     fun createSalonDetailViewModel(): SalonDetailViewModel {
         return SalonDetailViewModel()
     }
+
+    fun createBookingConfirmationViewModel(): BookingConfirmationViewModel {
+        return BookingConfirmationViewModel()
+    }
 }
