@@ -222,8 +222,8 @@ private fun ExploreTopBar(
 
         // Search bar
         ExploreSearchBar(
-            searchQuery = currentFilters.searchQuery,
-            selectedCity = currentFilters.selectedCity,
+            searchQuery = filters.searchQuery,
+            selectedCity = filters.selectedCity,
             onSearchBarClick = onSearchBarClick,
             onMapClick = onMapClick
         )
@@ -232,7 +232,7 @@ private fun ExploreTopBar(
 
         // Filter chips
         FilterChipBar(
-            filters = currentFilters,
+            filters = filters,
             onFiltersClick = onFiltersClick,
             onSortClick = onSortClick,
             onPriceClick = onPriceClick,
