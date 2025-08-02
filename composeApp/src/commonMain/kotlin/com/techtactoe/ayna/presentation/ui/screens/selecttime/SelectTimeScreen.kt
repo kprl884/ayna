@@ -309,7 +309,7 @@ private fun TimeSlotsList(
     onTimeSlotClick: (TimeSlot) -> Unit
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(Spacing.md)
     ) {
         items(timeSlots) { timeSlot ->
             TimeSlotItem(
