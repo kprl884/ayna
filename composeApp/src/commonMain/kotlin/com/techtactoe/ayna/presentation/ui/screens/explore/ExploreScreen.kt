@@ -42,7 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.PriceRange
 import com.techtactoe.ayna.domain.model.Venue
@@ -54,7 +53,6 @@ import com.techtactoe.ayna.presentation.ui.screens.explore.components.PriceBotto
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.SortBottomSheet
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueCard
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueTypeBottomSheet
-import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -311,11 +309,11 @@ private fun LoadingContent(
 @Composable
 private fun SuccessContent(
     venues: List<Venue>,
-    @Suppress("UNUSED_PARAMETER") isRefreshing: Boolean,
+    isRefreshing: Boolean,
     hasMorePages: Boolean,
     onVenueClick: (Venue) -> Unit,
     onSeeMoreClick: (Venue) -> Unit,
-    @Suppress("UNUSED_PARAMETER") onRefresh: () -> Unit,
+    onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
