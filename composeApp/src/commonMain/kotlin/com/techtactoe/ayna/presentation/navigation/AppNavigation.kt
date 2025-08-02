@@ -13,7 +13,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.techtactoe.ayna.data.MockSalonDetailRepository
 import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
@@ -115,18 +114,16 @@ fun AppNavigation() {
             composable<Screen.Detail> { backStackEntry ->
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
-
-                // Get salon detail data
-                MockSalonDetailRepository.getSalonDetail(salonId)
-
-                val viewModel = DataModule.createSalonDetailViewModel()
+                val viewModel = DataModule.createSalonDetailViewModel(salonId)
                 val uiState by viewModel.uiState.collectAsState()
 
                 SalonDetailScreen(
                     uiState = uiState,
                     onEvent = viewModel::onEvent,
-                    salonId = salonId,
-                    navController = navController
+                    navigateUp = { navController.popBackStack() },
+                    navigateSelectTimeOnSalonDetailScreen = { salonId, serviceId ->
+                        navController.navigate(Screen.SelectTime(salonId, serviceId))
+                    }
                 )
             }
 

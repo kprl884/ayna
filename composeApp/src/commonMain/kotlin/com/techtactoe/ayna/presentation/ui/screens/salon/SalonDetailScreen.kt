@@ -7,8 +7,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import com.techtactoe.ayna.presentation.navigation.Screen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -19,14 +17,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun SalonDetailScreen(
     uiState: SalonDetailContract.UiState,
     onEvent: (SalonDetailContract.UiEvent) -> Unit,
-    salonId: String,
-    navController: NavController,
+    navigateUp: () -> Unit,
+    navigateSelectTimeOnSalonDetailScreen: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (uiState.salonDetail == null && !uiState.isLoading && uiState.errorMessage == null) {
-        onEvent(SalonDetailContract.UiEvent.OnInitialize(salonId))
-    }
-
     val scrollState = rememberLazyListState()
 
     val showStickyTabBar by remember {
@@ -44,20 +38,21 @@ fun SalonDetailScreen(
         onEvent = { event ->
             when (event) {
                 is SalonDetailContract.UiEvent.OnBackClick -> {
-                    navController.navigateUp()
+                    navigateUp()
                 }
 
                 is SalonDetailContract.UiEvent.OnBookNowClick -> {
                     uiState.salonDetail?.services?.firstOrNull()?.let { firstService ->
-                        navController.navigate(
-                            Screen.SelectTime(uiState.salonId, firstService.id)
+                        navigateSelectTimeOnSalonDetailScreen(
+                            uiState.salonId,
+                            firstService.id
                         )
                     }
                 }
 
                 is SalonDetailContract.UiEvent.OnServiceBookClick -> {
-                    navController.navigate(
-                        Screen.SelectTime(uiState.salonId, event.serviceId)
+                    navigateSelectTimeOnSalonDetailScreen(
+                        uiState.salonId, event.serviceId
                     )
                 }
 
@@ -82,6 +77,12 @@ fun SalonDetailScreen(
 @Composable
 fun SalonDetailScreenPreview() {
     MaterialTheme {
-        // Mock data would go here
+        SalonDetailScreen(
+            uiState = SalonDetailContract.UiState(),
+            onEvent = {},
+            navigateUp = {},
+            navigateSelectTimeOnSalonDetailScreen = { _, _ -> },
+            modifier = Modifier
+        )
     }
 }

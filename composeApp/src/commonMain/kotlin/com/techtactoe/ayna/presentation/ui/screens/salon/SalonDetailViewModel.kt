@@ -12,10 +12,18 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel for the SalonDetail screen following the golden standard MVVM pattern
  */
-class SalonDetailViewModel : ViewModel() {
+class SalonDetailViewModel(
+    private val salonId: String?
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SalonDetailContract.UiState())
     val uiState: StateFlow<SalonDetailContract.UiState> = _uiState.asStateFlow()
+
+    init {
+        salonId?.let {
+            loadSalonDetail(salonId)
+        }
+    }
 
     /**
      * Handle all user events from the UI
@@ -26,28 +34,36 @@ class SalonDetailViewModel : ViewModel() {
                 _uiState.update { it.copy(salonId = event.salonId) }
                 loadSalonDetail(event.salonId)
             }
+
             is SalonDetailContract.UiEvent.OnTabSelected -> {
                 _uiState.update { it.copy(selectedTab = event.tab) }
             }
+
             is SalonDetailContract.UiEvent.OnScrollStateChanged -> {
                 _uiState.update { it.copy(showStickyTabBar = event.showStickyTabBar) }
             }
+
             is SalonDetailContract.UiEvent.OnBackClick -> {
                 // Handled in UI layer
             }
+
             is SalonDetailContract.UiEvent.OnShareClick -> {
                 // Handled in UI layer
             }
+
             is SalonDetailContract.UiEvent.OnFavoriteClick -> {
                 _uiState.update { it.copy(isFavorite = !it.isFavorite) }
                 // TODO: Call favorite use case
             }
+
             is SalonDetailContract.UiEvent.OnBookNowClick -> {
                 // Handled in UI layer
             }
+
             is SalonDetailContract.UiEvent.OnServiceBookClick -> {
                 // Handled in UI layer
             }
+
             is SalonDetailContract.UiEvent.OnClearError -> {
                 _uiState.update { it.copy(errorMessage = null) }
             }
