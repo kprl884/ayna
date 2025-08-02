@@ -166,18 +166,19 @@ fun AppNavigation() {
             }
 
             composable<Screen.JoinWaitlist> { backStackEntry ->
-                backStackEntry.toRoute()
+                val screen: Screen.JoinWaitlist = backStackEntry.toRoute()
                 val viewModel = DataModule.createJoinWaitlistViewModel()
+                val uiState by viewModel.uiState.collectAsState()
                 JoinWaitlistScreen(
-                    uiState = TODO(),
+                    uiState = uiState,
                     onEvent = viewModel::onEvent,
-                    salonId = TODO(),
-                    serviceId = TODO(),
-                    onNavigateBack = TODO(),
-                    onNavigateClose = TODO(),
-                    onNavigateToContinue = TODO(),
-                    onNavigateToBooking = TODO(),
-                    onNavigateToSelectTime = TODO()
+                    salonId = screen.salonId,
+                    serviceId = screen.serviceId,
+                    onNavigateBack = { },
+                    onNavigateClose = { },
+                    onNavigateToContinue = { },
+                    onNavigateToBooking = { },
+                    onNavigateToSelectTime = { }
                 )
             }
 
