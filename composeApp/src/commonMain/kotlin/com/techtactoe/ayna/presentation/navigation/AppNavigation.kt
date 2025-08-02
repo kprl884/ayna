@@ -187,7 +187,7 @@ fun AppNavigation() {
 
             composable<Screen.JoinWaitlist> { backStackEntry ->
                 val screen: Screen.JoinWaitlist = backStackEntry.toRoute()
-                val viewModel = DataModule.createJoinWaitlistViewModel()
+                val viewModel = remember { DataModule.createJoinWaitlistViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
                 JoinWaitlistScreen(
                     uiState = uiState,
