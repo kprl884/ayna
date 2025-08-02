@@ -109,26 +109,30 @@ fun ExploreScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ExploreTopBar(
-                uiState = screenState.uiState,
+                filters = uiState.filters,
                 scrollBehavior = scrollBehavior,
-                onSearchBarClick = { viewModel.navigateToAdvancedSearch() },
-                onMapClick = { viewModel.navigateToMap() },
-                onFiltersClick = { viewModel.showBottomSheet(BottomSheetType.Filters) },
-                onSortClick = { viewModel.showBottomSheet(BottomSheetType.Sort) },
-                onPriceClick = { viewModel.showBottomSheet(BottomSheetType.Price) },
-                onTypeClick = { viewModel.showBottomSheet(BottomSheetType.VenueType) }
+                onSearchBarClick = { viewModel.onEvent(ExploreContract.UiEvent.OnNavigateToAdvancedSearch) },
+                onMapClick = { viewModel.onEvent(ExploreContract.UiEvent.OnNavigateToMap) },
+                onFiltersClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Filters)) },
+                onSortClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Sort)) },
+                onPriceClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.Price)) },
+                onTypeClick = { viewModel.onEvent(ExploreContract.UiEvent.OnShowBottomSheet(BottomSheetType.VenueType)) }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color(0xFFF8F9FA)
     ) { paddingValues ->
         ExploreContent(
-            uiState = screenState.uiState,
-            onVenueClick = { venue -> viewModel.navigateToVenueDetail(venue.id) },
-            onSeeMoreClick = { venue -> viewModel.navigateToVenueDetail(venue.id) },
-            onRefresh = { viewModel.handleIntent(ExploreIntent.RefreshVenues) },
-            onLoadMore = { viewModel.handleIntent(ExploreIntent.LoadMoreVenues) },
-            onClearSearch = { viewModel.handleIntent(ExploreIntent.ClearFilters) },
+            venues = uiState.venues,
+            isLoading = uiState.isLoading,
+            isRefreshing = uiState.isRefreshing,
+            hasMorePages = uiState.hasMorePages,
+            errorMessage = uiState.errorMessage,
+            onVenueClick = { venue -> viewModel.onEvent(ExploreContract.UiEvent.OnVenueClicked(venue.id)) },
+            onSeeMoreClick = { venue -> viewModel.onEvent(ExploreContract.UiEvent.OnVenueClicked(venue.id)) },
+            onRefresh = { viewModel.onEvent(ExploreContract.UiEvent.OnRefreshVenues) },
+            onLoadMore = { viewModel.onEvent(ExploreContract.UiEvent.OnLoadMoreVenues) },
+            onClearSearch = { viewModel.onEvent(ExploreContract.UiEvent.OnClearFilters) },
             modifier = Modifier.padding(paddingValues)
         )
     }
