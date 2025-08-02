@@ -18,14 +18,14 @@ interface AppointmentsContract {
         val pastAppointments: List<Appointment> = emptyList(),
         
         // Loading states
-        val isLoading: Boolean = true,
+        val isLoading: Boolean = false, // Start with no loading for empty state
         val isRefreshing: Boolean = false,
-        
+
         // Tab state
         val selectedTab: AppointmentTab = AppointmentTab.UPCOMING,
-        
+
         // UI states
-        val isEmpty: Boolean = false,
+        val isEmpty: Boolean = true, // Default to empty state for Figma implementation
         val errorMessage: String? = null,
         
         // Navigation flags
