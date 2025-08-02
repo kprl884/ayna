@@ -3,9 +3,14 @@ package com.techtactoe.ayna.presentation.ui.screens.salon
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.data.MockSalonDetailRepository
+import com.techtactoe.ayna.presentation.ui.screens.salon.model.SalonDetailEffect
+import com.techtactoe.ayna.util.LogLevel
+import com.techtactoe.ayna.util.log
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,6 +23,10 @@ class SalonDetailViewModel(
 
     private val _uiState = MutableStateFlow(SalonDetailContract.UiState())
     val uiState: StateFlow<SalonDetailContract.UiState> = _uiState.asStateFlow()
+
+
+    private val _effect = Channel<SalonDetailEffect>()
+    val effect = _effect.receiveAsFlow()
 
     init {
         salonId?.let {
@@ -40,6 +49,7 @@ class SalonDetailViewModel(
             }
 
             is SalonDetailContract.UiEvent.OnScrollStateChanged -> {
+                log(LogLevel.DEBUG, "alpstein", "Scroll state changed: ${event.showStickyTabBar}")
                 _uiState.update { it.copy(showStickyTabBar = event.showStickyTabBar) }
             }
 
@@ -48,7 +58,10 @@ class SalonDetailViewModel(
             }
 
             is SalonDetailContract.UiEvent.OnShareClick -> {
-                // Handled in UI layer
+                val shareText = uiState.value.salonDetail?.let { salon ->
+                    "Check out ${salon.name} on Ayna! ${salon.about.description}"
+                } ?: "Check out this amazing salon on Ayna!"
+                sendEffect(SalonDetailEffect.Share(shareText))
             }
 
             is SalonDetailContract.UiEvent.OnFavoriteClick -> {
@@ -57,11 +70,17 @@ class SalonDetailViewModel(
             }
 
             is SalonDetailContract.UiEvent.OnBookNowClick -> {
-                // Handled in UI layer
+                salonId?.let {
+                    uiState.value.salonDetail?.services?.firstOrNull()?.let { firstService ->
+                        sendEffect(SalonDetailEffect.NavigateToSelectTime(salonId, firstService.id))
+                    }
+                }
             }
 
             is SalonDetailContract.UiEvent.OnServiceBookClick -> {
-                // Handled in UI layer
+                salonId?.let {
+                    sendEffect(SalonDetailEffect.NavigateToSelectTime(salonId, event.serviceId))
+                }
             }
 
             is SalonDetailContract.UiEvent.OnClearError -> {
@@ -93,6 +112,12 @@ class SalonDetailViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun sendEffect(effect: SalonDetailEffect) {
+        viewModelScope.launch {
+            _effect.send(effect)
         }
     }
 }

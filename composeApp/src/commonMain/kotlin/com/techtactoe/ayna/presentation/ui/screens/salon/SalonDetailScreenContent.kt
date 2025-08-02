@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.techtactoe.ayna.designsystem.ErrorContent
 import com.techtactoe.ayna.designsystem.LoadingContent
+import com.techtactoe.ayna.util.LogLevel
+import com.techtactoe.ayna.util.log
 
 /**
  * Content for the SalonDetail screen, handling UI rendering based on state
@@ -15,8 +17,15 @@ fun SalonDetailScreenContent(
     scrollState: androidx.compose.foundation.lazy.LazyListState,
     modifier: Modifier = Modifier
 ) {
+    log(
+        LogLevel.DEBUG,
+        "alpstein",
+        "Rendering content - Loading: ${uiState.isLoading}, Error: ${uiState.errorMessage != null}, HasData: ${uiState.salonDetail != null}, ShowStickyTab: ${uiState.showStickyTabBar}"
+    )
+
     when {
         uiState.isLoading -> {
+            log(LogLevel.DEBUG, "alpstein", "Showing loading content")
             LoadingContent()
         }
 

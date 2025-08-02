@@ -21,6 +21,8 @@ import com.techtactoe.ayna.presentation.ui.components.TeamSection
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ImageCarousel
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.SalonBasicInfo
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ServicesSection
+import com.techtactoe.ayna.util.LogLevel
+import com.techtactoe.ayna.util.log
 
 @Composable
 fun SalonDetailContent(
@@ -114,6 +116,8 @@ fun SalonDetailContent(
             }
             // Sticky tab bar
             if (uiState.showStickyTabBar) {
+                log(LogLevel.DEBUG, "alpstein", "if (uiState.showStickyTabBar) {" +  uiState.showStickyTabBar)
+
                 StickyTabBar(
                     selectedTab = uiState.selectedTab,
                     onTabClick = { tab ->

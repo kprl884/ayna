@@ -21,6 +21,7 @@ import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
+import com.techtactoe.ayna.presentation.ui.screens.salon.model.SalonDetailEffect
 import com.techtactoe.ayna.presentation.ui.screens.search.SearchScreen
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeScreen
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistScreen
@@ -114,16 +115,38 @@ fun AppNavigation() {
             composable<Screen.Detail> { backStackEntry ->
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
+
+                // ViewModel is created here
                 val viewModel = DataModule.createSalonDetailViewModel(salonId)
                 val uiState by viewModel.uiState.collectAsState()
 
+                LaunchedEffect(Unit) {
+                    viewModel.effect.collect { effect ->
+                        when (effect) {
+                            is SalonDetailEffect.NavigateUp -> {
+                                navController.popBackStack()
+                            }
+
+                            is SalonDetailEffect.NavigateToSelectTime -> {
+                                navController.navigate(
+                                    Screen.SelectTime(
+                                        effect.salonId,
+                                        effect.serviceId
+                                    )
+                                )
+                            }
+
+                            is SalonDetailEffect.Share -> {
+                                // TODO: Implement platform-specific sharing logic here
+                                println("Sharing: ${effect.text}")
+                            }
+                        }
+                    }
+                }
+
                 SalonDetailScreen(
                     uiState = uiState,
-                    onEvent = viewModel::onEvent,
-                    navigateUp = { navController.popBackStack() },
-                    navigateSelectTimeOnSalonDetailScreen = { salonId, serviceId ->
-                        navController.navigate(Screen.SelectTime(salonId, serviceId))
-                    }
+                    onEvent = viewModel::onEvent
                 )
             }
 
