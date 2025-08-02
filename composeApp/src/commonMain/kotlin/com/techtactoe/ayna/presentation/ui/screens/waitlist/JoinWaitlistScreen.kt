@@ -209,7 +209,7 @@ fun JoinWaitlistScreen(
             // Date and Time selectors
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -217,11 +217,12 @@ fun JoinWaitlistScreen(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = Spacing.sm)
                     )
 
                     DateSelector(
-                        selectedDate = viewModel.getFormattedDate(),
+                        selectedDate = uiState.formattedDate,
                         onClick = { /* TODO: Open date picker */ }
                     )
                 }
@@ -232,14 +233,15 @@ fun JoinWaitlistScreen(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = Spacing.sm)
                     )
 
                     TimeRangeSelector(
                         selectedTimeRange = uiState.selectedTimeRange,
-                        options = viewModel.getTimeRangeOptions(),
+                        options = uiState.timeRangeOptions,
                         onOptionSelected = { timeRange ->
-                            viewModel.updateSelectedTimeRange(timeRange)
+                            onEvent(JoinWaitlistContract.UiEvent.OnTimeRangeSelected(timeRange))
                         }
                     )
                 }
