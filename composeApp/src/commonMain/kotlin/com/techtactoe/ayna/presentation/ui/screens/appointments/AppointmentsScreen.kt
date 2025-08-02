@@ -250,6 +250,80 @@ private fun EmptyAppointmentsContent(
 }
 
 @Composable
+private fun PurpleCalendarIcon(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .size(80.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF9C7BFF), // Lighter purple at top
+                        Color(0xFF7B61FF)  // Brand purple at bottom
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        // Calendar icon structure
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Top section with small rectangles (calendar binding)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.padding(bottom = 2.dp)
+            ) {
+                repeat(2) {
+                    Box(
+                        modifier = Modifier
+                            .width(6.dp)
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(1.dp))
+                            .background(Color.White.copy(alpha = 0.9f))
+                    )
+                }
+            }
+
+            // Main calendar body
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(Color.White.copy(alpha = 0.95f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    // Calendar grid dots
+                    repeat(3) { row ->
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            repeat(3) { col ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(3.dp)
+                                        .clip(RoundedCornerShape(1.dp))
+                                        .background(
+                                            if (row == 1 && col == 1) Color(0xFF7B61FF)
+                                            else Color(0xFFD1C4E9)
+                                        )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun AppointmentsContent(
     selectedTab: AppointmentsContract.AppointmentTab,
     upcomingAppointments: List<Appointment>,
