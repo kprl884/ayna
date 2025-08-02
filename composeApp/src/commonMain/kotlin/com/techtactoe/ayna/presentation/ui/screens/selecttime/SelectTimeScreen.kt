@@ -149,18 +149,18 @@ fun SelectTimeScreen(
                     LoadingContent()
                 }
 
-                uiState.error != null -> {
+                uiState.errorMessage != null -> {
                     ErrorContent(
-                        message = uiState.error!!,
-                        onRetry = { viewModel.loadTimeSlots(uiState.selectedDate) }
+                        message = uiState.errorMessage!!,
+                        onRetry = { viewModel.onEvent(SelectTimeContract.UiEvent.OnRetryLoadSlots) }
                     )
                 }
 
                 uiState.isFullyBooked -> {
                     FullyBookedContent(
                         nextAvailableDate = uiState.nextAvailableDate,
-                        onGoToNextDate = { viewModel.goToNextAvailableDate() },
-                        onJoinWaitlist = onJoinWaitlistClick
+                        onGoToNextDate = { viewModel.onEvent(SelectTimeContract.UiEvent.OnGoToNextAvailableDate) },
+                        onJoinWaitlist = { viewModel.onEvent(SelectTimeContract.UiEvent.OnJoinWaitlistClicked) }
                     )
                 }
 
@@ -169,8 +169,9 @@ fun SelectTimeScreen(
                         timeSlots = uiState.availableSlots,
                         selectedTimeSlot = uiState.selectedTimeSlot,
                         onTimeSlotClick = { timeSlot ->
-                            viewModel.selectTimeSlot(timeSlot)
-                            onTimeSelected(timeSlot)
+                            viewModel.onEvent(SelectTimeContract.UiEvent.OnTimeSlotSelected(timeSlot))
+                            // Create appointment automatically when time slot is selected
+                            viewModel.onEvent(SelectTimeContract.UiEvent.OnCreateAppointment("Sample Salon", "Sample Service"))
                         }
                     )
                 }
