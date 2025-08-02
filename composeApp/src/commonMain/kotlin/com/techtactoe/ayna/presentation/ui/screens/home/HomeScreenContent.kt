@@ -79,10 +79,10 @@ fun HomeScreenContent(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = state.error,
+                                text = uiState.errorMessage ?: "Unknown error",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
-                                color = AynaColors.SecondaryText
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
