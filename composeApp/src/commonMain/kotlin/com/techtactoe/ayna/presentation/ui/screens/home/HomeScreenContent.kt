@@ -112,8 +112,13 @@ fun HomeScreenContent(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(state.salons) { salon ->
-                                    SalonCard(salon = salon, onSalonClick = onSalonClick)
+                                items(uiState.salons) { salon ->
+                                    SalonCard(
+                                        salon = salon,
+                                        onSalonClick = { salonId ->
+                                            onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
+                                        }
+                                    )
                                 }
                             }
 
@@ -127,7 +132,7 @@ fun HomeScreenContent(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(state.salons.take(2)) { salon ->
+                                items(uiState.salons.take(2)) { salon ->
                                     SalonCard(salon = salon)
                                 }
                             }
