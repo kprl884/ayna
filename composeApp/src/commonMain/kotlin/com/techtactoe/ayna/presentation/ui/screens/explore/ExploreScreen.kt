@@ -138,18 +138,16 @@ fun ExploreScreen(
     }
 
     // Bottom sheets
-    when (screenState.currentBottomSheet) {
+    when (uiState.currentBottomSheet) {
         is BottomSheetType.Sort -> {
-            val currentFilters = getCurrentFilters(screenState.uiState)
             SortBottomSheet(
-                currentSort = currentFilters.sortOption,
+                currentSort = uiState.filters.sortOption,
                 onSortSelected = { sortOption ->
-                    viewModel.updateTempFilters(
-                        screenState.tempFilters.copy(sortOption = sortOption)
-                    )
-                    viewModel.applyTempFilters()
+                    val newFilters = uiState.tempFilters.copy(sortOption = sortOption)
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(newFilters))
+                    viewModel.onEvent(ExploreContract.UiEvent.OnApplyTempFilters)
                 },
-                onDismiss = { viewModel.hideBottomSheet() }
+                onDismiss = { viewModel.onEvent(ExploreContract.UiEvent.OnHideBottomSheet) }
             )
         }
 
