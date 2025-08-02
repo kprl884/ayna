@@ -133,7 +133,12 @@ fun HomeScreenContent(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(uiState.salons.take(2)) { salon ->
-                                    SalonCard(salon = salon)
+                                    SalonCard(
+                                        salon = salon,
+                                        onSalonClick = { salonId ->
+                                            onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
+                                        }
+                                    )
                                 }
                             }
 
