@@ -287,6 +287,7 @@ private fun AppointmentsContent(
 @Composable
 private fun AppointmentCard(
     appointment: Appointment,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val appointmentDateTime = Instant.fromEpochMilliseconds(appointment.appointmentDateTime)
@@ -317,21 +318,22 @@ private fun AppointmentCard(
         } $amPm"
 
     val statusColor = when (appointment.status) {
-        AppointmentStatus.UPCOMING -> Color(0xFF4CAF50)
-        AppointmentStatus.COMPLETED -> Color(0xFF666666)
-        AppointmentStatus.CANCELLED -> Color(0xFFFF5722)
+        AppointmentStatus.UPCOMING -> MaterialTheme.colorScheme.primary
+        AppointmentStatus.COMPLETED -> MaterialTheme.colorScheme.onSurfaceVariant
+        AppointmentStatus.CANCELLED -> MaterialTheme.colorScheme.error
     }
 
     Card(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(12.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.sm),
+        shape = MaterialTheme.shapes.medium
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(Spacing.md)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -343,34 +345,38 @@ private fun AppointmentCard(
                         text = appointment.salonName,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold
-                        )
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
                         text = appointment.serviceName,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(top = Spacing.xs)
                     )
 
                     Text(
                         text = formattedDate,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(top = Spacing.xs)
                     )
                 }
 
                 Surface(
                     color = statusColor.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(4.dp)
+                    shape = MaterialTheme.shapes.extraSmall
                 ) {
                     Text(
                         text = appointment.status.name.lowercase()
                             .replaceFirstChar { it.uppercase() },
                         style = MaterialTheme.typography.labelSmall,
                         color = statusColor,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(
+                            horizontal = Spacing.sm,
+                            vertical = Spacing.xs
+                        )
                     )
                 }
             }
@@ -380,7 +386,7 @@ private fun AppointmentCard(
                     text = "with ${appointment.employeeName}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = Spacing.sm)
                 )
             }
 
@@ -390,7 +396,8 @@ private fun AppointmentCard(
                     style = MaterialTheme.typography.titleSmall.copy(
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(top = 8.dp)
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = Spacing.sm)
                 )
             }
         }
