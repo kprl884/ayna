@@ -259,48 +259,27 @@ private fun EmptyAppointmentsContent(
 
 @Composable
 private fun AppointmentsContent(
+    selectedTab: AppointmentsContract.AppointmentTab,
     upcomingAppointments: List<Appointment>,
-    pastAppointments: List<Appointment>
+    pastAppointments: List<Appointment>,
+    onAppointmentClick: (Appointment) -> Unit
 ) {
+    val appointments = when (selectedTab) {
+        AppointmentsContract.AppointmentTab.UPCOMING -> upcomingAppointments
+        AppointmentsContract.AppointmentTab.PAST -> pastAppointments
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(Spacing.md),
+        verticalArrangement = Arrangement.spacedBy(Spacing.md)
     ) {
-        if (upcomingAppointments.isNotEmpty()) {
-            item {
-                Text(
-                    text = "Upcoming",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
-
-            items(upcomingAppointments) { appointment ->
-                AppointmentCard(appointment = appointment)
-            }
-        }
-
-        if (pastAppointments.isNotEmpty()) {
-            item {
-                Text(
-                    text = "Past",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier.padding(
-                        top = if (upcomingAppointments.isNotEmpty()) 16.dp else 0.dp,
-                        bottom = 8.dp
-                    )
-                )
-            }
-
-            items(pastAppointments) { appointment ->
-                AppointmentCard(appointment = appointment)
-            }
+        items(appointments) { appointment ->
+            AppointmentCard(
+                appointment = appointment,
+                onClick = { onAppointmentClick(appointment) }
+            )
         }
     }
 }
