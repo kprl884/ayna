@@ -156,25 +156,28 @@ fun JoinWaitlistScreen(
                     Button(
                         onClick = {
                             if (uiState.hasAvailableSlots) {
-                                onBookNowClick()
+                                onEvent(JoinWaitlistContract.UiEvent.OnBookNow)
                             } else {
-                                viewModel.joinWaitlist()
-                                onContinueClick()
+                                onEvent(JoinWaitlistContract.UiEvent.OnJoinWaitlist)
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF9E9E9E)
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
-                        enabled = !uiState.isLoading
+                        enabled = !uiState.isSubmitting,
+                        shape = MaterialTheme.shapes.medium
                     ) {
-                        if (uiState.isLoading) {
+                        if (uiState.isSubmitting) {
                             CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = Color.White,
-                                strokeWidth = 2.dp
+                                modifier = Modifier.size(Spacing.md),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = Spacing.xs / 2
                             )
                         } else {
-                            Text("Continue")
+                            Text(
+                                "Continue",
+                                style = MaterialTheme.typography.labelLarge
+                            )
                         }
                     }
                 }
