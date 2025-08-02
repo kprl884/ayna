@@ -162,24 +162,32 @@ private fun LoadingContent() {
 @Composable
 private fun ErrorContent(
     message: String,
-    onRetry: () -> Unit
+    onRetry: () -> Unit,
+    onClearError: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(Spacing.xl),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = Spacing.md)
         )
 
-        Button(onClick = onRetry) {
-            Text("Try again")
+        Button(
+            onClick = onRetry,
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(
+                "Try again",
+                style = MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
