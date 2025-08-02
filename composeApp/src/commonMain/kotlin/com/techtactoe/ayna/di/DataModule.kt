@@ -52,4 +52,8 @@ object DataModule {
     fun createJoinWaitlistViewModel(): JoinWaitlistViewModel {
         return JoinWaitlistViewModel(joinWaitlistUseCase)
     }
+
+    fun createSalonDetailViewModel(): SalonDetailViewModel {
+        return SalonDetailViewModel()
+    }
 }
