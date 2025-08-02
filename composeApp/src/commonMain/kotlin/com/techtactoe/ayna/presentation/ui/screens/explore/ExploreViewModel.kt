@@ -140,51 +140,59 @@ class ExploreViewModel(
             }
         }
         
-        val currentFilters = getCurrentFilters()
-        
+        val currentFilters = getCurrentFilters(_screenState.value.uiState)
+
         viewModelScope.launch {
             try {
                 val result = repository.getVenues(currentFilters, currentPage)
                 result.fold(
                     onSuccess = { venues ->
                         if (venues.isEmpty() && allVenues.isEmpty()) {
-                            screenState = screenState.copy(
-                                uiState = ExploreUiState.Empty(filters = currentFilters)
-                            )
+                            _screenState.update { currentState ->
+                                currentState.copy(
+                                    uiState = ExploreUiState.Empty(filters = currentFilters)
+                                )
+                            }
                         } else {
                             if (reset) {
                                 allVenues.clear()
                             }
                             allVenues.addAll(venues)
                             currentPage++
-                            
-                            screenState = screenState.copy(
-                                uiState = ExploreUiState.Success(
-                                    isLoading = false,
-                                    venues = allVenues.toList(),
-                                    hasMorePages = venues.isNotEmpty(),
-                                    filters = currentFilters,
-                                    isRefreshing = false
+
+                            _screenState.update { currentState ->
+                                currentState.copy(
+                                    uiState = ExploreUiState.Success(
+                                        isLoading = false,
+                                        venues = allVenues.toList(),
+                                        hasMorePages = venues.isNotEmpty(),
+                                        filters = currentFilters,
+                                        isRefreshing = false
+                                    )
                                 )
-                            )
+                            }
                         }
                     },
                     onFailure = { exception ->
-                        screenState = screenState.copy(
-                            uiState = ExploreUiState.Error(
-                                message = exception.message ?: "An error occurred",
-                                filters = currentFilters
+                        _screenState.update { currentState ->
+                            currentState.copy(
+                                uiState = ExploreUiState.Error(
+                                    message = exception.message ?: "An error occurred",
+                                    filters = currentFilters
+                                )
                             )
-                        )
+                        }
                     }
                 )
             } catch (e: Exception) {
-                screenState = screenState.copy(
-                    uiState = ExploreUiState.Error(
-                        message = e.message ?: "An error occurred",
-                        filters = currentFilters
+                _screenState.update { currentState ->
+                    currentState.copy(
+                        uiState = ExploreUiState.Error(
+                            message = e.message ?: "An error occurred",
+                            filters = currentFilters
+                        )
                     )
-                )
+                }
             }
         }
     }
