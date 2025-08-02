@@ -247,10 +247,16 @@ private fun ConfirmationContent(
 @Composable
 private fun BookingConfirmationScreenPreview() {
     AynaAppTheme {
-        BookingConfirmationScreen(
-            appointmentId = "APT123456",
-            onGoToAppointmentsClick = {},
-            onDoneClick = {}
+        ConfirmationContent(
+            uiState = BookingConfirmationContract.UiState(
+                appointmentId = "APT123456",
+                salonName = "Beauty Salon",
+                serviceName = "Haircut & Styling",
+                appointmentDateTime = "Tomorrow at 2:00 PM",
+                price = "₺150",
+                isConfirmed = true
+            ),
+            onEvent = {}
         )
     }
 }
