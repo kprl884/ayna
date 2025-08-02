@@ -12,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -23,30 +24,16 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 /**
- * ViewModel for the Select Time screen
+ * ViewModel for the Select Time screen following the standardized MVVM pattern
+ * Single StateFlow for UI state and single onEvent function for all user interactions
  */
 class SelectTimeViewModel(
     private val getAvailableTimeSlotsUseCase: GetAvailableTimeSlotsUseCase,
     private val createAppointmentUseCase: CreateAppointmentUseCase
 ) : ViewModel() {
 
-    /**
-     * Data class representing the UI state for the Select Time screen
-     */
-    data class SelectTimeUiState(
-        val isLoading: Boolean = true,
-        val availableSlots: List<TimeSlot> = emptyList(),
-        val selectedDate: Long = Clock.System.now().toEpochMilliseconds(),
-        val selectedTimeSlot: TimeSlot? = null,
-        val error: String? = null,
-        val isFullyBooked: Boolean = false,
-        val nextAvailableDate: String = "",
-        val isCreatingAppointment: Boolean = false,
-        val appointmentCreated: String? = null // Contains appointment ID when created
-    )
-
-    private val _uiState = MutableStateFlow(SelectTimeUiState())
-    val uiState: StateFlow<SelectTimeUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(SelectTimeContract.UiState())
+    val uiState: StateFlow<SelectTimeContract.UiState> = _uiState.asStateFlow()
 
     // Parameters passed from navigation
     private var salonId: String = ""
