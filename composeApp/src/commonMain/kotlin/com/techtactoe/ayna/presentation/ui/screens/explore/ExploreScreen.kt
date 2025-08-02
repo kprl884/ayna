@@ -523,12 +523,14 @@ private fun ExploreScreenDarkPreview() {
 
 @Preview()
 @Composable
-private fun ExploreContentStatesPreview(
-    @PreviewParameter(ExploreScreenPreviewProvider::class) uiState: ExploreUiState
-) {
+private fun ExploreContentLoadingPreview() {
     AynaAppTheme {
         ExploreContent(
-            uiState = uiState,
+            venues = emptyList(),
+            isLoading = true,
+            isRefreshing = false,
+            hasMorePages = false,
+            errorMessage = null,
             onVenueClick = { },
             onSeeMoreClick = { },
             onRefresh = { },
