@@ -79,7 +79,7 @@ private fun LoadingContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = MaterialTheme.colorScheme.brandPurple)
+        CircularProgressIndicator(color = brandPurple)
     }
 }
 
@@ -220,7 +220,7 @@ private fun ConfirmationContent(
                 .fillMaxWidth()
                 .padding(bottom = Spacing.md),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.brandPurple
+                containerColor = brandPurple
             ),
             shape = MaterialTheme.shapes.medium
         ) {

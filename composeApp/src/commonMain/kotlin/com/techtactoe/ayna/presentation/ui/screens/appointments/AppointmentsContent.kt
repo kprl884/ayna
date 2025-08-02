@@ -10,17 +10,18 @@ import androidx.compose.ui.Modifier
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.presentation.theme.Spacing
 import com.techtactoe.ayna.presentation.ui.screens.appointments.component.AppointmentCard
+import com.techtactoe.ayna.presentation.ui.screens.appointments.model.AppointmentTab
 
 @Composable
 fun AppointmentsContent(
-    selectedTab: AppointmentsContract.AppointmentTab,
+    selectedTab: AppointmentTab,
     upcomingAppointments: List<Appointment>,
     pastAppointments: List<Appointment>,
     onAppointmentClick: (Appointment) -> Unit
 ) {
     val appointments = when (selectedTab) {
-        AppointmentsContract.AppointmentTab.UPCOMING -> upcomingAppointments
-        AppointmentsContract.AppointmentTab.PAST -> pastAppointments
+        AppointmentTab.UPCOMING -> upcomingAppointments
+        AppointmentTab.PAST -> pastAppointments
     }
 
     LazyColumn(

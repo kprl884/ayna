@@ -186,7 +186,7 @@ private fun DateChip(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
-        dateOption.isSelected -> MaterialTheme.colorScheme.brandPurple
+        dateOption.isSelected -> brandPurple
         dateOption.isDisabled -> Color.Transparent
         else -> Color.Transparent
     }
@@ -240,7 +240,7 @@ private fun LoadingContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = MaterialTheme.colorScheme.brandPurple)
+        CircularProgressIndicator(color = brandPurple)
     }
 }
 
@@ -281,7 +281,7 @@ private fun FullyBookedContent(
         Icon(
             imageVector = Icons.Default.DateRange,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.brandPurple,
+            tint = brandPurple,
             modifier = Modifier
                 .size(Spacing.xxxl)
                 .padding(bottom = Spacing.lg)
@@ -348,13 +348,13 @@ private fun TimeSlotItem(
     onClick: () -> Unit
 ) {
     val backgroundColor = if (isSelected) {
-        MaterialTheme.colorScheme.brandPurple.copy(alpha = 0.1f)
+        brandPurple.copy(alpha = 0.1f)
     } else {
         MaterialTheme.colorScheme.surface
     }
 
     val borderColor = if (isSelected) {
-        MaterialTheme.colorScheme.brandPurple
+        brandPurple
     } else {
         MaterialTheme.colorScheme.outline
     }

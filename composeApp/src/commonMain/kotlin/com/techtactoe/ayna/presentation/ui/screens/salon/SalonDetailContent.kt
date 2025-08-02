@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import com.techtactoe.ayna.presentation.ui.screens.salon.components.SalonBasicIn
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ServicesSection
 import com.techtactoe.ayna.util.LogLevel
 import com.techtactoe.ayna.util.log
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SalonDetailContent(
@@ -131,5 +133,17 @@ fun SalonDetailContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+@Preview
+fun SalonDetailContentPreview() {
+    MaterialTheme {
+        SalonDetailContent(
+            uiState = SalonDetailContract.UiState(),
+            onEvent = {},
+            scrollState = rememberLazyListState()
+        )
     }
 }
