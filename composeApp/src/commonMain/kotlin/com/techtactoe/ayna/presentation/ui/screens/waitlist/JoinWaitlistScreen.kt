@@ -400,14 +400,14 @@ private fun TimeRangeSelector(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(Spacing.xxxl - Spacing.sm)
                 .border(
                     1.dp,
                     MaterialTheme.colorScheme.outline,
-                    RoundedCornerShape(8.dp)
+                    MaterialTheme.shapes.small
                 )
                 .clickable { expanded = true }
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = Spacing.md),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -417,11 +417,13 @@ private fun TimeRangeSelector(
             ) {
                 Text(
                     text = selectedTimeRange,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Select time range"
+                    contentDescription = "Select time range",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -432,7 +434,13 @@ private fun TimeRangeSelector(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            option,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     onClick = {
                         onOptionSelected(option)
                         expanded = false
