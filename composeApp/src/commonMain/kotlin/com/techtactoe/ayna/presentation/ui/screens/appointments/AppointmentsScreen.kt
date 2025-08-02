@@ -483,8 +483,24 @@ private fun EmptyAppointmentsScreenPreview() {
 private fun AppointmentsScreenPreview() {
     AynaAppTheme {
         Surface {
-            // Preview placeholder - would normally show appointments content
-            EmptyAppointmentsContent(onSearchSalonsClick = {})
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyAppointmentsContent(onSearchSalonsClick = {})
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PurpleCalendarIconPreview() {
+    AynaAppTheme {
+        Surface(
+            modifier = Modifier.padding(Spacing.lg)
+        ) {
+            PurpleCalendarIcon()
         }
     }
 }
