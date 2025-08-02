@@ -9,6 +9,8 @@ import com.techtactoe.ayna.domain.repository.SalonRepositoryV2
 import com.techtactoe.ayna.domain.usecase.*
 import com.techtactoe.ayna.presentation.viewmodel.HomeViewModelV2
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsViewModel
+import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationViewModel
+import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailViewModel
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeViewModel
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistViewModel
 
@@ -50,5 +52,13 @@ object DataModule {
 
     fun createJoinWaitlistViewModel(): JoinWaitlistViewModel {
         return JoinWaitlistViewModel(joinWaitlistUseCase)
+    }
+
+    fun createSalonDetailViewModel(): SalonDetailViewModel {
+        return SalonDetailViewModel()
+    }
+
+    fun createBookingConfirmationViewModel(): BookingConfirmationViewModel {
+        return BookingConfirmationViewModel()
     }
 }

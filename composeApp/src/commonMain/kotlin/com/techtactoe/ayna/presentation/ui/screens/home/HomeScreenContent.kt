@@ -28,15 +28,15 @@ import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
-import com.techtactoe.ayna.presentation.viewmodel.HomeScreenState
+import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 
 @Composable
 fun HomeScreenContent(
-    state: HomeScreenState,
-    onSalonClick: (String) -> Unit = {}
+    uiState: HomeContract.UiState,
+    onEvent: (HomeContract.UiEvent) -> Unit
 ) {
     Scaffold(
-        containerColor = AynaColors.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         BoxWithConstraints(
             modifier = Modifier
@@ -45,16 +45,16 @@ fun HomeScreenContent(
         ) {
             val topPadding = this.maxHeight / 10
             when {
-                state.isLoading -> {
+                uiState.isLoading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = AynaColors.Purple)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
 
-                state.error != null -> {
+                uiState.errorMessage != null -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -79,10 +79,10 @@ fun HomeScreenContent(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = state.error,
+                                text = uiState.errorMessage ?: "Unknown error",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
-                                color = AynaColors.SecondaryText
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -92,18 +92,18 @@ fun HomeScreenContent(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(AynaColors.White)
+                            .background(MaterialTheme.colorScheme.background)
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(topPadding))
 
                         UserHeader(
-                            userName = "John"
+                            userName = uiState.userName
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        if (state.salons.isNotEmpty()) {
+                        if (uiState.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -112,8 +112,13 @@ fun HomeScreenContent(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(state.salons) { salon ->
-                                    SalonCard(salon = salon, onSalonClick = onSalonClick)
+                                items(uiState.salons) { salon ->
+                                    SalonCard(
+                                        salon = salon,
+                                        onSalonClick = { salonId ->
+                                            onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
+                                        }
+                                    )
                                 }
                             }
 
@@ -127,8 +132,13 @@ fun HomeScreenContent(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                items(state.salons.take(2)) { salon ->
-                                    SalonCard(salon = salon)
+                                items(uiState.salons.take(2)) { salon ->
+                                    SalonCard(
+                                        salon = salon,
+                                        onSalonClick = { salonId ->
+                                            onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
+                                        }
+                                    )
                                 }
                             }
 

@@ -50,28 +50,66 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.presentation.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Screen for joining waitlist when no appointments are available
+ * Following the golden standard MVVM pattern
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JoinWaitlistScreen(
-    viewModel: JoinWaitlistViewModel,
+    uiState: JoinWaitlistContract.UiState,
+    onEvent: (JoinWaitlistContract.UiEvent) -> Unit,
     salonId: String,
     serviceId: String,
-    onBackClick: () -> Unit,
-    onCloseClick: () -> Unit,
-    onContinueClick: () -> Unit,
-    onBookNowClick: () -> Unit,
-    onSeeAvailableTimesClick: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateClose: () -> Unit,
+    onNavigateToContinue: () -> Unit,
+    onNavigateToBooking: () -> Unit,
+    onNavigateToSelectTime: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
+    // Initialize with salon and service IDs
     LaunchedEffect(salonId, serviceId) {
-        viewModel.initialize(salonId, serviceId)
+        onEvent(JoinWaitlistContract.UiEvent.OnInitialize(salonId, serviceId))
+    }
+
+    // Handle navigation effects
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) {
+            onNavigateBack()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.BACK))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToClose) {
+        if (uiState.navigateToClose) {
+            onNavigateClose()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.CLOSE))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToBooking) {
+        if (uiState.navigateToBooking) {
+            onNavigateToBooking()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.BOOKING))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToSelectTime) {
+        if (uiState.navigateToSelectTime) {
+            onNavigateToSelectTime()
+            onEvent(JoinWaitlistContract.UiEvent.OnNavigationHandled(JoinWaitlistContract.NavigationReset.SELECT_TIME))
+        }
+    }
+
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            onNavigateToContinue()
+        }
     }
 
     Scaffold(
@@ -79,12 +117,12 @@ fun JoinWaitlistScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnBackClick) }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = onCloseClick) {
+                    IconButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnCloseClick) }) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 }
@@ -118,25 +156,28 @@ fun JoinWaitlistScreen(
                     Button(
                         onClick = {
                             if (uiState.hasAvailableSlots) {
-                                onBookNowClick()
+                                onEvent(JoinWaitlistContract.UiEvent.OnBookNow)
                             } else {
-                                viewModel.joinWaitlist()
-                                onContinueClick()
+                                onEvent(JoinWaitlistContract.UiEvent.OnJoinWaitlist)
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF9E9E9E)
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
-                        enabled = !uiState.isLoading
+                        enabled = !uiState.isSubmitting,
+                        shape = MaterialTheme.shapes.medium
                     ) {
-                        if (uiState.isLoading) {
+                        if (uiState.isSubmitting) {
                             CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = Color.White,
-                                strokeWidth = 2.dp
+                                modifier = Modifier.size(Spacing.md),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = Spacing.xs / 2
                             )
                         } else {
-                            Text("Continue")
+                            Text(
+                                "Continue",
+                                style = MaterialTheme.typography.labelLarge
+                            )
                         }
                     }
                 }
@@ -147,28 +188,28 @@ fun JoinWaitlistScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(Spacing.md)
         ) {
             Text(
                 text = "Join the waitlist",
                 style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
+                    fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.padding(bottom = 8.dp)
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = Spacing.sm)
             )
 
             Text(
                 text = "Select your preferred dates and time. We'll notify you if a time slot becomes available",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier.padding(bottom = Spacing.xl)
             )
 
             // Date and Time selectors
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -176,11 +217,12 @@ fun JoinWaitlistScreen(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = Spacing.sm)
                     )
 
                     DateSelector(
-                        selectedDate = viewModel.getFormattedDate(),
+                        selectedDate = uiState.formattedDate,
                         onClick = { /* TODO: Open date picker */ }
                     )
                 }
@@ -191,71 +233,78 @@ fun JoinWaitlistScreen(
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = Spacing.sm)
                     )
 
                     TimeRangeSelector(
                         selectedTimeRange = uiState.selectedTimeRange,
-                        options = viewModel.getTimeRangeOptions(),
+                        options = uiState.timeRangeOptions,
                         onOptionSelected = { timeRange ->
-                            viewModel.updateSelectedTimeRange(timeRange)
+                            onEvent(JoinWaitlistContract.UiEvent.OnTimeRangeSelected(timeRange))
                         }
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(Spacing.lg))
 
             // Add another time option
             OutlinedButton(
-                onClick = { /* TODO: Add another time option */ },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { onEvent(JoinWaitlistContract.UiEvent.OnAddAnotherTime) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = Spacing.sm)
                 )
-                Text("Add another time")
+                Text(
+                    "Add another time",
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(Spacing.xl))
 
             // Available slots notification
             if (uiState.hasAvailableSlots) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFF3E5F5)
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     ),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = MaterialTheme.shapes.medium
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(Spacing.md)
                     ) {
                         Text(
                             text = uiState.availableSlotsMessage,
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = Spacing.md)
                         )
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            TextButton(onClick = onBookNowClick) {
+                            TextButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnBookNow) }) {
                                 Text(
                                     text = "Book now →",
                                     style = MaterialTheme.typography.bodyMedium.copy(
                                         fontWeight = FontWeight.Medium
-                                    )
+                                    ),
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(Spacing.lg))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -263,35 +312,38 @@ fun JoinWaitlistScreen(
                 ) {
                     Text(
                         text = "Changed your mind? ",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     TextButton(
-                        onClick = onSeeAvailableTimesClick,
+                        onClick = { onEvent(JoinWaitlistContract.UiEvent.OnSeeAvailableTimes) },
                         contentPadding = PaddingValues(0.dp)
                     ) {
                         Text(
                             text = "See available times to book",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFF7B61FF)
+                            color = MaterialTheme.colorScheme.brandPurple
                         )
                     }
                 }
             }
 
             // Error handling
-            if (uiState.error != null) {
-                Spacer(modifier = Modifier.height(16.dp))
+            uiState.errorMessage?.let { error ->
+                Spacer(modifier = Modifier.height(Spacing.md))
                 Card(
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { onEvent(JoinWaitlistContract.UiEvent.OnClearError) }
                 ) {
                     Text(
-                        text = uiState.error!!,
+                        text = error,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(Spacing.md)
                     )
                 }
             }
@@ -307,14 +359,14 @@ private fun DateSelector(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(Spacing.xxxl - Spacing.sm)
             .border(
                 1.dp,
                 MaterialTheme.colorScheme.outline,
-                RoundedCornerShape(8.dp)
+                MaterialTheme.shapes.small
             )
             .clickable { onClick() }
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = Spacing.md),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
@@ -324,11 +376,13 @@ private fun DateSelector(
         ) {
             Text(
                 text = selectedDate,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "Select date"
+                contentDescription = "Select date",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -346,14 +400,14 @@ private fun TimeRangeSelector(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(Spacing.xxxl - Spacing.sm)
                 .border(
                     1.dp,
                     MaterialTheme.colorScheme.outline,
-                    RoundedCornerShape(8.dp)
+                    MaterialTheme.shapes.small
                 )
                 .clickable { expanded = true }
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = Spacing.md),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -363,11 +417,13 @@ private fun TimeRangeSelector(
             ) {
                 Text(
                     text = selectedTimeRange,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Select time range"
+                    contentDescription = "Select time range",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -378,7 +434,13 @@ private fun TimeRangeSelector(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = {
+                        Text(
+                            option,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     onClick = {
                         onOptionSelected(option)
                         expanded = false

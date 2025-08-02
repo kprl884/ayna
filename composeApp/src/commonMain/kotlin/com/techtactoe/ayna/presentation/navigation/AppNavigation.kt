@@ -69,9 +69,14 @@ fun AppNavigation() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable<Screen.Home> {
-                HomeScreen(onSalonClick = { salonId ->
-                    navController.navigate(Screen.Detail(salonId))
-                })
+                val viewModel = DataModule.createHomeViewModel()
+                val uiState by viewModel.uiState.collectAsState()
+
+                HomeScreen(
+                    uiState = uiState,
+                    onEvent = viewModel::onEvent,
+                    navController = navController
+                )
             }
             composable<Screen.Search> { SearchScreen() }
             composable<Screen.Explore> {
@@ -114,15 +119,14 @@ fun AppNavigation() {
                 // Get salon detail data
                 val salonDetail = MockSalonDetailRepository.getSalonDetail(salonId)
 
+                val viewModel = DataModule.createSalonDetailViewModel()
+                val uiState by viewModel.uiState.collectAsState()
+
                 SalonDetailScreen(
-                    salonDetail = salonDetail,
-                    onBackClick = { navController.popBackStack() },
-                    onShareClick = { /* Handle share */ },
-                    onFavoriteClick = { /* Handle favorite */ },
-                    onBookNowClick = { /* Handle booking */ },
-                    onServiceBookClick = { serviceId ->
-                        navController.navigate(Screen.SelectTime(salonId, serviceId))
-                    }
+                    uiState = uiState,
+                    onEvent = viewModel::onEvent,
+                    salonId = salonId,
+                    navController = navController
                 )
             }
 
@@ -182,11 +186,14 @@ fun AppNavigation() {
 
             composable<Screen.BookingConfirmation> { backStackEntry ->
                 val screen: Screen.BookingConfirmation = backStackEntry.toRoute()
+                val viewModel = DataModule.createBookingConfirmationViewModel()
+                val uiState by viewModel.uiState.collectAsState()
 
                 BookingConfirmationScreen(
+                    uiState = uiState,
+                    onEvent = viewModel::onEvent,
                     appointmentId = screen.appointmentId,
-                    onGoToAppointmentsClick = { },
-                    onDoneClick = {},
+                    navController = navController
                 )
             }
         }
