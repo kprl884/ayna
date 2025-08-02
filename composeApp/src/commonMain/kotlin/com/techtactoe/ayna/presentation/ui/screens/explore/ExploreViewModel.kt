@@ -239,12 +239,12 @@ class ExploreViewModel(
     }
     
     private fun updateSearchQuery(query: String) {
-        val currentFilters = getCurrentFilters()
+        val currentFilters = getCurrentFilters(_screenState.value.uiState)
         updateFilters(currentFilters.copy(searchQuery = query))
     }
-    
+
     private fun updateSelectedCity(city: String) {
-        val currentFilters = getCurrentFilters()
+        val currentFilters = getCurrentFilters(_screenState.value.uiState)
         updateFilters(currentFilters.copy(selectedCity = city))
     }
     
