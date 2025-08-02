@@ -152,50 +152,44 @@ fun ExploreScreen(
         }
 
         is BottomSheetType.Price -> {
-            val currentFilters = getCurrentFilters(screenState.uiState)
             PriceBottomSheet(
-                currentPriceRange = currentFilters.priceRange,
+                currentPriceRange = uiState.filters.priceRange,
                 onPriceRangeChanged = { priceRange ->
-                    viewModel.updateTempFilters(
-                        screenState.tempFilters.copy(priceRange = priceRange)
-                    )
+                    val newFilters = uiState.tempFilters.copy(priceRange = priceRange)
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(newFilters))
                 },
                 onClear = {
-                    viewModel.updateTempFilters(
-                        screenState.tempFilters.copy(priceRange = PriceRange())
-                    )
+                    val newFilters = uiState.tempFilters.copy(priceRange = PriceRange())
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(newFilters))
                 },
-                onApply = { viewModel.applyTempFilters() },
-                onDismiss = { viewModel.hideBottomSheet() }
+                onApply = { viewModel.onEvent(ExploreContract.UiEvent.OnApplyTempFilters) },
+                onDismiss = { viewModel.onEvent(ExploreContract.UiEvent.OnHideBottomSheet) }
             )
         }
 
         is BottomSheetType.VenueType -> {
-            val currentFilters = getCurrentFilters(screenState.uiState)
             VenueTypeBottomSheet(
-                currentType = currentFilters.venueType,
+                currentType = uiState.filters.venueType,
                 onTypeSelected = { venueType ->
-                    viewModel.updateTempFilters(
-                        screenState.tempFilters.copy(venueType = venueType)
-                    )
-                    viewModel.applyTempFilters()
+                    val newFilters = uiState.tempFilters.copy(venueType = venueType)
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(newFilters))
+                    viewModel.onEvent(ExploreContract.UiEvent.OnApplyTempFilters)
                 },
-                onDismiss = { viewModel.hideBottomSheet() }
+                onDismiss = { viewModel.onEvent(ExploreContract.UiEvent.OnHideBottomSheet) }
             )
         }
 
         is BottomSheetType.Filters -> {
-            getCurrentFilters(screenState.uiState)
             FiltersBottomSheet(
-                currentFilters = screenState.tempFilters,
+                currentFilters = uiState.tempFilters,
                 onFiltersChanged = { filters ->
-                    viewModel.updateTempFilters(filters)
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(filters))
                 },
                 onClearAll = {
-                    viewModel.updateTempFilters(ExploreFilters())
+                    viewModel.onEvent(ExploreContract.UiEvent.OnUpdateTempFilters(ExploreFilters()))
                 },
-                onApply = { viewModel.applyTempFilters() },
-                onDismiss = { viewModel.hideBottomSheet() }
+                onApply = { viewModel.onEvent(ExploreContract.UiEvent.OnApplyTempFilters) },
+                onDismiss = { viewModel.onEvent(ExploreContract.UiEvent.OnHideBottomSheet) }
             )
         }
 
