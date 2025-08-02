@@ -482,21 +482,16 @@ private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
 @Composable
 private fun ExploreScreenPreview() {
     AynaAppTheme {
-        val sampleUiState = ExploreUiState.Success(
-            isLoading = false,
-            venues = sampleVenues(),
-            isRefreshing = false,
-            hasMorePages = true,
-            filters = ExploreFilters(),
-            isLocationPermissionGranted = false
-        )
-        ExploreContent(
-            uiState = sampleUiState,
-            onVenueClick = { },
-            onSeeMoreClick = { },
-            onRefresh = { },
-            onLoadMore = { },
-            onClearSearch = { }
+        // Create a mock ViewModel with Sort bottom sheet active
+        val mockViewModel = ExploreViewModel().apply {
+            showBottomSheet(BottomSheetType.Sort)
+        }
+
+        ExploreScreen(
+            viewModel = mockViewModel,
+            onNavigateToVenueDetail = { },
+            onNavigateToMap = { },
+            onNavigateToAdvancedSearch = { }
         )
     }
 }
