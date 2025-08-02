@@ -261,10 +261,10 @@ private fun FullyBookedContent(
         Icon(
             imageVector = Icons.Default.DateRange,
             contentDescription = null,
-            tint = Color(0xFF7B61FF),
+            tint = MaterialTheme.colorScheme.brandPurple,
             modifier = Modifier
-                .size(64.dp)
-                .padding(bottom = 24.dp)
+                .size(Spacing.xxxl)
+                .padding(bottom = Spacing.lg)
         )
 
         Text(
@@ -273,7 +273,7 @@ private fun FullyBookedContent(
                 fontWeight = FontWeight.SemiBold
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = Spacing.sm)
         )
 
         Text(
@@ -281,14 +281,14 @@ private fun FullyBookedContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 32.dp)
+            modifier = Modifier.padding(bottom = Spacing.xl)
         )
 
         OutlinedButton(
             onClick = onGoToNextDate,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = Spacing.md)
         ) {
             Text("Go to next available date")
         }
