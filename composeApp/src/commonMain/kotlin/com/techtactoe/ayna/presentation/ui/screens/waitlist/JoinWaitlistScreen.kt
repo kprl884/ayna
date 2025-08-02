@@ -117,12 +117,12 @@ fun JoinWaitlistScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnBackClick) }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = onCloseClick) {
+                    IconButton(onClick = { onEvent(JoinWaitlistContract.UiEvent.OnCloseClick) }) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 }
