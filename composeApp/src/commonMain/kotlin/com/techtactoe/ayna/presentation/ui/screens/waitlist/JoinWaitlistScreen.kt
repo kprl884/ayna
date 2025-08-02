@@ -50,6 +50,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.presentation.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
