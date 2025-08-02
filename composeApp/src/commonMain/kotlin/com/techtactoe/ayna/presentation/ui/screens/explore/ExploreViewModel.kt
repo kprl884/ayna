@@ -212,24 +212,27 @@ class ExploreViewModel(
     }
     
     private fun updateFilters(filters: ExploreFilters) {
-        when (val currentState = screenState.uiState) {
-            is ExploreUiState.Success -> {
-                screenState = screenState.copy(
-                    uiState = currentState.copy(filters = filters, isLoading = false)
-                )
-            }
-            is ExploreUiState.Error -> {
-                screenState = screenState.copy(
-                    uiState = currentState.copy(filters = filters)
-                )
-            }
-            is ExploreUiState.Empty -> {
-                screenState = screenState.copy(
-                    uiState = currentState.copy(filters = filters)
-                )
-            }
-            else -> {
-                // For loading state, just load with new filters
+        _screenState.update { screenState ->
+            when (val currentUiState = screenState.uiState) {
+                is ExploreUiState.Success -> {
+                    screenState.copy(
+                        uiState = currentUiState.copy(filters = filters, isLoading = false)
+                    )
+                }
+                is ExploreUiState.Error -> {
+                    screenState.copy(
+                        uiState = currentUiState.copy(filters = filters)
+                    )
+                }
+                is ExploreUiState.Empty -> {
+                    screenState.copy(
+                        uiState = currentUiState.copy(filters = filters)
+                    )
+                }
+                else -> {
+                    // For loading state, just load with new filters
+                    screenState
+                }
             }
         }
         loadVenues(reset = true)
