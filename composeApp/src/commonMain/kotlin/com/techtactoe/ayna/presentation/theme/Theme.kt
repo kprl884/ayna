@@ -102,6 +102,18 @@ private val DarkColorScheme = darkColorScheme(
     inversePrimary = Color(0xFF037AFF),
 )
 
+// Extension properties for brand-specific colors that don't map directly to Material 3 roles
+val ColorScheme.brandPurple: Color
+    @Composable get() = Color(0xFF7B61FF)
+
+val ColorScheme.brandPurpleLight: Color
+    @Composable get() = Color(0xFFC9C0F8)
+
+val ColorScheme.borderDefault: Color
+    @Composable get() = if (background == Color(0xFFFFFFFF)) Color(0xFFE0E0E0) else Color(0xFF424242)
+
+val ColorScheme.textSecondary: Color
+    @Composable get() = onSurfaceVariant
 
 @Composable
 fun AynaAppTheme(
