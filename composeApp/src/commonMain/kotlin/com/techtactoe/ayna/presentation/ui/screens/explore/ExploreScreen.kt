@@ -245,7 +245,11 @@ private fun ExploreTopBar(
 
 @Composable
 private fun ExploreContent(
-    uiState: ExploreUiState,
+    venues: List<Venue>,
+    isLoading: Boolean,
+    isRefreshing: Boolean,
+    hasMorePages: Boolean,
+    errorMessage: String?,
     onVenueClick: (Venue) -> Unit,
     onSeeMoreClick: (Venue) -> Unit,
     onRefresh: () -> Unit,
@@ -253,41 +257,37 @@ private fun ExploreContent(
     onClearSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when (uiState) {
-        is ExploreUiState.Loading -> {
+    when {
+        isLoading && venues.isEmpty() -> {
             LoadingContent(modifier = modifier)
         }
 
-        is ExploreUiState.Success -> {
-            if (uiState.isLoading) {
-                LoadingContent(modifier = modifier)
-            } else {
-                SuccessContent(
-                    venues = uiState.venues,
-                    isRefreshing = uiState.isRefreshing,
-                    hasMorePages = uiState.hasMorePages,
-                    onVenueClick = onVenueClick,
-                    onSeeMoreClick = onSeeMoreClick,
-                    onRefresh = onRefresh,
-                    onLoadMore = onLoadMore,
-                    modifier = modifier
-                )
-            }
-        }
-
-        is ExploreUiState.Error -> {
+        errorMessage != null -> {
             ErrorContent(
-                message = uiState.message,
+                message = errorMessage,
                 onRetry = onRefresh,
                 modifier = modifier
             )
         }
 
-        is ExploreUiState.Empty -> {
+        venues.isEmpty() -> {
             EmptyContent(
-                message = uiState.message,
-                subMessage = uiState.subMessage,
+                message = "We didn't find a match",
+                subMessage = "Try a new search",
                 onClearSearch = onClearSearch,
+                modifier = modifier
+            )
+        }
+
+        else -> {
+            SuccessContent(
+                venues = venues,
+                isRefreshing = isRefreshing,
+                hasMorePages = hasMorePages,
+                onVenueClick = onVenueClick,
+                onSeeMoreClick = onSeeMoreClick,
+                onRefresh = onRefresh,
+                onLoadMore = onLoadMore,
                 modifier = modifier
             )
         }
