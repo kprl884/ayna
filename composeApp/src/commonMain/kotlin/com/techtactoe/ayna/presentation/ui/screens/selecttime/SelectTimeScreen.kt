@@ -166,14 +166,14 @@ private fun DateChip(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
-        dateOption.isSelected -> Color(0xFF7B61FF)
+        dateOption.isSelected -> MaterialTheme.colorScheme.brandPurple
         dateOption.isDisabled -> Color.Transparent
         else -> Color.Transparent
     }
 
     val textColor = when {
-        dateOption.isSelected -> Color.White
-        dateOption.isDisabled -> Color.Gray
+        dateOption.isSelected -> MaterialTheme.colorScheme.onPrimary
+        dateOption.isDisabled -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
         else -> MaterialTheme.colorScheme.onSurface
     }
 
@@ -193,7 +193,7 @@ private fun DateChip(
                 .size(56.dp)
                 .clip(CircleShape)
                 .background(backgroundColor)
-                .border(1.dp, borderColor, CircleShape)
+                .border(BorderThickness.extraSmall, borderColor, CircleShape)
         ) {
             Text(
                 text = dateOption.dayOfMonth.toString(),
@@ -204,7 +204,7 @@ private fun DateChip(
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Spacing.sm))
 
         Text(
             text = dateOption.dayOfWeek,
