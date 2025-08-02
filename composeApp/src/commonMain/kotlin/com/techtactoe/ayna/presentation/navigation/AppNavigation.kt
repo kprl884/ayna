@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -78,7 +79,7 @@ fun AppNavigation() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable<Screen.Home> {
-                val viewModel = DataModule.createHomeViewModel()
+                val viewModel = remember { DataModule.createHomeViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 HomeScreen(
@@ -102,7 +103,7 @@ fun AppNavigation() {
                 )
             }
             composable<Screen.Appointments> {
-                val viewModel = DataModule.createAppointmentsViewModel()
+                val viewModel = remember { DataModule.createAppointmentsViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 AppointmentsScreen(
@@ -117,7 +118,8 @@ fun AppNavigation() {
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
 
-                val viewModel = DataModule.createSalonDetailViewModel(salonId)
+                // ViewModel is properly remembered to survive recompositions
+                val viewModel = remember(salonId) { DataModule.createSalonDetailViewModel(salonId) }
                 val uiState by viewModel.uiState.collectAsState()
 
                 LaunchedEffect(Unit) {
@@ -152,7 +154,7 @@ fun AppNavigation() {
 
             composable<Screen.SelectTime> { backStackEntry ->
                 val screen: Screen.SelectTime = backStackEntry.toRoute()
-                val viewModel = DataModule.createSelectTimeViewModel()
+                val viewModel = remember { DataModule.createSelectTimeViewModel() }
 
                 SelectTimeScreen(
                     viewModel = viewModel,
@@ -187,7 +189,7 @@ fun AppNavigation() {
 
             composable<Screen.JoinWaitlist> { backStackEntry ->
                 val screen: Screen.JoinWaitlist = backStackEntry.toRoute()
-                val viewModel = DataModule.createJoinWaitlistViewModel()
+                val viewModel = remember { DataModule.createJoinWaitlistViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
                 JoinWaitlistScreen(
                     uiState = uiState,
@@ -204,7 +206,7 @@ fun AppNavigation() {
 
             composable<Screen.BookingConfirmation> { backStackEntry ->
                 val screen: Screen.BookingConfirmation = backStackEntry.toRoute()
-                val viewModel = DataModule.createBookingConfirmationViewModel()
+                val viewModel = remember { DataModule.createBookingConfirmationViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 BookingConfirmationScreen(

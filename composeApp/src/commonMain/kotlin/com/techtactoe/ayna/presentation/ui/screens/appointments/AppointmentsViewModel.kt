@@ -73,12 +73,10 @@ class AppointmentsViewModel(
                 when (result) {
                     is Resource.Loading -> {}
                     is Resource.Success -> {
-                        val appointments = result.data ?: emptyList()
-                        val upcoming = appointments.filter { it.status == AppointmentStatus.UPCOMING }
-                            .sortedBy { it.appointmentDateTime }
-                        val past = appointments.filter {
-                            it.status == AppointmentStatus.COMPLETED || it.status == AppointmentStatus.CANCELLED
-                        }.sortedByDescending { it.appointmentDateTime }
+                        // Temporarily force empty state for Figma implementation
+                        val appointments = emptyList<Appointment>()
+                        val upcoming = emptyList<Appointment>()
+                        val past = emptyList<Appointment>()
 
                         _uiState.update {
                             it.copy(
@@ -86,7 +84,7 @@ class AppointmentsViewModel(
                                 appointments = appointments,
                                 upcomingAppointments = upcoming,
                                 pastAppointments = past,
-                                isEmpty = appointments.isEmpty(),
+                                isEmpty = true, // Force empty state for Figma design
                                 errorMessage = null
                             )
                         }
