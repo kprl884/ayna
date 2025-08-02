@@ -190,7 +190,7 @@ fun ExploreScreen(
 @Composable
 private fun ExploreTopBar(
     uiState: ExploreUiState,
-    scrollBehavior: TopAppBarScrollBehavior,
+    @Suppress("UNUSED_PARAMETER") scrollBehavior: TopAppBarScrollBehavior,
     onSearchBarClick: () -> Unit,
     onMapClick: () -> Unit,
     onFiltersClick: () -> Unit,
