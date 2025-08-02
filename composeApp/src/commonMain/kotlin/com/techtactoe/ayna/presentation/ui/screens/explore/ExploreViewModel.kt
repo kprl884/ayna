@@ -198,11 +198,15 @@ class ExploreViewModel(
     }
     
     private fun refreshVenues() {
-        val currentState = screenState.uiState
-        if (currentState is ExploreUiState.Success) {
-            screenState = screenState.copy(
-                uiState = currentState.copy(isRefreshing = true, isLoading = false)
-            )
+        _screenState.update { screenState ->
+            val currentUiState = screenState.uiState
+            if (currentUiState is ExploreUiState.Success) {
+                screenState.copy(
+                    uiState = currentUiState.copy(isRefreshing = true, isLoading = false)
+                )
+            } else {
+                screenState
+            }
         }
         loadVenues(reset = true)
     }
