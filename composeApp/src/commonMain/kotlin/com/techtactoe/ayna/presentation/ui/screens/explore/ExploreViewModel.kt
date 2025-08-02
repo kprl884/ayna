@@ -35,84 +35,117 @@ class ExploreViewModel(
     }
 
     /**
-     * Handles user intents and updates the state accordingly
+     * Single entry point for all user interactions with the Explore screen
+     * Following the golden standard MVVM pattern
      */
-    fun handleIntent(intent: ExploreIntent) {
-        when (intent) {
-            is ExploreIntent.LoadVenues -> loadVenues(reset = true)
-            is ExploreIntent.RefreshVenues -> refreshVenues()
-            is ExploreIntent.LoadMoreVenues -> loadVenues(reset = false)
-            is ExploreIntent.UpdateFilters -> updateFilters(intent.filters)
-            is ExploreIntent.UpdateSearchQuery -> updateSearchQuery(intent.query)
-            is ExploreIntent.UpdateSelectedCity -> updateSelectedCity(intent.city)
-            is ExploreIntent.ClearFilters -> clearFilters()
-            is ExploreIntent.BookmarkVenue -> bookmarkVenue(intent.venueId)
-            is ExploreIntent.RequestLocationPermission -> requestLocationPermission()
-        }
-    }
+    fun onEvent(event: ExploreContract.UiEvent) {
+        when (event) {
+            // Filter events
+            is ExploreContract.UiEvent.OnShowBottomSheet -> {
+                _uiState.update {
+                    it.copy(
+                        currentBottomSheet = event.type,
+                        tempFilters = it.filters
+                    )
+                }
+            }
+            is ExploreContract.UiEvent.OnHideBottomSheet -> {
+                _uiState.update { it.copy(currentBottomSheet = BottomSheetType.None) }
+            }
+            is ExploreContract.UiEvent.OnUpdateTempFilters -> {
+                _uiState.update { it.copy(tempFilters = event.filters) }
+            }
+            is ExploreContract.UiEvent.OnApplyTempFilters -> {
+                val tempFilters = _uiState.value.tempFilters
+                _uiState.update {
+                    it.copy(
+                        filters = tempFilters,
+                        currentBottomSheet = BottomSheetType.None
+                    )
+                }
+                loadVenues(reset = true)
+            }
+            is ExploreContract.UiEvent.OnClearFilters -> {
+                _uiState.update {
+                    it.copy(
+                        filters = ExploreFilters(),
+                        tempFilters = ExploreFilters()
+                    )
+                }
+                loadVenues(reset = true)
+            }
 
-    /**
-     * Shows bottom sheet with specified type
-     */
-    fun showBottomSheet(type: BottomSheetType) {
-        _screenState.update { currentState ->
-            currentState.copy(
-                currentBottomSheet = type,
-                tempFilters = getCurrentFilters(currentState.uiState)
-            )
-        }
-    }
+            // Search events
+            is ExploreContract.UiEvent.OnSearchQueryChanged -> {
+                val newFilters = _uiState.value.filters.copy(searchQuery = event.query)
+                _uiState.update {
+                    it.copy(
+                        filters = newFilters,
+                        searchQuery = event.query
+                    )
+                }
+                loadVenues(reset = true)
+            }
+            is ExploreContract.UiEvent.OnSelectedCityChanged -> {
+                val newFilters = _uiState.value.filters.copy(selectedCity = event.city)
+                _uiState.update {
+                    it.copy(
+                        filters = newFilters,
+                        selectedCity = event.city
+                    )
+                }
+                loadVenues(reset = true)
+            }
 
-    /**
-     * Hides currently shown bottom sheet
-     */
-    fun hideBottomSheet() {
-        _screenState.update { currentState ->
-            currentState.copy(currentBottomSheet = BottomSheetType.None)
-        }
-    }
+            // Venue interaction events
+            is ExploreContract.UiEvent.OnVenueClicked -> {
+                _uiState.update { it.copy(navigateToVenueDetail = event.venueId) }
+            }
+            is ExploreContract.UiEvent.OnVenueBookmarked -> {
+                bookmarkVenue(event.venueId)
+            }
 
-    /**
-     * Updates temporary filters for bottom sheet
-     */
-    fun updateTempFilters(filters: ExploreFilters) {
-        _screenState.update { currentState ->
-            currentState.copy(tempFilters = filters)
-        }
-    }
+            // Navigation events
+            is ExploreContract.UiEvent.OnNavigateToMap -> {
+                _uiState.update { it.copy(navigateToMap = true) }
+            }
+            is ExploreContract.UiEvent.OnNavigateToAdvancedSearch -> {
+                _uiState.update { it.copy(navigateToAdvancedSearch = true) }
+            }
+            is ExploreContract.UiEvent.OnNavigationHandled -> {
+                when (event.resetNavigation) {
+                    ExploreContract.NavigationReset.VENUE_DETAIL -> {
+                        _uiState.update { it.copy(navigateToVenueDetail = null) }
+                    }
+                    ExploreContract.NavigationReset.MAP -> {
+                        _uiState.update { it.copy(navigateToMap = false) }
+                    }
+                    ExploreContract.NavigationReset.ADVANCED_SEARCH -> {
+                        _uiState.update { it.copy(navigateToAdvancedSearch = false) }
+                    }
+                }
+            }
 
-    /**
-     * Applies temporary filters to actual filters
-     */
-    fun applyTempFilters() {
-        updateFilters(_screenState.value.tempFilters)
-        hideBottomSheet()
-    }
+            // List events
+            is ExploreContract.UiEvent.OnRefreshVenues -> {
+                refreshVenues()
+            }
+            is ExploreContract.UiEvent.OnLoadMoreVenues -> {
+                loadVenues(reset = false)
+            }
 
-    /**
-     * Navigates to venue detail screen
-     */
-    fun navigateToVenueDetail(venueId: String) {
-        viewModelScope.launch {
-            _events.emit(ExploreEvent.NavigateToVenueDetail(venueId))
-        }
-    }
+            // Permission events
+            is ExploreContract.UiEvent.OnRequestLocationPermission -> {
+                requestLocationPermission()
+            }
 
-    /**
-     * Navigates to map screen
-     */
-    fun navigateToMap() {
-        viewModelScope.launch {
-            _events.emit(ExploreEvent.NavigateToMap)
-        }
-    }
-
-    /**
-     * Navigates to advanced search screen
-     */
-    fun navigateToAdvancedSearch() {
-        viewModelScope.launch {
-            _events.emit(ExploreEvent.NavigateToAdvancedSearch)
+            // Error handling
+            is ExploreContract.UiEvent.OnClearError -> {
+                _uiState.update { it.copy(errorMessage = null) }
+            }
+            is ExploreContract.UiEvent.OnSnackbarDismissed -> {
+                _uiState.update { it.copy(snackbarMessage = null) }
+            }
         }
     }
 
