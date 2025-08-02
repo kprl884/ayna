@@ -116,8 +116,8 @@ fun AppNavigation() {
                 val screen: Screen.Detail = backStackEntry.toRoute()
                 val salonId = screen.salonId
 
-                // ViewModel is created here
-                val viewModel = DataModule.createSalonDetailViewModel(salonId)
+                // ViewModel is properly remembered to survive recompositions
+                val viewModel = remember(salonId) { DataModule.createSalonDetailViewModel(salonId) }
                 val uiState by viewModel.uiState.collectAsState()
 
                 LaunchedEffect(Unit) {
