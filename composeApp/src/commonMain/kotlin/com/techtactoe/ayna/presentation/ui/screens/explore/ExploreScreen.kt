@@ -45,9 +45,6 @@ import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.PriceRange
 import com.techtactoe.ayna.domain.model.Venue
-import com.techtactoe.ayna.domain.model.VenueService
-import com.techtactoe.ayna.domain.model.VenueType
-import com.techtactoe.ayna.domain.model.VenueLocation
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.ExploreSearchBar
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.FilterChipBar
@@ -479,76 +476,6 @@ private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
         is ExploreUiState.Empty -> uiState.filters
         else -> ExploreFilters()
     }
-}
-
-private fun sampleVenues(): List<Venue> {
-    return listOf(
-        Venue(
-            id = "1",
-            name = "Ayna Beauty Salon",
-            rating = 4.8,
-            reviewCount = 245,
-            district = "Beyoğlu",
-            city = "Istanbul",
-            images = listOf("https://example.com/image1.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s1",
-                    name = "Haircut & Style",
-                    price = 15000, // 150 TRY
-                    duration = 60
-                ),
-                VenueService(
-                    id = "s2",
-                    name = "Hair Color",
-                    price = 25000, // 250 TRY
-                    duration = 120
-                )
-            ),
-            venueType = VenueType.EVERYONE,
-            location = VenueLocation(
-                latitude = 41.0351,
-                longitude = 28.9831,
-                address = "Istiklal Caddesi, Beyoğlu"
-            )
-        ),
-        Venue(
-            id = "2",
-            name = "Elite Hair Studio",
-            rating = 4.6,
-            reviewCount = 189,
-            district = "Şişli",
-            city = "Istanbul",
-            images = listOf("https://example.com/image2.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s3",
-                    name = "Premium Cut",
-                    price = 20000, // 200 TRY
-                    duration = 75
-                )
-            ),
-            venueType = VenueType.EVERYONE
-        ),
-        Venue(
-            id = "3",
-            name = "Men's Grooming Lounge",
-            rating = 4.9,
-            reviewCount = 312,
-            district = "Kadıköy",
-            city = "Istanbul",
-            images = listOf("https://example.com/image3.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s4",
-                    name = "Beard Trim",
-                    price = 8000, // 80 TRY
-                    duration = 30
-                )
-            ),
-            venueType = VenueType.MALE_ONLY
-        )
-    )
 }
 
 @Preview

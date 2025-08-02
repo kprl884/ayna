@@ -1,10 +1,8 @@
 package com.techtactoe.ayna.presentation.ui.screens.explore
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.techtactoe.ayna.data.FakeExploreRepository
-import com.techtactoe.ayna.domain.model.*
+import com.techtactoe.ayna.domain.model.ExploreFilters
+import com.techtactoe.ayna.domain.model.Venue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,7 +39,7 @@ class ExploreViewModel(
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private var currentPage = 0
     private val allVenues = mutableListOf<Venue>()
-    
+
     /**
      * Handles user intents and updates the state accordingly
      */
@@ -58,7 +56,7 @@ class ExploreViewModel(
             is ExploreIntent.RequestLocationPermission -> requestLocationPermission()
         }
     }
-    
+
     /**
      * Shows bottom sheet with specified type
      */
@@ -70,7 +68,7 @@ class ExploreViewModel(
             )
         }
     }
-    
+
     /**
      * Hides currently shown bottom sheet
      */
@@ -79,7 +77,7 @@ class ExploreViewModel(
             currentState.copy(currentBottomSheet = BottomSheetType.None)
         }
     }
-    
+
     /**
      * Updates temporary filters for bottom sheet
      */
@@ -88,7 +86,7 @@ class ExploreViewModel(
             currentState.copy(tempFilters = filters)
         }
     }
-    
+
     /**
      * Applies temporary filters to actual filters
      */
@@ -96,7 +94,7 @@ class ExploreViewModel(
         updateFilters(_screenState.value.tempFilters)
         hideBottomSheet()
     }
-    
+
     /**
      * Navigates to venue detail screen
      */
@@ -105,7 +103,7 @@ class ExploreViewModel(
             _events.emit(ExploreEvent.NavigateToVenueDetail(venueId))
         }
     }
-    
+
     /**
      * Navigates to map screen
      */
@@ -114,7 +112,7 @@ class ExploreViewModel(
             _events.emit(ExploreEvent.NavigateToMap)
         }
     }
-    
+
     /**
      * Navigates to advanced search screen
      */
@@ -123,7 +121,7 @@ class ExploreViewModel(
             _events.emit(ExploreEvent.NavigateToAdvancedSearch)
         }
     }
-    
+
     private fun loadVenues(reset: Boolean) {
         if (reset) {
             currentPage = 0
@@ -139,7 +137,7 @@ class ExploreViewModel(
                 }
             }
         }
-        
+
         val currentFilters = getCurrentFilters(_screenState.value.uiState)
 
         viewModelScope.launch {
@@ -196,7 +194,7 @@ class ExploreViewModel(
             }
         }
     }
-    
+
     private fun refreshVenues() {
         _screenState.update { screenState ->
             val currentUiState = screenState.uiState
@@ -210,7 +208,7 @@ class ExploreViewModel(
         }
         loadVenues(reset = true)
     }
-    
+
     private fun updateFilters(filters: ExploreFilters) {
         _screenState.update { screenState ->
             when (val currentUiState = screenState.uiState) {
@@ -219,16 +217,19 @@ class ExploreViewModel(
                         uiState = currentUiState.copy(filters = filters, isLoading = false)
                     )
                 }
+
                 is ExploreUiState.Error -> {
                     screenState.copy(
                         uiState = currentUiState.copy(filters = filters)
                     )
                 }
+
                 is ExploreUiState.Empty -> {
                     screenState.copy(
                         uiState = currentUiState.copy(filters = filters)
                     )
                 }
+
                 else -> {
                     // For loading state, just load with new filters
                     screenState
@@ -237,7 +238,7 @@ class ExploreViewModel(
         }
         loadVenues(reset = true)
     }
-    
+
     private fun updateSearchQuery(query: String) {
         val currentFilters = getCurrentFilters(_screenState.value.uiState)
         updateFilters(currentFilters.copy(searchQuery = query))
@@ -247,22 +248,23 @@ class ExploreViewModel(
         val currentFilters = getCurrentFilters(_screenState.value.uiState)
         updateFilters(currentFilters.copy(selectedCity = city))
     }
-    
+
     private fun clearFilters() {
         updateFilters(ExploreFilters())
     }
-    
+
     private fun bookmarkVenue(venueId: String) {
         viewModelScope.launch {
             try {
                 repository.bookmarkVenue(venueId)
                 _events.emit(ExploreEvent.ShowSnackbar("Venue bookmarked"))
             } catch (e: Exception) {
+                println("Failed to bookmark venue: $e")
                 _events.emit(ExploreEvent.ShowSnackbar("Failed to bookmark venue"))
             }
         }
     }
-    
+
     private fun requestLocationPermission() {
         // This would be implemented with actual location permission logic
         // In a real app, this would call platform-specific permission request methods
@@ -280,6 +282,7 @@ class ExploreViewModel(
                                     uiState = uiState.copy(isLocationPermissionGranted = true)
                                 )
                             }
+
                             else -> currentState
                         }
                     }
@@ -290,11 +293,12 @@ class ExploreViewModel(
                     _events.emit(ExploreEvent.ShowSnackbar("Location permission denied. Showing general results."))
                 }
             } catch (e: Exception) {
+                println("Failed to request location permission: ${e.message}")
                 _events.emit(ExploreEvent.ShowSnackbar("Failed to request location permission"))
             }
         }
     }
-    
+
     private fun getCurrentFilters(uiState: ExploreUiState): ExploreFilters {
         return when (uiState) {
             is ExploreUiState.Success -> uiState.filters
@@ -303,74 +307,4 @@ class ExploreViewModel(
             else -> ExploreFilters()
         }
     }
-}
-
-fun sampleVenues(): List<Venue> {
-    return listOf(
-        Venue(
-            id = "1",
-            name = "Ayna Beauty Salon",
-            rating = 4.8,
-            reviewCount = 245,
-            district = "Beyoğlu",
-            city = "Istanbul",
-            images = listOf("https://example.com/image1.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s1",
-                    name = "Haircut & Style",
-                    price = 15000, // 150 TRY
-                    duration = 60
-                ),
-                VenueService(
-                    id = "s2",
-                    name = "Hair Color",
-                    price = 25000, // 250 TRY
-                    duration = 120
-                )
-            ),
-            venueType = VenueType.EVERYONE,
-            location = VenueLocation(
-                latitude = 41.0351,
-                longitude = 28.9831,
-                address = "Istiklal Caddesi, Beyoğlu"
-            )
-        ),
-        Venue(
-            id = "2",
-            name = "Elite Hair Studio",
-            rating = 4.6,
-            reviewCount = 189,
-            district = "Şişli",
-            city = "Istanbul",
-            images = listOf("https://example.com/image2.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s3",
-                    name = "Premium Cut",
-                    price = 20000, // 200 TRY
-                    duration = 75
-                )
-            ),
-            venueType = VenueType.EVERYONE
-        ),
-        Venue(
-            id = "3",
-            name = "Men's Grooming Lounge",
-            rating = 4.9,
-            reviewCount = 312,
-            district = "Kadıköy",
-            city = "Istanbul",
-            images = listOf("https://example.com/image3.jpg"),
-            services = listOf(
-                VenueService(
-                    id = "s4",
-                    name = "Beard Trim",
-                    price = 8000, // 80 TRY
-                    duration = 30
-                )
-            ),
-            venueType = VenueType.MALE_ONLY
-        )
-    )
 }
