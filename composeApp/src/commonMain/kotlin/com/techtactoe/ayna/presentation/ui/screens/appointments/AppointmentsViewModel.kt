@@ -53,20 +53,12 @@ class AppointmentsViewModel(
                 _uiState.update { it.copy(navigateToSearch = true) }
             }
 
-            is AppointmentsContract.UiEvent.OnNavigationHandled -> {
-                when (event.resetNavigation) {
-                    AppointmentsContract.NavigationReset.SEARCH -> {
-                        _uiState.update { it.copy(navigateToSearch = false) }
-                    }
-
-                    AppointmentsContract.NavigationReset.APPOINTMENT_DETAIL -> {
-                        _uiState.update { it.copy(navigateToAppointmentDetail = null) }
-                    }
-                }
-            }
-
             is AppointmentsContract.UiEvent.OnClearError -> {
                 _uiState.update { it.copy(errorMessage = null) }
+            }
+
+            AppointmentsContract.UiEvent.OnClearNavigateState -> {
+              _uiState.update { it.copy(navigateToSearch = false, navigateToAppointmentDetail = null) }
             }
         }
     }

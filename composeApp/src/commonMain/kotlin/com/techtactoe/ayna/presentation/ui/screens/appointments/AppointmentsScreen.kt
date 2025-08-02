@@ -13,15 +13,14 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavController
 import com.techtactoe.ayna.designsystem.ErrorContent
 import com.techtactoe.ayna.designsystem.LoadingContent
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.appointments.component.EmptyAppointmentsContent
+import com.techtactoe.ayna.presentation.ui.screens.appointments.model.AppointmentTab
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -32,22 +31,18 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun AppointmentsScreen(
     uiState: AppointmentsContract.UiState,
     onEvent: (AppointmentsContract.UiEvent) -> Unit,
-    navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToAppointmentDetail: (String) -> Unit,
+    navigateToSearch: () -> Unit,
 ) {
-    // Handle navigation effects
-    LaunchedEffect(uiState.navigateToSearch) {
-        if (uiState.navigateToSearch) {
-            navController.navigate("explore")
-            onEvent(AppointmentsContract.UiEvent.OnNavigationHandled(AppointmentsContract.NavigationReset.SEARCH))
-        }
+    if (uiState.navigateToSearch) {
+        navigateToSearch()
+        onEvent(AppointmentsContract.UiEvent.OnClearNavigateState)
     }
 
-    LaunchedEffect(uiState.navigateToAppointmentDetail) {
-        uiState.navigateToAppointmentDetail?.let { appointmentId ->
-            navController.navigate("appointment_detail/$appointmentId")
-            onEvent(AppointmentsContract.UiEvent.OnNavigationHandled(AppointmentsContract.NavigationReset.APPOINTMENT_DETAIL))
-        }
+    uiState.navigateToAppointmentDetail?.let { appointmentId ->
+        navigateToAppointmentDetail(appointmentId)
+        onEvent(AppointmentsContract.UiEvent.OnClearNavigateState)
     }
 
     Scaffold(
@@ -95,7 +90,7 @@ fun AppointmentsScreen(
                             containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.primary
                         ) {
-                            AppointmentsContract.AppointmentTab.entries.forEach { tab ->
+                            AppointmentTab.entries.forEach { tab ->
                                 Tab(
                                     selected = uiState.selectedTab == tab,
                                     onClick = {
@@ -108,8 +103,8 @@ fun AppointmentsScreen(
                                     text = {
                                         Text(
                                             text = when (tab) {
-                                                AppointmentsContract.AppointmentTab.UPCOMING -> "Upcoming"
-                                                AppointmentsContract.AppointmentTab.PAST -> "Past"
+                                                AppointmentTab.UPCOMING -> "Upcoming"
+                                                AppointmentTab.PAST -> "Past"
                                             },
                                             style = MaterialTheme.typography.labelLarge
                                         )
@@ -128,14 +123,6 @@ fun AppointmentsScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun EmptyAppointmentsScreenPreview() {
-    AynaAppTheme {
-        EmptyAppointmentsContent(onSearchSalonsClick = {})
     }
 }
 

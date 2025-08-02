@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.theme.Spacing
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EmptyAppointmentsContent(
@@ -61,5 +63,13 @@ fun EmptyAppointmentsContent(
                 modifier = Modifier.padding(vertical = Spacing.xs)
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun EmptyAppointmentsScreenPreview() {
+    AynaAppTheme {
+        EmptyAppointmentsContent(onSearchSalonsClick = {})
     }
 }
