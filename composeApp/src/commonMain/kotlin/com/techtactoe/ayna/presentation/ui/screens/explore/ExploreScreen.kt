@@ -202,7 +202,7 @@ fun ExploreScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ExploreTopBar(
-    uiState: ExploreUiState,
+    filters: ExploreFilters,
     @Suppress("UNUSED_PARAMETER") scrollBehavior: TopAppBarScrollBehavior,
     onSearchBarClick: () -> Unit,
     onMapClick: () -> Unit,
@@ -212,7 +212,6 @@ private fun ExploreTopBar(
     onTypeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val currentFilters = getCurrentFilters(uiState)
 
     Column(
         modifier = modifier
