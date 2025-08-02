@@ -69,9 +69,14 @@ fun AppNavigation() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable<Screen.Home> {
-                HomeScreen(onSalonClick = { salonId ->
-                    navController.navigate(Screen.Detail(salonId))
-                })
+                val viewModel = DataModule.createHomeViewModel()
+                val uiState by viewModel.uiState.collectAsState()
+
+                HomeScreen(
+                    uiState = uiState,
+                    onEvent = viewModel::onEvent,
+                    navController = navController
+                )
             }
             composable<Screen.Search> { SearchScreen() }
             composable<Screen.Explore> {
