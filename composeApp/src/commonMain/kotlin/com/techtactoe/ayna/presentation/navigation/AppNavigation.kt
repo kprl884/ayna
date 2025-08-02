@@ -114,15 +114,14 @@ fun AppNavigation() {
                 // Get salon detail data
                 val salonDetail = MockSalonDetailRepository.getSalonDetail(salonId)
 
+                val viewModel = DataModule.createSalonDetailViewModel()
+                val uiState by viewModel.uiState.collectAsState()
+
                 SalonDetailScreen(
-                    salonDetail = salonDetail,
-                    onBackClick = { navController.popBackStack() },
-                    onShareClick = { /* Handle share */ },
-                    onFavoriteClick = { /* Handle favorite */ },
-                    onBookNowClick = { /* Handle booking */ },
-                    onServiceBookClick = { serviceId ->
-                        navController.navigate(Screen.SelectTime(salonId, serviceId))
-                    }
+                    uiState = uiState,
+                    onEvent = viewModel::onEvent,
+                    salonId = salonId,
+                    navController = navController
                 )
             }
 
