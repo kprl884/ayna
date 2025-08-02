@@ -1,6 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.screens.salon
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,18 +9,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.domain.model.SalonDetail
-import com.techtactoe.ayna.presentation.theme.AynaColors
+import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
+import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.presentation.theme.brandPurple
 import com.techtactoe.ayna.presentation.ui.components.AboutSection
 import com.techtactoe.ayna.presentation.ui.components.BuySection
 import com.techtactoe.ayna.presentation.ui.components.FloatingBookingBar
@@ -32,23 +36,63 @@ import com.techtactoe.ayna.presentation.ui.components.TeamSection
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.SalonBasicInfo
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * Screen displaying detailed information about a salon
+ * Following the golden standard MVVM pattern
+ */
 @Composable
 fun SalonDetailScreen(
-    salonDetail: SalonDetail,
-    onBackClick: () -> Unit,
-    onShareClick: () -> Unit,
-    onFavoriteClick: () -> Unit,
-    onBookNowClick: () -> Unit,
-    onServiceBookClick: (serviceId: String) -> Unit = { },
+    uiState: SalonDetailContract.UiState,
+    onEvent: (SalonDetailContract.UiEvent) -> Unit,
+    salonId: String,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberLazyListState()
-    var selectedTab by remember { mutableStateOf(SalonDetailTab.SERVICES) }
+    // Initialize with salon ID
+    LaunchedEffect(salonId) {
+        onEvent(SalonDetailContract.UiEvent.OnInitialize(salonId))
+    }
 
+    // Handle navigation effects
+    LaunchedEffect(uiState.navigateBack) {
+        if (uiState.navigateBack) {
+            navController.navigateUp()
+            onEvent(SalonDetailContract.UiEvent.OnNavigationHandled(SalonDetailContract.NavigationReset.BACK))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToBooking) {
+        if (uiState.navigateToBooking) {
+            navController.navigate("select_time/${uiState.salonId}")
+            onEvent(SalonDetailContract.UiEvent.OnNavigationHandled(SalonDetailContract.NavigationReset.BOOKING))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToServiceBooking) {
+        uiState.navigateToServiceBooking?.let { serviceId ->
+            navController.navigate("select_time/${uiState.salonId}/$serviceId")
+            onEvent(SalonDetailContract.UiEvent.OnNavigationHandled(SalonDetailContract.NavigationReset.SERVICE_BOOKING))
+        }
+    }
+
+    LaunchedEffect(uiState.shareContent) {
+        uiState.shareContent?.let { content ->
+            // TODO: Implement actual sharing functionality
+            onEvent(SalonDetailContract.UiEvent.OnNavigationHandled(SalonDetailContract.NavigationReset.SHARE))
+        }
+    }
+
+    val scrollState = rememberLazyListState()
+
+    // Monitor scroll state for sticky tab bar
     val showStickyTabBar by remember {
         derivedStateOf {
             scrollState.firstVisibleItemIndex > 0 || scrollState.firstVisibleItemScrollOffset > 100
         }
+    }
+
+    LaunchedEffect(showStickyTabBar) {
+        onEvent(SalonDetailContract.UiEvent.OnScrollStateChanged(showStickyTabBar))
     }
 
     Scaffold(
