@@ -92,18 +92,18 @@ fun HomeScreenContent(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(AynaColors.White)
+                            .background(MaterialTheme.colorScheme.background)
                             .verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(topPadding))
 
                         UserHeader(
-                            userName = "John"
+                            userName = uiState.userName
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        if (state.salons.isNotEmpty()) {
+                        if (uiState.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
 
                             Spacer(modifier = Modifier.height(16.dp))
