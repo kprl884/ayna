@@ -95,12 +95,86 @@ fun SalonDetailScreen(
         onEvent(SalonDetailContract.UiEvent.OnScrollStateChanged(showStickyTabBar))
     }
 
+    when {
+        uiState.isLoading -> {
+            LoadingContent()
+        }
+        uiState.errorMessage != null -> {
+            ErrorContent(
+                message = uiState.errorMessage,
+                onRetry = { onEvent(SalonDetailContract.UiEvent.OnInitialize(salonId)) },
+                onClearError = { onEvent(SalonDetailContract.UiEvent.OnClearError) }
+            )
+        }
+        uiState.salonDetail != null -> {
+            SalonDetailContent(
+                uiState = uiState,
+                onEvent = onEvent,
+                scrollState = scrollState,
+                modifier = modifier
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.brandPurple)
+    }
+}
+
+@Composable
+private fun ErrorContent(
+    message: String,
+    onRetry: () -> Unit,
+    onClearError: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Spacing.xl),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = Spacing.md)
+        )
+
+        androidx.compose.material3.Button(
+            onClick = onRetry,
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(
+                "Try again",
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+@Composable
+private fun SalonDetailContent(
+    uiState: SalonDetailContract.UiState,
+    onEvent: (SalonDetailContract.UiEvent) -> Unit,
+    scrollState: androidx.compose.foundation.lazy.LazyListState,
+    modifier: Modifier = Modifier
+) {
+    val salonDetail = uiState.salonDetail!!
+
     Scaffold(
-        containerColor = AynaColors.White,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             FloatingBookingBar(
                 serviceCount = salonDetail.services.size,
-                onBookNowClick = onBookNowClick
+                onBookNowClick = { onEvent(SalonDetailContract.UiEvent.OnBookNowClick) }
             )
         }
     ) { paddingValues ->
@@ -116,9 +190,9 @@ fun SalonDetailScreen(
                 item {
                     ImageCarousel(
                         images = salonDetail.images,
-                        onBackClick = onBackClick,
-                        onShareClick = onShareClick,
-                        onFavoriteClick = onFavoriteClick
+                        onBackClick = { onEvent(SalonDetailContract.UiEvent.OnBackClick) },
+                        onShareClick = { onEvent(SalonDetailContract.UiEvent.OnShareClick) },
+                        onFavoriteClick = { onEvent(SalonDetailContract.UiEvent.OnFavoriteClick) }
                     )
                 }
 
@@ -137,7 +211,9 @@ fun SalonDetailScreen(
                 item {
                     ServicesSection(
                         services = salonDetail.services,
-                        onServiceBookClick = onServiceBookClick
+                        onServiceBookClick = { serviceId ->
+                            onEvent(SalonDetailContract.UiEvent.OnServiceBookClick(serviceId))
+                        }
                     )
                 }
 
@@ -171,18 +247,18 @@ fun SalonDetailScreen(
             }
 
             // Sticky tab bar
-            if (showStickyTabBar) {
+            if (uiState.showStickyTabBar) {
                 StickyTabBar(
-                    selectedTab = selectedTab,
+                    selectedTab = uiState.selectedTab,
                     onTabClick = { tab ->
-                        selectedTab = tab
+                        onEvent(SalonDetailContract.UiEvent.OnTabSelected(tab))
                         // TODO: Scroll to the corresponding section
                     },
                     modifier = Modifier.fillMaxWidth(),
                     salonName = salonDetail.name,
-                    onBackClick = onBackClick,
-                    onShareClick = onShareClick,
-                    onFavoriteClick = onFavoriteClick
+                    onBackClick = { onEvent(SalonDetailContract.UiEvent.OnBackClick) },
+                    onShareClick = { onEvent(SalonDetailContract.UiEvent.OnShareClick) },
+                    onFavoriteClick = { onEvent(SalonDetailContract.UiEvent.OnFavoriteClick) }
                 )
             }
         }
