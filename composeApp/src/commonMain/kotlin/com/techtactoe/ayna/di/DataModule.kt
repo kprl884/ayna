@@ -22,7 +22,7 @@ import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationVi
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailViewModel
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeViewModel
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistViewModel
-import com.techtactoe.ayna.presentation.viewmodel.HomeViewModel
+import com.techtactoe.ayna.presentation.ui.screens.home.HomeViewModel
 
 /**
  * Dependency injection configuration for the Clean Architecture layers

@@ -10,66 +10,38 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Screen {
-    val route: String
+    @Serializable
+    data object Home : Screen
 
     @Serializable
-    data object Home : Screen {
-        override val route: String = "home"
-    }
+    data object Search : Screen
 
     @Serializable
-    data object Search : Screen {
-        override val route: String = "search"
-    }
+    data object Explore : Screen
 
     @Serializable
-    data object Explore : Screen {
-        override val route: String = "explore"
-    }
+    data object ExploreMap : Screen
 
     @Serializable
-    data object ExploreMap : Screen {
-        override val route: String = "explore_map"
-    }
+    data object AdvancedSearch : Screen
 
     @Serializable
-    data object AdvancedSearch : Screen {
-        override val route: String = "advanced_search"
-    }
-    @Serializable
-    data object Appointments : Screen {
-        override val route: String = "appointments"
-    }
+    data object Appointments : Screen
 
     @Serializable
-    data object Profile : Screen {
-        override val route: String = "profile"
-    }
+    data object Profile : Screen
 
     @Serializable
-    data class Detail(val salonId: String) : Screen {
-        override val route: String = "detail"
-    }
+    data class Detail(val salonId: String) : Screen
 
     @Serializable
-    data class SalonDetailScreen(val salonId: String) : Screen {
-        override val route: String = "salon_detail"
-    }
+    data class SelectTime(val salonId: String, val serviceId: String) : Screen
 
     @Serializable
-    data class SelectTime(val salonId: String, val serviceId: String) : Screen {
-        override val route: String = "select_time"
-    }
+    data class JoinWaitlist(val salonId: String, val serviceId: String) : Screen
 
     @Serializable
-    data class JoinWaitlist(val salonId: String, val serviceId: String) : Screen {
-        override val route: String = "join_waitlist"
-    }
-
-    @Serializable
-    data class BookingConfirmation(val appointmentId: String) : Screen {
-        override val route: String = "booking_confirmation"
-    }
+    data class BookingConfirmation(val appointmentId: String) : Screen
 }
 
 /**
@@ -82,11 +54,5 @@ val Screen.icon: ImageVector?
         is Screen.Explore -> Icons.Default.Search
         is Screen.Appointments -> Icons.Default.DateRange
         is Screen.Profile -> Icons.Default.AccountCircle
-        is Screen.Detail -> null
-        is Screen.SalonDetailScreen -> null
-        is Screen.ExploreMap -> null
-        is Screen.AdvancedSearch -> null
-        is Screen.SelectTime -> null
-        is Screen.JoinWaitlist -> null
-        is Screen.BookingConfirmation -> null
+        else -> null
     }

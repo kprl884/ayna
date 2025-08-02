@@ -1,11 +1,10 @@
-package com.techtactoe.ayna.presentation.viewmodel
+package com.techtactoe.ayna.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.domain.usecase.GetNearbySalonsUseCase
 import com.techtactoe.ayna.domain.usecase.GetRecommendedSalonsUseCase
 import com.techtactoe.ayna.domain.util.Resource
-import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +17,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val getRecommendedSalonsUseCase: GetRecommendedSalonsUseCase,
     private val getNearbySalonsUseCase: GetNearbySalonsUseCase
-
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeContract.UiState())
@@ -46,32 +44,12 @@ class HomeViewModel(
                 _uiState.update { it.copy(searchQuery = event.query) }
             }
 
-            is HomeContract.UiEvent.OnSearchClick -> {
-                _uiState.update { it.copy(navigateToSearch = true) }
-            }
-
-            is HomeContract.UiEvent.OnSalonClick -> {
-                _uiState.update { it.copy(navigateToSalonDetail = event.salonId) }
-            }
-
+            // Navigation event'leri artık UI'da handle ediliyor
+            is HomeContract.UiEvent.OnSearchClick,
+            is HomeContract.UiEvent.OnSalonClick,
             is HomeContract.UiEvent.OnProfileClick -> {
-                _uiState.update { it.copy(navigateToProfile = true) }
-            }
-
-            is HomeContract.UiEvent.OnNavigationHandled -> {
-                when (event.resetNavigation) {
-                    HomeContract.NavigationReset.SALON_DETAIL -> {
-                        _uiState.update { it.copy(navigateToSalonDetail = null) }
-                    }
-
-                    HomeContract.NavigationReset.SEARCH -> {
-                        _uiState.update { it.copy(navigateToSearch = false) }
-                    }
-
-                    HomeContract.NavigationReset.PROFILE -> {
-                        _uiState.update { it.copy(navigateToProfile = false) }
-                    }
-                }
+                // Bu event'ler UI katmanında handle edilecek
+                // ViewModel'de bir işlem yapmaya gerek yok
             }
 
             is HomeContract.UiEvent.OnClearError -> {
@@ -121,39 +99,46 @@ class HomeViewModel(
         }
     }
 
-    fun loadSalons() {
-        _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+    /**
+     * Load nearby salons
+     */
+    private fun loadSalons() {
+        _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-        // Use the lifecycle-aware viewModelScope
         viewModelScope.launch {
             try {
                 val result = getNearbySalonsUseCase()
                 result.fold(
                     onSuccess = { salons ->
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            salons = salons,
-                            errorMessage = null
-                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                salons = salons,
+                                errorMessage = null
+                            )
+                        }
                     },
                     onFailure = { exception ->
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            salons = emptyList(),
-                            errorMessage = exception.message ?: "Bilinmeyen bir hata oluştu"
-                        )
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                salons = emptyList(),
+                                errorMessage = exception.message ?: "Bilinmeyen bir hata oluştu"
+                            )
+                        }
                     }
                 )
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    salons = emptyList(),
-                    errorMessage = e.message ?: "Bilinmeyen bir hata oluştu"
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        salons = emptyList(),
+                        errorMessage = e.message ?: "Bilinmeyen bir hata oluştu"
+                    )
+                }
             }
         }
     }
-
 
     /**
      * Refresh salons

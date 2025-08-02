@@ -1,8 +1,8 @@
 package com.techtactoe.ayna.presentation.ui.screens.home
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
+import com.techtactoe.ayna.presentation.navigation.Screen
 
 /**
  * Screen displaying the home content with recommended salons
@@ -14,30 +14,23 @@ fun HomeScreen(
     onEvent: (HomeContract.UiEvent) -> Unit,
     navController: NavController
 ) {
-    // Handle navigation effects
-    LaunchedEffect(uiState.navigateToSalonDetail) {
-        uiState.navigateToSalonDetail?.let { salonId ->
-            navController.navigate("salon_detail/$salonId")
-            onEvent(HomeContract.UiEvent.OnNavigationHandled(HomeContract.NavigationReset.SALON_DETAIL))
-        }
-    }
-
-    LaunchedEffect(uiState.navigateToSearch) {
-        if (uiState.navigateToSearch) {
-            navController.navigate("explore")
-            onEvent(HomeContract.UiEvent.OnNavigationHandled(HomeContract.NavigationReset.SEARCH))
-        }
-    }
-
-    LaunchedEffect(uiState.navigateToProfile) {
-        if (uiState.navigateToProfile) {
-            navController.navigate("profile")
-            onEvent(HomeContract.UiEvent.OnNavigationHandled(HomeContract.NavigationReset.PROFILE))
-        }
-    }
-
     HomeScreenContent(
         uiState = uiState,
-        onEvent = onEvent
+        onEvent = { event ->
+            when (event) {
+                is HomeContract.UiEvent.OnSalonClick -> {
+                    navController.navigate(Screen.Detail(event.salonId))
+                }
+                is HomeContract.UiEvent.OnSearchClick -> {
+                    navController.navigate(Screen.Explore)
+                }
+                is HomeContract.UiEvent.OnProfileClick -> {
+                    navController.navigate(Screen.Profile)
+                }
+                else -> {
+                    onEvent(event)
+                }
+            }
+        }
     )
 }
