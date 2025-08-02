@@ -155,7 +155,7 @@ private fun LoadingContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = Color(0xFF7B61FF))
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.brandPurple)
     }
 }
 
