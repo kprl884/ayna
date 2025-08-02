@@ -132,7 +132,7 @@ fun SalonCard(
 fun SalonCardPreview() {
     val mockSalon = Salon(
         id = "1",
-        name = "Emre's Barbershop Dolapdere",
+        name = "Barbershop Dolapdere",
         location = Location(
             address = "Dolapdere Mahallesi, 34384 Istanbul",
             city = "Istanbul",

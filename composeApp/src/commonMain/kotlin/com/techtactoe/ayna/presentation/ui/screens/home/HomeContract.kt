@@ -14,6 +14,7 @@ interface HomeContract {
     data class UiState(
         // Data
         val salons: List<Salon> = emptyList(),
+        val salonsRecommended: List<Salon> = emptyList(),
 
         // Loading states
         val isLoading: Boolean = false,

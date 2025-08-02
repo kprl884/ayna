@@ -79,7 +79,7 @@ class HomeViewModel(
                             it.copy(
                                 isLoading = false,
                                 isRefreshing = false,
-                                salons = result.data ?: emptyList(),
+                                salonsRecommended = result.data ?: emptyList(),
                                 errorMessage = null
                             )
                         }
