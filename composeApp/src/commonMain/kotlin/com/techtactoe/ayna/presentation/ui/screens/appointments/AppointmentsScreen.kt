@@ -411,3 +411,14 @@ private fun EmptyAppointmentsScreenPreview() {
         EmptyAppointmentsContent(onSearchSalonsClick = {})
     }
 }
+
+@Preview
+@Composable
+private fun AppointmentsScreenPreview() {
+    AynaAppTheme {
+        Surface {
+            // Preview placeholder - would normally show appointments content
+            EmptyAppointmentsContent(onSearchSalonsClick = {})
+        }
+    }
+}
