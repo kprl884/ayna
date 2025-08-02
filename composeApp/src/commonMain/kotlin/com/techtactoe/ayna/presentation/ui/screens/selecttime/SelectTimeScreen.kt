@@ -70,7 +70,22 @@ fun SelectTimeScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(salonId, serviceId) {
-        viewModel.initialize(salonId, serviceId)
+        viewModel.onEvent(SelectTimeContract.UiEvent.OnInitialize(salonId, serviceId))
+    }
+
+    // Handle navigation events
+    LaunchedEffect(uiState.appointmentCreated) {
+        uiState.appointmentCreated?.let { appointmentId ->
+            onTimeSelected(uiState.selectedTimeSlot!!)
+            viewModel.onEvent(SelectTimeContract.UiEvent.OnNavigationHandled(SelectTimeContract.NavigationReset.APPOINTMENT_CREATED))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToWaitlist) {
+        if (uiState.navigateToWaitlist) {
+            onJoinWaitlistClick()
+            viewModel.onEvent(SelectTimeContract.UiEvent.OnNavigationHandled(SelectTimeContract.NavigationReset.WAITLIST))
+        }
     }
 
     Scaffold(
