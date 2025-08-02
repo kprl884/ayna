@@ -204,7 +204,7 @@ fun AppNavigation() {
 
             composable<Screen.BookingConfirmation> { backStackEntry ->
                 val screen: Screen.BookingConfirmation = backStackEntry.toRoute()
-                val viewModel = DataModule.createBookingConfirmationViewModel()
+                val viewModel = remember { DataModule.createBookingConfirmationViewModel() }
                 val uiState by viewModel.uiState.collectAsState()
 
                 BookingConfirmationScreen(
