@@ -5,40 +5,34 @@ import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.Venue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for the Explore screen handling venue discovery and filtering
+ * ViewModel for the Explore screen following the standardized MVVM pattern
+ * Single StateFlow for UI state and single onEvent function for all user interactions
  */
 class ExploreViewModel(
     private val repository: FakeExploreRepository = FakeExploreRepository()
 ) {
-    private val _screenState = MutableStateFlow(
-        ExploreScreenState(
-            uiState = ExploreUiState.Success(
-                isLoading = false,
-                venues = sampleVenues(),
-                isRefreshing = false,
-                hasMorePages = true,
-                filters = ExploreFilters(),
-                isLocationPermissionGranted = false
-            )
+    private val _uiState = MutableStateFlow(
+        ExploreContract.UiState(
+            venues = sampleVenues(),
+            isSuccess = true
         )
     )
-    val screenState: StateFlow<ExploreScreenState> = _screenState.asStateFlow()
-
-    private val _events = MutableSharedFlow<ExploreEvent>()
-    val events = _events.asSharedFlow()
+    val uiState: StateFlow<ExploreContract.UiState> = _uiState.asStateFlow()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private var currentPage = 0
     private val allVenues = mutableListOf<Venue>()
+
+    init {
+        loadVenues(reset = true)
+    }
 
     /**
      * Handles user intents and updates the state accordingly
