@@ -24,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.techtactoe.ayna.presentation.theme.AynaColors
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
+import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 
 @Composable
 fun HomeScreenContent(
@@ -77,7 +79,7 @@ fun HomeScreenContent(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = uiState.errorMessage,
+                                text = uiState.errorMessage ?: "Unknown error",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -131,12 +133,7 @@ fun HomeScreenContent(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(uiState.salons.take(2)) { salon ->
-                                    SalonCard(
-                                        salon = salon,
-                                        onSalonClick = { salonId ->
-                                            onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
-                                        }
-                                    )
+                                    SalonCard(salon = salon)
                                 }
                             }
 
