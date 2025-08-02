@@ -5,24 +5,121 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.presentation.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
- * Placeholder screen for booking confirmation
+ * Screen displaying booking confirmation details
+ * Following the golden standard MVVM pattern
  */
 @Composable
 fun BookingConfirmationScreen(
+    uiState: BookingConfirmationContract.UiState,
+    onEvent: (BookingConfirmationContract.UiEvent) -> Unit,
     appointmentId: String,
-    onGoToAppointmentsClick: () -> Unit,
-    onDoneClick: () -> Unit,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    // Initialize with appointment ID
+    LaunchedEffect(appointmentId) {
+        onEvent(BookingConfirmationContract.UiEvent.OnInitialize(appointmentId))
+    }
+
+    // Handle navigation effects
+    LaunchedEffect(uiState.navigateToAppointments) {
+        if (uiState.navigateToAppointments) {
+            navController.navigate("appointments") {
+                popUpTo("home") { inclusive = false }
+            }
+            onEvent(BookingConfirmationContract.UiEvent.OnNavigationHandled(BookingConfirmationContract.NavigationReset.APPOINTMENTS))
+        }
+    }
+
+    LaunchedEffect(uiState.navigateToHome) {
+        if (uiState.navigateToHome) {
+            navController.navigate("home") {
+                popUpTo("home") { inclusive = true }
+            }
+            onEvent(BookingConfirmationContract.UiEvent.OnNavigationHandled(BookingConfirmationContract.NavigationReset.HOME))
+        }
+    }
+
+    when {
+        uiState.isLoading -> {
+            LoadingContent()
+        }
+        uiState.errorMessage != null -> {
+            ErrorContent(
+                message = uiState.errorMessage,
+                onRetry = { onEvent(BookingConfirmationContract.UiEvent.OnInitialize(appointmentId)) },
+                onClearError = { onEvent(BookingConfirmationContract.UiEvent.OnClearError) }
+            )
+        }
+        uiState.isConfirmed -> {
+            ConfirmationContent(
+                uiState = uiState,
+                onEvent = onEvent,
+                modifier = modifier
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.brandPurple)
+    }
+}
+
+@Composable
+private fun ErrorContent(
+    message: String,
+    onRetry: () -> Unit,
+    onClearError: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Spacing.xl),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(bottom = Spacing.md)
+        )
+
+        Button(
+            onClick = onRetry,
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(
+                "Try again",
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+}
+
+@Composable
+private fun ConfirmationContent(
+    uiState: BookingConfirmationContract.UiState,
+    onEvent: (BookingConfirmationContract.UiEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
