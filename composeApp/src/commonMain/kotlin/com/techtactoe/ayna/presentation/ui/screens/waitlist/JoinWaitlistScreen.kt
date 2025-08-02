@@ -359,14 +359,14 @@ private fun DateSelector(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(Spacing.xxxl - Spacing.sm)
             .border(
                 1.dp,
                 MaterialTheme.colorScheme.outline,
-                RoundedCornerShape(8.dp)
+                MaterialTheme.shapes.small
             )
             .clickable { onClick() }
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = Spacing.md),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
@@ -376,11 +376,13 @@ private fun DateSelector(
         ) {
             Text(
                 text = selectedDate,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "Select date"
+                contentDescription = "Select date",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
