@@ -25,9 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.domain.model.NotificationUiState
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
+import com.techtactoe.ayna.presentation.ui.components.SalonCardViewState
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
+import com.techtactoe.ayna.presentation.ui.components.UserHeaderViewState
 
 @Composable
 fun HomeScreenContent(
@@ -97,10 +101,13 @@ fun HomeScreenContent(
                         Spacer(modifier = Modifier.height(topPadding))
 
                         UserHeader(
-                            userName = uiState.userName,
-                            notificationState = com.techtactoe.ayna.domain.model.NotificationUiState(
-                                hasUnreadNotifications = true, // TODO: Get from actual state
-                                unreadCount = 3 // TODO: Get from actual state
+                            UserHeaderViewState(
+                                userName = uiState.userName,
+
+                                notificationState = NotificationUiState(
+                                    hasUnreadNotifications = true,
+                                    unreadCount = 3
+                                )
                             ),
                             onNotificationClick = {
                                 onEvent(HomeContract.UiEvent.OnNavigateToNotifications)
@@ -120,7 +127,19 @@ fun HomeScreenContent(
                             ) {
                                 items(uiState.salons) { salon ->
                                     SalonCard(
-                                        salon = salon,
+                                        SalonCardViewState(
+                                            id = "1",
+                                            name = "Barbershop Dolapdere",
+                                            address = "Dolapdere Mahallesi, 34384 Istanbul",
+                                            rating = 5.0,
+                                            reviewCount = 69,
+                                            imageUrl = "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800",
+                                            tags = listOf(
+                                                StringResources.barber_text,
+                                                StringResources.popular_text
+                                            ),
+                                            isNew = true
+                                        ),
                                         onSalonClick = { salonId ->
                                             onEvent(HomeContract.UiEvent.OnSalonClick(salonId))
                                         }
@@ -139,7 +158,17 @@ fun HomeScreenContent(
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(uiState.salons.take(2)) { salon ->
-                                    SalonCard(salon = salon)
+                                    SalonCard(
+                                        viewState = SalonCardViewState(
+                                            id = salon.id,
+                                            name = salon.name,
+                                            address = salon.address,
+                                            rating = salon.rating,
+                                            reviewCount = salon.reviewCount,
+                                            imageUrl = salon.imageUrl,
+                                            tags = salon.tags
+                                        )
+                                    )
                                 }
                             }
 

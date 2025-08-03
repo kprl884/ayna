@@ -31,7 +31,7 @@ object StringResources {
     val new_text = "Yeni"
     
     // MARK: - Business & Services
-    val book_now_button = "Şimdi Rezervasyon Yap"
+    val book_now_button = "Rezervasyon Yap"
     val view_profile_button = "Profili Görüntüle"
     val follow_button = "Takip Et"
     val unfollow_button = "Takibi Bırak"

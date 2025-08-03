@@ -11,10 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.domain.model.TeamMember
-import com.techtactoe.ayna.designsystem.theme.Elevation
+import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.domain.model.TeamMember
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Stable

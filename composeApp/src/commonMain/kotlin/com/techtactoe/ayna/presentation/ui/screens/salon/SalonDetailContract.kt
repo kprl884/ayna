@@ -1,7 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.screens.salon
 
 import com.techtactoe.ayna.domain.model.SalonDetail
-import com.techtactoe.ayna.presentation.ui.components.SalonDetailTab
+import com.techtactoe.ayna.presentation.ui.model.SalonDetailTab
 
 /**
  * Contract defining the UI state and events for the SalonDetail screen

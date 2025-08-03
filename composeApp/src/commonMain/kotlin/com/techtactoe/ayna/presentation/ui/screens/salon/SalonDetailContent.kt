@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -14,12 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.techtactoe.ayna.domain.model.Review
+import com.techtactoe.ayna.domain.model.TeamMember
 import com.techtactoe.ayna.presentation.ui.components.AboutSection
+import com.techtactoe.ayna.presentation.ui.components.AboutSectionViewState
 import com.techtactoe.ayna.presentation.ui.components.BuySection
+import com.techtactoe.ayna.presentation.ui.components.BuySectionViewState
 import com.techtactoe.ayna.presentation.ui.components.FloatingBookingBar
+import com.techtactoe.ayna.presentation.ui.components.FloatingBookingBarViewState
 import com.techtactoe.ayna.presentation.ui.components.ReviewsSection
+import com.techtactoe.ayna.presentation.ui.components.ReviewsSectionViewState
 import com.techtactoe.ayna.presentation.ui.components.StickyTabBar
+import com.techtactoe.ayna.presentation.ui.components.StickyTabBarViewState
 import com.techtactoe.ayna.presentation.ui.components.TeamSection
+import com.techtactoe.ayna.presentation.ui.components.TeamSectionViewState
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ImageCarousel
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.SalonBasicInfo
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ServicesSection
@@ -31,7 +40,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun SalonDetailContent(
     uiState: SalonDetailContract.UiState,
     onEvent: (SalonDetailContract.UiEvent) -> Unit,
-    scrollState: androidx.compose.foundation.lazy.LazyListState,
+    scrollState: LazyListState,
     modifier: Modifier = Modifier
 ) {
     val salonDetail = uiState.salonDetail
@@ -40,8 +49,14 @@ fun SalonDetailContent(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             FloatingBookingBar(
-                serviceCount = salonDetail?.services?.size ?: 0,
-                onBookNowClick = { onEvent(SalonDetailContract.UiEvent.OnBookNowClick) }
+                FloatingBookingBarViewState(
+                    serviceCount = salonDetail?.services?.size ?: 0,
+                    isVisible = uiState.showStickyTabBar,
+                    isEnabled = true,
+                ),
+                onBookNowClick = {
+                    onEvent(SalonDetailContract.UiEvent.OnBookNowClick)
+                }
             )
         }
     ) { paddingValues ->
@@ -93,31 +108,82 @@ fun SalonDetailContent(
                 // Team section
                 item {
                     salonDetail?.let { salon ->
-                        TeamSection(teamMembers = salonDetail.team)
+                        TeamSection(
+                            TeamSectionViewState(
+                                teamMembers = listOf(
+                                    TeamMember(
+                                        id = "1",
+                                        name = "Marios",
+                                        role = "Creative Director",
+                                        imageUrl = null,
+                                        rating = 5.0
+                                    ),
+                                    TeamMember(
+                                        id = "2",
+                                        name = "Ankit",
+                                        role = "Support Team",
+                                        imageUrl = null,
+                                        rating = 5.0
+                                    ),
+                                    TeamMember(
+                                        id = "3",
+                                        name = "Fanouria",
+                                        role = "Stylist",
+                                        imageUrl = null,
+                                        rating = 5.0
+                                    )
+                                )
+                            )
+                        )
                     }
                 }
                 // Reviews section
                 item {
                     salonDetail?.let { salon ->
                         ReviewsSection(
-                            reviews = salonDetail.reviews,
-                            overallRating = salonDetail.rating,
-                            reviewCount = salonDetail.reviewCount
+                            ReviewsSectionViewState(
+                                reviews = listOf(
+                                    Review(
+                                        id = "1",
+                                        userName = "Monica T",
+                                        userInitials = "MT",
+                                        date = "Sat, Jul 19, 2025 at 10:28 PM",
+                                        rating = 5,
+                                        comment = "Only the best! Much appreciated 😊"
+                                    ),
+                                    Review(
+                                        id = "2",
+                                        userName = "Froso P",
+                                        userInitials = "FP",
+                                        date = "Sat, Jul 19, 2025 at 12:52 PM",
+                                        rating = 5,
+                                        comment = "Absolutely excellent service! The environment is welcoming, stylish, and relaxing. Special thanks to the team for their professionalism."
+                                    )
+                                ),
+                                overallRating = 5.0,
+                                reviewCount = 3645
+                            )
                         )
                     }
                 }
                 // Buy section
                 item {
                     salonDetail?.let { salon ->
-                        BuySection(buyOptions = salonDetail.buyOptions)
+                        BuySection(
+                            BuySectionViewState(
+                                buyOptions = salonDetail.buyOptions
+                            )
+                        )
                     }
                 }
                 // About section
                 item {
                     salonDetail?.let { salon ->
                         AboutSection(
-                            about = salonDetail.about,
-                            openingHours = salonDetail.openingHours
+                            viewState = AboutSectionViewState(
+                                description = salonDetail.about.description,
+                                openingHours = salonDetail.openingHours,
+                            )
                         )
                     }
                 }
@@ -130,15 +196,17 @@ fun SalonDetailContent(
                 )
 
                 StickyTabBar(
-                    selectedTab = uiState.selectedTab,
                     onTabClick = { tab ->
                         onEvent(SalonDetailContract.UiEvent.OnTabSelected(tab))
                         // TODO: Scroll to the corresponding section
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    salonName = salonDetail?.name.orEmpty(),
                     onBackClick = { onEvent(SalonDetailContract.UiEvent.OnBackClick) },
-                    onFavoriteClick = { onEvent(SalonDetailContract.UiEvent.OnFavoriteClick) }
+                    onFavoriteClick = { onEvent(SalonDetailContract.UiEvent.OnFavoriteClick) },
+                    viewState = StickyTabBarViewState(
+                        salonName = salonDetail?.name ?: "",
+                        selectedTab = uiState.selectedTab,
+                    )
                 )
             }
         }

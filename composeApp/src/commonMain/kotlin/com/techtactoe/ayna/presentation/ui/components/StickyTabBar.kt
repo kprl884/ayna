@@ -34,11 +34,8 @@ import com.techtactoe.ayna.designsystem.theme.AnimationDuration
 import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.designsystem.theme.StringResources
 import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.presentation.ui.model.SalonDetailTab
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-enum class SalonDetailTab {
-    PHOTOS, SERVICES, TEAM, REVIEWS, BUY, ABOUT
-}
 
 @Stable
 data class StickyTabBarViewState(

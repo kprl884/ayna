@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -21,13 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.techtactoe.ayna.domain.model.OpeningHour
-import com.techtactoe.ayna.domain.model.SalonAbout
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.designsystem.theme.StringResources
 import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.domain.model.OpeningHour
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Stable
@@ -70,7 +66,7 @@ fun AboutSection(
                 modifier = Modifier.clickable { onReadMoreClick() }
             )
         }
-        
+
         // Opening times
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.small)
@@ -85,7 +81,7 @@ fun AboutSection(
                 OpeningHourRow(hour = hour)
             }
         }
-        
+
         // Features
         Column(
             verticalArrangement = Arrangement.spacedBy(Spacing.small)
