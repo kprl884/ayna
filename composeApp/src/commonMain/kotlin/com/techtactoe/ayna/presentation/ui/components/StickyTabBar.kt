@@ -1,5 +1,8 @@
 package com.techtactoe.ayna.presentation.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,37 +20,46 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.ic_heart
 import com.techtactoe.ayna.designsystem.icon.IconInCircle
 import com.techtactoe.ayna.designsystem.icon.IconWithImageVector
-import com.techtactoe.ayna.designsystem.theme.AynaColors
-import com.techtactoe.ayna.designsystem.theme.ScreenPaddingDimensions
+import com.techtactoe.ayna.designsystem.theme.AnimationDuration
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class SalonDetailTab {
     PHOTOS, SERVICES, TEAM, REVIEWS, BUY, ABOUT
 }
 
+@Stable
+data class StickyTabBarViewState(
+    val salonName: String,
+    val selectedTab: SalonDetailTab,
+    val isFavorite: Boolean = false
+)
+
 @Composable
 fun StickyTabBar(
-    salonName: String,
+    viewState: StickyTabBarViewState,
     onBackClick: () -> Unit,
     onFavoriteClick: () -> Unit,
-    selectedTab: SalonDetailTab,
     onTabClick: (SalonDetailTab) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(ScreenPaddingDimensions.medium)
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(Spacing.medium)
     ) {
         Column {
             Row(
@@ -56,12 +68,16 @@ fun StickyTabBar(
             ) {
                 IconWithImageVector(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = StringResources.back_button_description,
                     modifier = Modifier
                         .clickable { onBackClick() }
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Text(salonName)
+                Text(
+                    text = viewState.salonName,
+                    style = AynaTypography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 IconInCircle(
                     onClick = { onFavoriteClick() },
@@ -72,13 +88,13 @@ fun StickyTabBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    .padding(horizontal = Spacing.medium),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.large)
             ) {
                 SalonDetailTab.entries.forEach { tab ->
                     TabItem(
                         tab = tab,
-                        isSelected = selectedTab == tab,
+                        isSelected = viewState.selectedTab == tab,
                         onClick = { onTabClick(tab) }
                     )
                 }
@@ -86,7 +102,7 @@ fun StickyTabBar(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = AynaColors.BorderGray
+                color = MaterialTheme.colorScheme.outline
             )
         }
 
@@ -100,35 +116,47 @@ private fun TabItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = tween(durationMillis = AnimationDuration.fast)
+    )
+
+    val indicatorAlpha by animateFloatAsState(
+        targetValue = if (isSelected) 1f else 0f,
+        animationSpec = tween(durationMillis = AnimationDuration.fast)
+    )
+
     Box(
         modifier = modifier
             .clickable { onClick() }
-            .padding(vertical = 16.dp)
+            .padding(vertical = Spacing.medium)
     ) {
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
+        ) {
             Text(
                 text = when (tab) {
                     SalonDetailTab.PHOTOS -> "Photos"
-                    SalonDetailTab.SERVICES -> "Services"
+                    SalonDetailTab.SERVICES -> StringResources.services_text
                     SalonDetailTab.TEAM -> "Team"
-                    SalonDetailTab.REVIEWS -> "Reviews"
+                    SalonDetailTab.REVIEWS -> StringResources.reviews_text
                     SalonDetailTab.BUY -> "Buy"
-                    SalonDetailTab.ABOUT -> "About"
+                    SalonDetailTab.ABOUT -> StringResources.about_text
                 },
-                fontSize = 16.sp,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                color = if (isSelected) AynaColors.Black else AynaColors.SecondaryText
+                style = if (isSelected) AynaTypography.labelLarge else AynaTypography.labelMedium,
+                color = textColor
             )
 
-            if (isSelected) {
-                Box(
-                    modifier = Modifier
-                        .width(24.dp)
-                        .height(2.dp)
-                        .background(AynaColors.Black)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(2.dp)
+                    .alpha(indicatorAlpha)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+            )
         }
     }
 }
@@ -136,11 +164,16 @@ private fun TabItem(
 @Preview
 @Composable
 fun StickyTabBarPreview() {
+    val mockViewState = StickyTabBarViewState(
+        salonName = "Hair Etc. Studio",
+        selectedTab = SalonDetailTab.SERVICES,
+        isFavorite = false
+    )
+
     MaterialTheme {
         StickyTabBar(
-            selectedTab = SalonDetailTab.SERVICES,
+            viewState = mockViewState,
             onTabClick = {},
-            salonName = "Salon Name",
             onBackClick = {},
             onFavoriteClick = {}
         )
