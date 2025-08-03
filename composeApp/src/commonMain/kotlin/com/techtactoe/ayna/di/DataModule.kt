@@ -73,4 +73,8 @@ object DataModule {
     fun createBookingConfirmationViewModel(): BookingConfirmationViewModel {
         return BookingConfirmationViewModel()
     }
+
+    fun createNotificationsViewModel(): NotificationsViewModel {
+        return NotificationsViewModel()
+    }
 }
