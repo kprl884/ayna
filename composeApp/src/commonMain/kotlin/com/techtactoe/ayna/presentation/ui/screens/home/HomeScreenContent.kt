@@ -98,7 +98,14 @@ fun HomeScreenContent(
                         Spacer(modifier = Modifier.height(topPadding))
 
                         UserHeader(
-                            userName = uiState.userName
+                            userName = uiState.userName,
+                            notificationState = com.techtactoe.ayna.domain.model.NotificationUiState(
+                                hasUnreadNotifications = true, // TODO: Get from actual state
+                                unreadCount = 3 // TODO: Get from actual state
+                            ),
+                            onNotificationClick = {
+                                onEvent(HomeContract.UiEvent.OnNavigateToNotifications)
+                            }
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
