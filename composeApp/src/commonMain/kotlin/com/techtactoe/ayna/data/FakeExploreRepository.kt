@@ -47,7 +47,8 @@ class FakeExploreRepository {
             filteredVenues = when (filters.sortOption) {
                 SortOption.RECOMMENDED -> filteredVenues.sortedByDescending { it.rating * it.reviewCount }
                 SortOption.TOP_RATED -> filteredVenues.sortedByDescending { it.rating }
-                SortOption.NEAREST -> filteredVenues // Could implement actual distance sorting
+                SortOption.NEAREST -> filteredVenues
+                else ->  filteredVenues.sortedByDescending { it.rating * it.reviewCount }
             }
             
             // Apply pagination

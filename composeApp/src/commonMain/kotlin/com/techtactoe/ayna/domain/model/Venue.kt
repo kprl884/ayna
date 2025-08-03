@@ -47,6 +47,7 @@ enum class SortOption {
     NEAREST
 }
 
+
 @Serializable
 data class PriceRange(
     val min: Int = 0,

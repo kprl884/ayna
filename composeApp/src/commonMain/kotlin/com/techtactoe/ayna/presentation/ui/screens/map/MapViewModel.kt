@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.domain.model.LatLng
 import com.techtactoe.ayna.domain.model.SalonMapCard
 import com.techtactoe.ayna.domain.model.SalonMapPin
-import com.techtactoe.ayna.domain.model.SortOption
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

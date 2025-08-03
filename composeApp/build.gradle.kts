@@ -47,6 +47,8 @@ kotlin {
             implementation(libs.androidx.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation("com.google.maps.android:maps-compose:2.15.0")
+            implementation("com.google.android.gms:play-services-maps:18.2.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

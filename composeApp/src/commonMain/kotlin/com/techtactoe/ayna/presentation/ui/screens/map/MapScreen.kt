@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -37,7 +36,6 @@ import com.techtactoe.ayna.designsystem.theme.StringResources
 import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.presentation.ui.screens.map.components.FilterBottomSheet
 import com.techtactoe.ayna.presentation.ui.screens.map.components.FilterBottomSheetViewState
-import com.techtactoe.ayna.presentation.ui.screens.map.components.MapView
 import com.techtactoe.ayna.presentation.ui.screens.map.components.SalonMapCard
 import com.techtactoe.ayna.presentation.ui.screens.map.components.SalonMapCardViewState
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -51,7 +49,7 @@ fun MapScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
@@ -60,7 +58,7 @@ fun MapScreen(
             }
         }
     }
-    
+
     MapContent(
         uiState = uiState,
         onEvent = viewModel::onEvent,
@@ -85,7 +83,7 @@ fun MapContent(
                 onEvent(MapContract.UiEvent.OnSalonPinClick(salonId))
             }
         )
-        
+
         // Header
         MapHeader(
             locationName = uiState.locationName,
@@ -93,7 +91,7 @@ fun MapContent(
             onFilterClick = { onEvent(MapContract.UiEvent.OnFilterClick) },
             modifier = Modifier.align(Alignment.TopCenter)
         )
-        
+
         // Salon Cards Horizontal List (at bottom)
         uiState.selectedSalon?.let { salon ->
             Box(
@@ -123,7 +121,7 @@ fun MapContent(
                 }
             }
         }
-        
+
         // Filter Bottom Sheet
         FilterBottomSheet(
             viewState = FilterBottomSheetViewState(
@@ -155,10 +153,7 @@ private fun MapHeader(
             .fillMaxWidth()
             .background(
                 color = MaterialTheme.colorScheme.surface,
-                shape = AynaShapes.medium.copy(
-                    topStart = 0.dp,
-                    topEnd = 0.dp
-                )
+                shape = AynaShapes.medium
             )
             .statusBarsPadding()
             .padding(Spacing.medium),
@@ -180,14 +175,14 @@ private fun MapHeader(
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
-            
+
             Text(
                 text = "Map View",
                 style = AynaTypography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        
+
         // Location search bar and filter button
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -215,16 +210,16 @@ private fun MapHeader(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
-                
+
                 Text(
                     text = locationName,
                     style = AynaTypography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
             Spacer(modifier = Modifier.size(Spacing.small))
-            
+
             // Filter button
             IconButton(
                 onClick = onFilterClick,
@@ -271,19 +266,19 @@ private fun MapViewPlaceholder(
                 style = AynaTypography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Text(
                 text = "Center: ${center.latitude}, ${center.longitude}",
                 style = AynaTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             Text(
                 text = "${pins.size} salon pins",
                 style = AynaTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            
+
             // Mock pins for demonstration
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.small)

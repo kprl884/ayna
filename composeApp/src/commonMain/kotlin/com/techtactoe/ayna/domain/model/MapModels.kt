@@ -3,12 +3,6 @@ package com.techtactoe.ayna.domain.model
 import androidx.compose.runtime.Stable
 
 @Stable
-data class LatLng(
-    val latitude: Double,
-    val longitude: Double
-)
-
-@Stable
 data class SalonMapPin(
     val salonId: String,
     val position: LatLng,
@@ -27,7 +21,7 @@ data class SalonMapCard(
     val imageUrl: String
 )
 
-enum class SortOption {
+enum class SortOptionMap {
     NEAREST,
     TOP_RATED,
     PRICE_LOW_TO_HIGH,
@@ -42,6 +36,6 @@ enum class ServiceType {
 
 @Stable
 data class MapFilterState(
-    val sortBy: SortOption = SortOption.NEAREST,
+    val sortBy: SortOptionMap = SortOptionMap.NEAREST,
     val serviceType: ServiceType = ServiceType.ALL
 )

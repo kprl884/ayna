@@ -35,15 +35,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.designsystem.button.PrimaryButton
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.designsystem.theme.AnimationDuration
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.designsystem.theme.Elevation
 import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
 import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.MapFilterState
 import com.techtactoe.ayna.domain.model.ServiceType
-import com.techtactoe.ayna.domain.model.SortOption
+import com.techtactoe.ayna.domain.model.SortOptionMap
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Stable
@@ -82,10 +81,7 @@ fun FilterBottomSheet(
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .clickable(enabled = false) { }, // Prevent card clicks from dismissing
-                shape = AynaShapes.large.copy(
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                ),
+                shape = AynaShapes.large,
                 elevation = CardDefaults.cardElevation(defaultElevation = Elevation.xl),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -109,14 +105,14 @@ fun FilterBottomSheet(
                             )
                             .align(Alignment.CenterHorizontally)
                     )
-                    
+
                     // Title
                     Text(
                         text = "Filters",
                         style = AynaTypography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    
+
                     // Sort by section
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Spacing.medium)
@@ -126,11 +122,11 @@ fun FilterBottomSheet(
                             style = AynaTypography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                        
+
                         Column(
                             verticalArrangement = Arrangement.spacedBy(Spacing.small)
                         ) {
-                            SortOption.values().forEach { option ->
+                            SortOptionMap.entries.forEach { option ->
                                 SortOptionItem(
                                     option = option,
                                     isSelected = viewState.filterState.sortBy == option,
@@ -143,7 +139,7 @@ fun FilterBottomSheet(
                             }
                         }
                     }
-                    
+
                     // Service Availability section
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Spacing.medium)
@@ -153,7 +149,7 @@ fun FilterBottomSheet(
                             style = AynaTypography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                        
+
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.small)
                         ) {
@@ -170,9 +166,9 @@ fun FilterBottomSheet(
                             }
                         }
                     }
-                    
+
                     Spacer(modifier = Modifier.height(Spacing.small))
-                    
+
                     // Apply button
                     PrimaryButton(
                         text = "Apply",
@@ -187,7 +183,7 @@ fun FilterBottomSheet(
 
 @Composable
 private fun SortOptionItem(
-    option: SortOption,
+    option: SortOptionMap,
     isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -212,13 +208,13 @@ private fun SortOptionItem(
                 unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         )
-        
+
         Text(
             text = when (option) {
-                SortOption.NEAREST -> "Nearest"
-                SortOption.TOP_RATED -> "Top Rated"
-                SortOption.PRICE_LOW_TO_HIGH -> "Price low to high"
-                SortOption.PRICE_HIGH_TO_LOW -> "Price high to low"
+                SortOptionMap.NEAREST -> "Nearest"
+                SortOptionMap.TOP_RATED -> "Top Rated"
+                SortOptionMap.PRICE_LOW_TO_HIGH -> "Price low to high"
+                SortOptionMap.PRICE_HIGH_TO_LOW -> "Price high to low"
             },
             style = AynaTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface
@@ -238,13 +234,13 @@ private fun ServiceTypeChip(
     } else {
         MaterialTheme.colorScheme.surfaceVariant
     }
-    
+
     val textColor = if (isSelected) {
         MaterialTheme.colorScheme.onPrimary
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant
     }
-    
+
     Box(
         modifier = modifier
             .clip(AynaShapes.large)
@@ -274,7 +270,7 @@ fun FilterBottomSheetPreview() {
         isVisible = true,
         filterState = MapFilterState()
     )
-    
+
     MaterialTheme {
         FilterBottomSheet(
             viewState = mockViewState
