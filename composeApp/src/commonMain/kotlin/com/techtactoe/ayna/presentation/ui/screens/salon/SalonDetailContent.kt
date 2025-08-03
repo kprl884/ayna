@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.presentation.ui.components.AboutSection
 import com.techtactoe.ayna.presentation.ui.components.BuySection
@@ -47,7 +48,12 @@ fun SalonDetailContent(
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+                    top = 0.dp,
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = paddingValues.calculateRightPadding(LayoutDirection.Ltr)
+                )
         ) {
             LazyColumn(
                 state = scrollState,
@@ -117,7 +123,11 @@ fun SalonDetailContent(
                 }
             }
             if (uiState.showStickyTabBar) {
-                log(LogLevel.DEBUG, "alpstein", "if (uiState.showStickyTabBar) {" +  uiState.showStickyTabBar)
+                log(
+                    LogLevel.DEBUG,
+                    "alpstein",
+                    "if (uiState.showStickyTabBar) {" + uiState.showStickyTabBar
+                )
 
                 StickyTabBar(
                     selectedTab = uiState.selectedTab,
@@ -128,7 +138,6 @@ fun SalonDetailContent(
                     modifier = Modifier.fillMaxWidth(),
                     salonName = salonDetail?.name.orEmpty(),
                     onBackClick = { onEvent(SalonDetailContract.UiEvent.OnBackClick) },
-                    onShareClick = { onEvent(SalonDetailContract.UiEvent.OnShareClick) },
                     onFavoriteClick = { onEvent(SalonDetailContract.UiEvent.OnFavoriteClick) }
                 )
             }

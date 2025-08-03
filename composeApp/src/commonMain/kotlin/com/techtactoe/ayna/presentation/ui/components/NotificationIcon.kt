@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
+import com.techtactoe.ayna.designsystem.icon.IconWithImageVector
 import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.domain.model.NotificationUiState
 
@@ -54,11 +54,9 @@ fun NotificationIcon(
                 }
             }
         ) {
-            Icon(
+            IconWithImageVector(
                 imageVector = Icons.Default.Notifications,
-                contentDescription = "Notifications",
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSurface
+                contentDescription = "Notifications"
             )
         }
     }

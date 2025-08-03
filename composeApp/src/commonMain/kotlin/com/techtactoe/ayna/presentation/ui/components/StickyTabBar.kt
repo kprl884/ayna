@@ -10,12 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ayna.composeapp.generated.resources.Res
+import ayna.composeapp.generated.resources.ic_heart
+import com.techtactoe.ayna.designsystem.icon.IconInCircle
+import com.techtactoe.ayna.designsystem.icon.IconWithImageVector
 import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.ScreenPaddingDimensions
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class SalonDetailTab {
@@ -34,7 +38,6 @@ enum class SalonDetailTab {
 fun StickyTabBar(
     salonName: String,
     onBackClick: () -> Unit,
-    onShareClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     selectedTab: SalonDetailTab,
     onTabClick: (SalonDetailTab) -> Unit,
@@ -43,68 +46,28 @@ fun StickyTabBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(AynaColors.White)
+            .background(MaterialTheme.colorScheme.background)
+            .padding(ScreenPaddingDimensions.medium)
     ) {
         Column {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Surface(
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconWithImageVector(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
                     modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onBackClick() },
-                    shape = CircleShape,
-                    color = AynaColors.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "←",
-                            fontSize = 18.sp,
-                            color = AynaColors.Black
-                        )
-                    }
-                }
+                        .clickable { onBackClick() }
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(salonName)
                 Spacer(modifier = Modifier.weight(1f))
-                Surface(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onShareClick() },
-                    shape = CircleShape,
-                    color = AynaColors.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "↗",
-                            fontSize = 18.sp,
-                            color = AynaColors.Black
-                        )
-                    }
-                }
-
-                Surface(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onFavoriteClick() },
-                    shape = CircleShape,
-                    color = AynaColors.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "♡",
-                            fontSize = 18.sp,
-                            color = AynaColors.Black
-                        )
-                    }
-                }
+                IconInCircle(
+                    onClick = { onFavoriteClick() },
+                    resource = Res.drawable.ic_heart,
+                    shadowElevation = 0.dp
+                )
             }
             Row(
                 modifier = Modifier
@@ -179,7 +142,6 @@ fun StickyTabBarPreview() {
             onTabClick = {},
             salonName = "Salon Name",
             onBackClick = {},
-            onShareClick = {},
             onFavoriteClick = {}
         )
     }

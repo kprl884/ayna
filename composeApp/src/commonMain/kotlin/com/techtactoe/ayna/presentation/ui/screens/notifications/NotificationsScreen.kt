@@ -45,6 +45,7 @@ fun NotificationsScreen(
                 is NotificationsContract.NavigationEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
+
                 is NotificationsContract.NavigationEvent.NavigateToScreen -> {
                     navController.navigate(navigationEvent.screen)
                 }

@@ -6,14 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ayna.composeapp.generated.resources.Res
+import ayna.composeapp.generated.resources.ic_heart
+import com.techtactoe.ayna.designsystem.icon.IconInCircle
 import com.techtactoe.ayna.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -41,7 +41,7 @@ fun ImageCarousel(
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { images.size })
-    
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -66,13 +66,12 @@ fun ImageCarousel(
                 )
             }
         }
-        
+
         // Top overlay controls
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
@@ -95,7 +94,7 @@ fun ImageCarousel(
                     )
                 }
             }
-            
+
             // Share and favorite buttons
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -118,29 +117,13 @@ fun ImageCarousel(
                         )
                     }
                 }
-                
-                Surface(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onFavoriteClick() },
-                    shape = CircleShape,
-                    color = AynaColors.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "♡",
-                            fontSize = 18.sp,
-                            color = AynaColors.Black
-                        )
-                    }
-                }
+                IconInCircle(
+                    onClick = { onFavoriteClick() },
+                    resource = Res.drawable.ic_heart
+                )
             }
         }
-        
-        // Image indicator
+
         if (images.size > 1) {
             Surface(
                 modifier = Modifier
