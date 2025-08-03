@@ -18,6 +18,8 @@ fun AppBottomNavigation(
     val navItems = listOf(Screen.Home, Screen.Explore, Screen.Appointments, Screen.Profile)
 
     NavigationBar(
+        containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background,
+        contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onBackground,
         modifier = modifier.fillMaxWidth()
     ) {
         navItems.forEach { screen ->

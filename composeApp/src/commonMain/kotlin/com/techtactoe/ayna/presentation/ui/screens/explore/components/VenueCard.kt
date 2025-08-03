@@ -24,8 +24,6 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.techtactoe.ayna.domain.model.Venue
 import com.techtactoe.ayna.domain.model.VenueService
-import com.techtactoe.ayna.domain.model.VenueType
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 
 /**
  * Venue card component showing venue information and top services

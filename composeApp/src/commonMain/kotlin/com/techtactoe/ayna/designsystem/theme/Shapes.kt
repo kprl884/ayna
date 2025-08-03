@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.theme
+package com.techtactoe.ayna.designsystem.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
@@ -37,13 +37,13 @@ object BorderThickness {
 
 // MARK: - Spacing System
 object Spacing {
-    val xs = 4.dp
-    val sm = 8.dp
-    val md = 16.dp
-    val lg = 24.dp
-    val xl = 32.dp
-    val xxl = 48.dp
-    val xxxl = 64.dp
+    val extraSmall = 4.dp
+    val small = 8.dp
+    val medium = 16.dp
+    val large = 24.dp
+    val xlarge = 32.dp
+    val xxlarge = 48.dp
+    val xxxlarge = 64.dp
 }
 
 // MARK: - Corner Radius

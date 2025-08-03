@@ -32,6 +32,9 @@ sealed interface Screen {
     data object Profile : Screen
 
     @Serializable
+    data object Notifications : Screen
+
+    @Serializable
     data class Detail(val salonId: String) : Screen
 
     @Serializable

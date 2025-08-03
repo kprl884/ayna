@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.Spacing
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -98,7 +98,7 @@ fun PurpleCalendarIcon(
 private fun PurpleCalendarIconPreview() {
     AynaAppTheme {
         Surface(
-            modifier = Modifier.padding(Spacing.lg)
+            modifier = Modifier.padding(Spacing.large)
         ) {
             PurpleCalendarIcon()
         }

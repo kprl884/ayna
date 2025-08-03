@@ -25,7 +25,13 @@ interface HomeContract {
 
         // UI state
         val searchQuery: String = "",
-        val userName: String = "User" // In real app, from auth
+        val userName: String = "User", // In real app, from auth
+
+        // Navigation flags
+        val navigateToSalonDetail: String? = null,
+        val navigateToSearch: Boolean = false,
+        val navigateToProfile: Boolean = false,
+        val navigateToNotifications: Boolean = false
     )
 
     /**
@@ -40,10 +46,23 @@ interface HomeContract {
         data class OnSearchQueryChanged(val query: String) : UiEvent
         data object OnSearchClick : UiEvent
 
+        // Navigation events
         data class OnSalonClick(val salonId: String) : UiEvent
         data object OnProfileClick : UiEvent
+        data object OnNavigateToNotifications : UiEvent
+        data class OnNavigationHandled(val resetNavigation: NavigationReset) : UiEvent
 
         // Error handling
         data object OnClearError : UiEvent
+    }
+
+    /**
+     * Navigation reset options
+     */
+    enum class NavigationReset {
+        SALON_DETAIL,
+        SEARCH,
+        PROFILE,
+        NOTIFICATIONS
     }
 }

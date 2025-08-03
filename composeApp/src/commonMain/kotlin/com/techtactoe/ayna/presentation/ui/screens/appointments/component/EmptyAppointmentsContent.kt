@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.Spacing
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -24,12 +24,12 @@ fun EmptyAppointmentsContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Spacing.lg),
+            .padding(horizontal = Spacing.large),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         PurpleCalendarIcon(
-            modifier = Modifier.padding(bottom = Spacing.xl)
+            modifier = Modifier.padding(bottom = Spacing.xlarge)
         )
 
         Text(
@@ -39,7 +39,7 @@ fun EmptyAppointmentsContent(
             ),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.md)
+            modifier = Modifier.padding(bottom = Spacing.medium)
         )
 
         Text(
@@ -47,20 +47,20 @@ fun EmptyAppointmentsContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xxl)
+            modifier = Modifier.padding(bottom = Spacing.xxlarge)
         )
 
         OutlinedButton(
             onClick = onSearchSalonsClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Spacing.xl),
+                .padding(horizontal = Spacing.xlarge),
             shape = MaterialTheme.shapes.large
         ) {
             Text(
                 "Search salons",
                 style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(vertical = Spacing.xs)
+                modifier = Modifier.padding(vertical = Spacing.extraSmall)
             )
         }
     }

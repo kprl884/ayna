@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import com.techtactoe.ayna.presentation.theme.Spacing
-import com.techtactoe.ayna.presentation.theme.brandPurple
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -92,7 +92,7 @@ private fun ErrorContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Spacing.xl),
+            .padding(Spacing.xlarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -101,7 +101,7 @@ private fun ErrorContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.md)
+            modifier = Modifier.padding(bottom = Spacing.medium)
         )
 
         Button(
@@ -125,7 +125,7 @@ private fun ConfirmationContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(Spacing.xl),
+            .padding(Spacing.xlarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -134,8 +134,8 @@ private fun ConfirmationContent(
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(Spacing.xxxl + Spacing.md)
-                .padding(bottom = Spacing.xl)
+                .size(Spacing.xxxlarge + Spacing.medium)
+                .padding(bottom = Spacing.xlarge)
         )
 
         Text(
@@ -145,7 +145,7 @@ private fun ConfirmationContent(
             ),
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.md)
+            modifier = Modifier.padding(bottom = Spacing.medium)
         )
 
         Text(
@@ -153,7 +153,7 @@ private fun ConfirmationContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xl)
+            modifier = Modifier.padding(bottom = Spacing.xlarge)
         )
 
         // Appointment details
@@ -161,14 +161,14 @@ private fun ConfirmationContent(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = Spacing.lg),
+                    .padding(bottom = Spacing.large),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Column(
-                    modifier = Modifier.padding(Spacing.md)
+                    modifier = Modifier.padding(Spacing.medium)
                 ) {
                     Text(
                         text = uiState.salonName,
@@ -182,14 +182,14 @@ private fun ConfirmationContent(
                         text = uiState.serviceName,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.xs)
+                        modifier = Modifier.padding(top = Spacing.extraSmall)
                     )
 
                     Text(
                         text = uiState.appointmentDateTime,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.xs)
+                        modifier = Modifier.padding(top = Spacing.extraSmall)
                     )
 
                     if (uiState.price.isNotEmpty()) {
@@ -199,7 +199,7 @@ private fun ConfirmationContent(
                                 fontWeight = FontWeight.Medium
                             ),
                             color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(top = Spacing.sm)
+                            modifier = Modifier.padding(top = Spacing.small)
                         )
                     }
                 }
@@ -211,14 +211,14 @@ private fun ConfirmationContent(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xl)
+            modifier = Modifier.padding(bottom = Spacing.xlarge)
         )
 
         Button(
             onClick = { onEvent(BookingConfirmationContract.UiEvent.OnGoToAppointmentsClick) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = Spacing.md),
+                .padding(bottom = Spacing.medium),
             colors = ButtonDefaults.buttonColors(
                 containerColor = brandPurple
             ),

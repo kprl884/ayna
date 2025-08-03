@@ -28,7 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.SortOption
 import com.techtactoe.ayna.domain.model.VenueType
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.domain.model.PriceRange
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -195,7 +196,7 @@ private fun FilterChipBarPreview() {
             FilterChipBar(
                 filters = ExploreFilters(
                     sortOption = SortOption.TOP_RATED,
-                    priceRange = com.techtactoe.ayna.domain.model.PriceRange(max = 15000),
+                    priceRange = PriceRange(max = 15000),
                     venueType = VenueType.FEMALE_ONLY
                 ),
                 onFiltersClick = { },

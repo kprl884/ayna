@@ -15,13 +15,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.di.DataModule
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
+import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.model.SalonDetailEffect
@@ -118,11 +119,23 @@ fun AppNavigation() {
                 }
                 composable<Screen.Profile> { ProfileScreen() }
 
+                composable<Screen.Notifications> {
+                    val viewModel = remember { DataModule.createNotificationsViewModel() }
+                    val uiState by viewModel.uiState.collectAsState()
+
+                    NotificationsScreen(
+                        uiState = uiState,
+                        onEvent = viewModel::onEvent,
+                        onBackClick = viewModel::onBackClick,
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                }
+
                 composable<Screen.Detail> { backStackEntry ->
                     val screen: Screen.Detail = backStackEntry.toRoute()
                     val salonId = screen.salonId
 
-                    // ViewModel is properly remembered to survive recompositions
                     val viewModel =
                         remember(salonId) { DataModule.createSalonDetailViewModel(salonId) }
                     val uiState by viewModel.uiState.collectAsState()

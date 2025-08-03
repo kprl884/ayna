@@ -27,7 +27,7 @@ import com.techtactoe.ayna.domain.model.Employee
 import com.techtactoe.ayna.domain.model.Location
 import com.techtactoe.ayna.domain.model.Salon
 import com.techtactoe.ayna.domain.model.Service
-import com.techtactoe.ayna.presentation.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

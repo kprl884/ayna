@@ -19,6 +19,7 @@ import com.techtactoe.ayna.domain.usecase.JoinWaitlistUseCase
 import com.techtactoe.ayna.domain.usecase.SearchSalonsUseCase
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsViewModel
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationViewModel
+import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsViewModel
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailViewModel
 import com.techtactoe.ayna.presentation.ui.screens.selecttime.SelectTimeViewModel
 import com.techtactoe.ayna.presentation.ui.screens.waitlist.JoinWaitlistViewModel
@@ -71,5 +72,9 @@ object DataModule {
 
     fun createBookingConfirmationViewModel(): BookingConfirmationViewModel {
         return BookingConfirmationViewModel()
+    }
+
+    fun createNotificationsViewModel(): NotificationsViewModel {
+        return NotificationsViewModel()
     }
 }

@@ -27,6 +27,9 @@ fun HomeScreen(
                 is HomeContract.UiEvent.OnProfileClick -> {
                     navController.navigate(Screen.Profile)
                 }
+                is HomeContract.UiEvent.OnNavigateToNotifications -> {
+                    navController.navigate(Screen.Notifications)
+                }
                 else -> {
                     onEvent(event)
                 }

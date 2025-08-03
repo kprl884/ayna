@@ -44,11 +44,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.domain.model.TimeSlot
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
-import com.techtactoe.ayna.presentation.theme.AynaShapes
-import com.techtactoe.ayna.presentation.theme.BorderThickness
-import com.techtactoe.ayna.presentation.theme.Spacing
-import com.techtactoe.ayna.presentation.theme.brandPurple
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.designsystem.theme.BorderThickness
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -114,7 +114,7 @@ fun SelectTimeScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(Spacing.md)
+                .padding(Spacing.medium)
         ) {
             // Month/Year header
             Text(
@@ -122,13 +122,13 @@ fun SelectTimeScreen(
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.padding(bottom = Spacing.md)
+                modifier = Modifier.padding(bottom = Spacing.medium)
             )
 
             // Date selector
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(Spacing.md),
-                modifier = Modifier.padding(bottom = Spacing.lg)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.medium),
+                modifier = Modifier.padding(bottom = Spacing.large)
             ) {
                 items(uiState.dateOptions) { dateOption ->
                     DateChip(
@@ -224,7 +224,7 @@ private fun DateChip(
             )
         }
 
-        Spacer(modifier = Modifier.height(Spacing.sm))
+        Spacer(modifier = Modifier.height(Spacing.small))
 
         Text(
             text = dateOption.dayOfWeek,
@@ -258,7 +258,7 @@ private fun ErrorContent(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.md)
+            modifier = Modifier.padding(bottom = Spacing.medium)
         )
 
         Button(onClick = onRetry) {
@@ -283,8 +283,8 @@ private fun FullyBookedContent(
             contentDescription = null,
             tint = brandPurple,
             modifier = Modifier
-                .size(Spacing.xxxl)
-                .padding(bottom = Spacing.lg)
+                .size(Spacing.xxxlarge)
+                .padding(bottom = Spacing.large)
         )
 
         Text(
@@ -293,7 +293,7 @@ private fun FullyBookedContent(
                 fontWeight = FontWeight.SemiBold
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.sm)
+            modifier = Modifier.padding(bottom = Spacing.small)
         )
 
         Text(
@@ -301,14 +301,14 @@ private fun FullyBookedContent(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xl)
+            modifier = Modifier.padding(bottom = Spacing.xlarge)
         )
 
         OutlinedButton(
             onClick = onGoToNextDate,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = Spacing.md)
+                .padding(bottom = Spacing.medium)
         ) {
             Text("Go to next available date")
         }
@@ -329,7 +329,7 @@ private fun TimeSlotsList(
     onTimeSlotClick: (TimeSlot) -> Unit
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(Spacing.md)
+        verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
         items(timeSlots) { timeSlot ->
             TimeSlotItem(
@@ -370,7 +370,7 @@ private fun TimeSlotItem(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Spacing.lg),
+                .padding(Spacing.large),
             contentAlignment = Alignment.CenterStart
         ) {
             Text(

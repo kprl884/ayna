@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.PriceRange
 import com.techtactoe.ayna.domain.model.Venue
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.ExploreSearchBar
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.FilterChipBar
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.FiltersBottomSheet

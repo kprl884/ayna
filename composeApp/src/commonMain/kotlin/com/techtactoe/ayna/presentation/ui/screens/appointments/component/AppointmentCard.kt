@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
-import com.techtactoe.ayna.presentation.theme.Elevation
-import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.Elevation
+import com.techtactoe.ayna.designsystem.theme.Spacing
 import kotlinx.datetime.Instant
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
@@ -72,7 +72,7 @@ fun AppointmentCard(
         shape = MaterialTheme.shapes.medium
     ) {
         Column(
-            modifier = Modifier.padding(Spacing.md)
+            modifier = Modifier.padding(Spacing.medium)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -92,14 +92,14 @@ fun AppointmentCard(
                         text = appointment.serviceName,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.xs)
+                        modifier = Modifier.padding(top = Spacing.extraSmall)
                     )
 
                     Text(
                         text = formattedDate,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.xs)
+                        modifier = Modifier.padding(top = Spacing.extraSmall)
                     )
                 }
 
@@ -113,8 +113,8 @@ fun AppointmentCard(
                         style = MaterialTheme.typography.labelSmall,
                         color = statusColor,
                         modifier = Modifier.padding(
-                            horizontal = Spacing.sm,
-                            vertical = Spacing.xs
+                            horizontal = Spacing.small,
+                            vertical = Spacing.extraSmall
                         )
                     )
                 }
@@ -125,7 +125,7 @@ fun AppointmentCard(
                     text = "with ${appointment.employeeName}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = Spacing.sm)
+                    modifier = Modifier.padding(top = Spacing.small)
                 )
             }
 
@@ -136,7 +136,7 @@ fun AppointmentCard(
                         fontWeight = FontWeight.Medium
                     ),
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(top = Spacing.sm)
+                    modifier = Modifier.padding(top = Spacing.small)
                 )
             }
         }

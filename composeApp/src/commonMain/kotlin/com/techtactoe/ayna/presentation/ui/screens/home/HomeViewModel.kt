@@ -44,12 +44,34 @@ class HomeViewModel(
                 _uiState.update { it.copy(searchQuery = event.query) }
             }
 
-            // Navigation event'leri artık UI'da handle ediliyor
-            is HomeContract.UiEvent.OnSearchClick,
-            is HomeContract.UiEvent.OnSalonClick,
+            // Navigation events
+            is HomeContract.UiEvent.OnSearchClick -> {
+                _uiState.update { it.copy(navigateToSearch = true) }
+            }
+            is HomeContract.UiEvent.OnSalonClick -> {
+                _uiState.update { it.copy(navigateToSalonDetail = event.salonId) }
+            }
             is HomeContract.UiEvent.OnProfileClick -> {
-                // Bu event'ler UI katmanında handle edilecek
-                // ViewModel'de bir işlem yapmaya gerek yok
+                _uiState.update { it.copy(navigateToProfile = true) }
+            }
+            is HomeContract.UiEvent.OnNavigateToNotifications -> {
+                _uiState.update { it.copy(navigateToNotifications = true) }
+            }
+            is HomeContract.UiEvent.OnNavigationHandled -> {
+                when (event.resetNavigation) {
+                    HomeContract.NavigationReset.SALON_DETAIL -> {
+                        _uiState.update { it.copy(navigateToSalonDetail = null) }
+                    }
+                    HomeContract.NavigationReset.SEARCH -> {
+                        _uiState.update { it.copy(navigateToSearch = false) }
+                    }
+                    HomeContract.NavigationReset.PROFILE -> {
+                        _uiState.update { it.copy(navigateToProfile = false) }
+                    }
+                    HomeContract.NavigationReset.NOTIFICATIONS -> {
+                        _uiState.update { it.copy(navigateToNotifications = false) }
+                    }
+                }
             }
 
             is HomeContract.UiEvent.OnClearError -> {
