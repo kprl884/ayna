@@ -25,7 +25,13 @@ interface HomeContract {
 
         // UI state
         val searchQuery: String = "",
-        val userName: String = "User" // In real app, from auth
+        val userName: String = "User", // In real app, from auth
+
+        // Navigation flags
+        val navigateToSalonDetail: String? = null,
+        val navigateToSearch: Boolean = false,
+        val navigateToProfile: Boolean = false,
+        val navigateToNotifications: Boolean = false
     )
 
     /**
