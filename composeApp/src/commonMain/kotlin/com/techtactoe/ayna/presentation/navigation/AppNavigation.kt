@@ -22,6 +22,7 @@ import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScre
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
+import com.techtactoe.ayna.presentation.ui.screens.map.MapScreen
 import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsScreen
 import com.techtactoe.ayna.presentation.ui.screens.profile.ProfileScreen
 import com.techtactoe.ayna.presentation.ui.screens.salon.SalonDetailScreen
