@@ -1,31 +1,61 @@
 package com.techtactoe.ayna.presentation.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SectionHeader(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actionText: String? = null,
+    onActionClick: () -> Unit = {}
 ) {
-    Text(
-        text = title,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.Medium,
-        color = AynaColors.PrimaryText,
-        modifier = modifier.padding(horizontal = 16.dp)
-    )
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = Spacing.medium),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = AynaTypography.headlineMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        actionText?.let {
+            TextButton(
+                onClick = onActionClick,
+                shape = AynaShapes.small
+            ) {
+                Text(
+                    text = it,
+                    style = AynaTypography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+    }
 }
 
 @Preview
 @Composable
 fun SectionHeaderPreview() {
-    SectionHeader(title = "Recommended")
+    SectionHeader(
+        title = StringResources.popular_text,
+        actionText = StringResources.view_profile_button
+    )
 }
