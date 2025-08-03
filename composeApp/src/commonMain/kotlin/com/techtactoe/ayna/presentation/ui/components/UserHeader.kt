@@ -89,10 +89,13 @@ private fun NotificationIcon(
                 .scale(scale)
                 .padding(horizontal = 16.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Notifications,
+            AsyncImage(
+                model = if (notificationState.hasUnreadNotifications) {
+                    "https://cdn.builder.io/api/v1/image/assets%2F5b75d307a1554817a72557f83cf3c781%2Ff330551911d44ccaa380526ffdbf7c71?format=webp&width=800"
+                } else {
+                    "https://cdn.builder.io/api/v1/image/assets%2F5b75d307a1554817a72557f83cf3c781%2Fc44a4871c4dd44f68c0fa011cab37cd9?format=webp&width=800"
+                },
                 contentDescription = "Notifications",
-                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(24.dp)
             )
         }
