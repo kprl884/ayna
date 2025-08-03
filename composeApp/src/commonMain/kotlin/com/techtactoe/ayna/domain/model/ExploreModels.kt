@@ -44,20 +44,6 @@ data class PriceRangeUiModel(
     val max: Int = 30000
 )
 
-enum class SortOption {
-    RECOMMENDED,
-    TOP_RATED,
-    NEAREST,
-    PRICE_LOW_TO_HIGH,
-    PRICE_HIGH_TO_LOW
-}
-
-enum class VenueType {
-    EVERYONE,
-    MALE_ONLY,
-    FEMALE_ONLY
-}
-
 // Error types for better error handling
 sealed class ExploreError : Exception() {
     data object NetworkError : ExploreError()

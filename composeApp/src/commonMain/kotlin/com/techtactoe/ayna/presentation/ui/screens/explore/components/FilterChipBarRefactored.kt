@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.designsystem.theme.BorderThickness
@@ -233,33 +232,6 @@ private fun BaseFilterChip(
             selectedBorderWidth = BorderThickness.extraSmall
         )
     )
-}
-
-// Helper functions with proper string resources integration
-private fun getSortDisplayText(sortOption: SortOption): String {
-    return when (sortOption) {
-        SortOption.RECOMMENDED -> "Sort"
-        SortOption.TOP_RATED -> "Top-rated"
-        SortOption.NEAREST -> "Nearest"
-        SortOption.PRICE_LOW_TO_HIGH -> "Price ↑"
-        SortOption.PRICE_HIGH_TO_LOW -> "Price ↓"
-    }
-}
-
-private fun getPriceDisplayText(maxPrice: Int): String {
-    return if (maxPrice >= 30000) {
-        "Price"
-    } else {
-        "₺${maxPrice / 100}"
-    }
-}
-
-private fun getTypeDisplayText(venueType: VenueType): String {
-    return when (venueType) {
-        VenueType.EVERYONE -> "Type"
-        VenueType.MALE_ONLY -> "Male only"
-        VenueType.FEMALE_ONLY -> "Female only"
-    }
 }
 
 @Preview

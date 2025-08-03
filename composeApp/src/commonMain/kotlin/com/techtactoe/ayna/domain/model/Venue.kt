@@ -34,27 +34,6 @@ data class VenueLocation(
 )
 
 @Serializable
-enum class VenueType {
-    EVERYONE,
-    MALE_ONLY,
-    FEMALE_ONLY
-}
-
-@Serializable
-enum class SortOption {
-    RECOMMENDED,
-    TOP_RATED,
-    NEAREST
-}
-
-
-@Serializable
-data class PriceRange(
-    val min: Int = 0,
-    val max: Int = 30000 // 300 TRY in cents
-)
-
-@Serializable
 data class ExploreFilters(
     val sortOption: SortOption = SortOption.RECOMMENDED,
     val priceRange: PriceRange = PriceRange(),

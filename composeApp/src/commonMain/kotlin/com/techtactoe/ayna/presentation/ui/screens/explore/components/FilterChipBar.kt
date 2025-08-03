@@ -149,7 +149,7 @@ private fun FilterChip(
     )
 }
 
-private fun getSortDisplayText(sortOption: SortOption): String {
+fun getSortDisplayText(sortOption: SortOption): String {
     return when (sortOption) {
         SortOption.RECOMMENDED -> "Sort"
         SortOption.TOP_RATED -> "Top-rated"
@@ -157,7 +157,7 @@ private fun getSortDisplayText(sortOption: SortOption): String {
     }
 }
 
-private fun getPriceDisplayText(maxPrice: Int): String {
+fun getPriceDisplayText(maxPrice: Int): String {
     return if (maxPrice >= 30000) {
         "Price"
     } else {
@@ -165,7 +165,7 @@ private fun getPriceDisplayText(maxPrice: Int): String {
     }
 }
 
-private fun getTypeDisplayText(venueType: VenueType): String {
+fun getTypeDisplayText(venueType: VenueType): String {
     return when (venueType) {
         VenueType.EVERYONE -> "Type"
         VenueType.MALE_ONLY -> "Male only"

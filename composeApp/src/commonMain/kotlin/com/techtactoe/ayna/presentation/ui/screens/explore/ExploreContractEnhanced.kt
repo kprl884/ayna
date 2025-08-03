@@ -14,7 +14,7 @@ import com.techtactoe.ayna.domain.model.VenueType
  * Enhanced Contract for Explore feature following SOLID principles
  * Improved separation of concerns and type safety
  */
-interface ExploreContractEnhanced {
+interface ExploreContract{
     
     @Stable
     data class UiState(
