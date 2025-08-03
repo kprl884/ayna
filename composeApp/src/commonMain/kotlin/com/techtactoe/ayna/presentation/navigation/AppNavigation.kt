@@ -119,6 +119,17 @@ fun AppNavigation() {
                 }
                 composable<Screen.Profile> { ProfileScreen() }
 
+                composable<Screen.Notifications> {
+                    val viewModel = remember { DataModule.createNotificationsViewModel() }
+                    val uiState by viewModel.uiState.collectAsState()
+
+                    NotificationsScreen(
+                        uiState = uiState,
+                        onEvent = viewModel::onEvent,
+                        navController = navController
+                    )
+                }
+
                 composable<Screen.Detail> { backStackEntry ->
                     val screen: Screen.Detail = backStackEntry.toRoute()
                     val salonId = screen.salonId
