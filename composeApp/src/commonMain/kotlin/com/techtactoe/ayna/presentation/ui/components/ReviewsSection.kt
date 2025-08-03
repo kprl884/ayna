@@ -13,71 +13,76 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.Review
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.designsystem.theme.Elevation
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Stable
+data class ReviewsSectionViewState(
+    val reviews: List<Review>,
+    val overallRating: Double,
+    val reviewCount: Int
+)
 
 @Composable
 fun ReviewsSection(
-    reviews: List<Review>,
-    overallRating: Double,
-    reviewCount: Int,
+    viewState: ReviewsSectionViewState,
+    onSeeAllReviewsClick: () -> Unit = {},
+    onReadMoreClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(Spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
-        Text(
-            text = "Reviews",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = AynaColors.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
+        SectionHeader(
+            title = StringResources.reviews_text,
+            actionText = "See all",
+            onActionClick = onSeeAllReviewsClick
         )
 
         // Overall rating
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 20.dp)
+            horizontalArrangement = Arrangement.spacedBy(Spacing.small)
         ) {
             // Star rating
-            repeat(5) {
+            repeat(5) { index ->
                 Text(
-                    text = "⭐",
-                    fontSize = 20.sp
+                    text = if (index < viewState.overallRating.toInt()) "⭐" else "☆",
+                    style = AynaTypography.titleMedium
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
-
             Text(
-                modifier = Modifier.clickable {
-                    //todo navigate Reviews screen
-                },
-                text = "$overallRating ($reviewCount)",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = AynaColors.Black
+                modifier = Modifier.clickable { onSeeAllReviewsClick() },
+                text = "${viewState.overallRating} (${viewState.reviewCount} ${StringResources.rating_text})",
+                style = AynaTypography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
         // Individual reviews
-        reviews.forEach { review ->
-            ReviewCard(review = review)
-
-            if (review != reviews.last()) {
-                Spacer(modifier = Modifier.height(20.dp))
-            }
+        viewState.reviews.take(3).forEach { review ->
+            ReviewCard(
+                review = review,
+                onReadMoreClick = { onReadMoreClick(review.id) }
+            )
         }
     }
 }
@@ -85,112 +90,125 @@ fun ReviewsSection(
 @Composable
 private fun ReviewCard(
     review: Review,
+    onReadMoreClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Card(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        shape = AynaShapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.xs),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
     ) {
-        // User avatar
-        Box(
+        Row(
             modifier = Modifier
-                .size(40.dp)
-                .background(AynaColors.Purple.copy(alpha = 0.1f), CircleShape),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(Spacing.medium),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.medium)
         ) {
-            Text(
-                text = review.userInitials,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = AynaColors.Purple
-            )
-        }
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            // User name and date
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            // User avatar
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        CircleShape
+                    ),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = review.userName,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = AynaColors.Black
-                )
-
-                Text(
-                    text = review.date,
-                    fontSize = 12.sp,
-                    color = AynaColors.SecondaryText
+                    text = review.userInitials,
+                    style = AynaTypography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Star rating
-            Row {
-                repeat(review.rating) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
+            ) {
+                // User name and date
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
-                        text = "⭐",
-                        fontSize = 14.sp
+                        text = review.userName,
+                        style = AynaTypography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = review.date,
+                        style = AynaTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // Star rating
+                Row {
+                    repeat(5) { index ->
+                        Text(
+                            text = if (index < review.rating) "⭐" else "☆",
+                            style = AynaTypography.labelMedium
+                        )
+                    }
+                }
+
+                // Review comment
+                Text(
+                    text = review.comment,
+                    style = AynaTypography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                // Read more link (if needed)
+                if (review.comment.length > 100) {
+                    Text(
+                        text = "Read more",
+                        style = AynaTypography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable { onReadMoreClick() }
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Review comment
-            Text(
-                text = review.comment,
-                fontSize = 14.sp,
-                color = AynaColors.Black,
-                lineHeight = 20.sp
-            )
-
-            // Read more link (if needed)
-            if (review.comment.length > 100) {
-                Text(
-                    text = "Read more",
-                    fontSize = 14.sp,
-                    color = AynaColors.Purple,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
         }
+    }
     }
 }
 
 @Preview
 @Composable
 fun ReviewsSectionPreview() {
-    val mockReviews = listOf(
-        Review(
-            id = "1",
-            userName = "Monica T",
-            userInitials = "MT",
-            date = "Sat, Jul 19, 2025 at 10:28 PM",
-            rating = 5,
-            comment = "Only the best! Much appreciated 😊"
+    val mockViewState = ReviewsSectionViewState(
+        reviews = listOf(
+            Review(
+                id = "1",
+                userName = "Monica T",
+                userInitials = "MT",
+                date = "Sat, Jul 19, 2025 at 10:28 PM",
+                rating = 5,
+                comment = "Only the best! Much appreciated 😊"
+            ),
+            Review(
+                id = "2",
+                userName = "Froso P",
+                userInitials = "FP",
+                date = "Sat, Jul 19, 2025 at 12:52 PM",
+                rating = 5,
+                comment = "Absolutely excellent service! The environment is welcoming, stylish, and relaxing. Special thanks to the team for their professionalism."
+            )
         ),
-        Review(
-            id = "2",
-            userName = "Froso P",
-            userInitials = "FP",
-            date = "Sat, Jul 19, 2025 at 12:52 PM",
-            rating = 5,
-            comment = "Absolutely excellent service! The environment is welcoming, stylish, and relaxing. Special thanks to the team for their professionalism."
-        )
+        overallRating = 5.0,
+        reviewCount = 3645
     )
 
     MaterialTheme {
         ReviewsSection(
-            reviews = mockReviews,
-            overallRating = 5.0,
-            reviewCount = 3645
+            viewState = mockViewState
         )
     }
 }
