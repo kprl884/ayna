@@ -1,6 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,97 +12,109 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.OpeningHour
 import com.techtactoe.ayna.domain.model.SalonAbout
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Stable
+data class AboutSectionViewState(
+    val description: String,
+    val openingHours: List<OpeningHour>,
+    val features: List<String> = listOf(StringResources.booking_confirmed_text)
+)
 
 @Composable
 fun AboutSection(
-    about: SalonAbout,
-    openingHours: List<OpeningHour>,
+    viewState: AboutSectionViewState,
+    onReadMoreClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(Spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
-        Text(
-            text = "About",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = AynaColors.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
+        SectionHeader(
+            title = StringResources.about_text
         )
-        
+
         // Description
-        Text(
-            text = about.description,
-            fontSize = 14.sp,
-            color = AynaColors.Black,
-            lineHeight = 20.sp
-        )
-        
-        Text(
-            text = "Read more",
-            fontSize = 14.sp,
-            color = AynaColors.Purple,
-            modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
-        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
+        ) {
+            Text(
+                text = viewState.description,
+                style = AynaTypography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = "Read more",
+                style = AynaTypography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable { onReadMoreClick() }
+            )
+        }
         
         // Opening times
-        Text(
-            text = "Opening times",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = AynaColors.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        
-        openingHours.forEach { hour ->
-            OpeningHourRow(hour = hour)
-            
-            if (hour != openingHours.last()) {
-                Spacer(modifier = Modifier.height(12.dp))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.small)
+        ) {
+            Text(
+                text = "Opening times",
+                style = AynaTypography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            viewState.openingHours.forEach { hour ->
+                OpeningHourRow(hour = hour)
             }
         }
         
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        // Additional information
-        Text(
-            text = "Additional information",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = AynaColors.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+        // Features
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Spacing.small)
         ) {
             Text(
-                text = "✓",
-                fontSize = 16.sp,
-                color = Color.Green,
-                modifier = Modifier.padding(end = 8.dp)
+                text = "Additional information",
+                style = AynaTypography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
-            
-            Text(
-                text = "Instant confirmation",
-                fontSize = 14.sp,
-                color = AynaColors.Black
-            )
+
+            viewState.features.forEach { feature ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.small)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+
+                    Text(
+                        text = feature,
+                        style = AynaTypography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
         }
     }
 }
@@ -117,35 +130,34 @@ private fun OpeningHourRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Spacing.small)
         ) {
             // Status indicator
             Box(
                 modifier = Modifier
                     .size(8.dp)
                     .background(
-                        color = if (hour.isOpen) Color.Green else AynaColors.InactiveGray,
+                        color = if (hour.isOpen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                         shape = CircleShape
                     )
             )
-            
-            Spacer(modifier = Modifier.size(8.dp))
-            
+
             Text(
                 text = hour.day,
-                fontSize = 14.sp,
-                color = AynaColors.Black
+                style = AynaTypography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
-        
+
         Text(
             text = if (hour.isOpen && hour.openTime != null && hour.closeTime != null) {
                 "${hour.openTime} – ${hour.closeTime}"
             } else {
                 "Closed"
             },
-            fontSize = 14.sp,
-            color = AynaColors.SecondaryText
+            style = AynaTypography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -153,25 +165,23 @@ private fun OpeningHourRow(
 @Preview
 @Composable
 fun AboutSectionPreview() {
-    val mockAbout = SalonAbout(
+    val mockViewState = AboutSectionViewState(
         description = "Hair Etc. Studio offers the most unique hair experience in Cyprus. We are a team of creators working with people on a daily basis...",
-        fullDescription = "Full description would go here..."
+        openingHours = listOf(
+            OpeningHour("Monday", false),
+            OpeningHour("Tuesday", true, "9:00 AM", "7:00 PM"),
+            OpeningHour("Wednesday", true, "9:00 AM", "7:00 PM"),
+            OpeningHour("Thursday", true, "9:30 AM", "5:30 PM"),
+            OpeningHour("Friday", true, "9:00 AM", "7:00 PM"),
+            OpeningHour("Saturday", true, "8:30 AM", "5:00 PM"),
+            OpeningHour("Sunday", false)
+        ),
+        features = listOf(StringResources.booking_confirmed_text, "Professional service")
     )
-    
-    val mockOpeningHours = listOf(
-        OpeningHour("Monday", false),
-        OpeningHour("Tuesday", true, "9:00 AM", "7:00 PM"),
-        OpeningHour("Wednesday", true, "9:00 AM", "7:00 PM"),
-        OpeningHour("Thursday", true, "9:30 AM", "5:30 PM"),
-        OpeningHour("Friday", true, "9:00 AM", "7:00 PM"),
-        OpeningHour("Saturday", true, "8:30 AM", "5:00 PM"),
-        OpeningHour("Sunday", false)
-    )
-    
+
     MaterialTheme {
         AboutSection(
-            about = mockAbout,
-            openingHours = mockOpeningHours
+            viewState = mockViewState
         )
     }
 }
