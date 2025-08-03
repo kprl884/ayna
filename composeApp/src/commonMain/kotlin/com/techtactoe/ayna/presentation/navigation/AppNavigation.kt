@@ -95,7 +95,11 @@ fun AppNavigation() {
                 }
                 composable<Screen.Search> { SearchScreen() }
                 composable<Screen.Explore> {
-                    ExploreScreen(
+                    // Using the refactored version with enhanced architecture
+                    val viewModel = remember { ExploreViewModelEnhanced() }
+
+                    ExploreScreenRefactored(
+                        viewModel = viewModel,
                         onNavigateToVenueDetail = { venueId ->
                             navController.navigate(Screen.Detail(venueId))
                         },
