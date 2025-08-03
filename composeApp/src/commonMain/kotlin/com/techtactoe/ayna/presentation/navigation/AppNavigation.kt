@@ -94,6 +94,10 @@ fun AppNavigation() {
                     )
                 }
                 composable<Screen.Search> { SearchScreen() }
+                composable<Screen.AdvancedSearch> {
+                    // TODO: Implement AdvancedSearchScreen
+                    SearchScreen() // Temporary fallback
+                }
                 composable<Screen.Explore> {
                     // Using the refactored version with enhanced architecture
                     val viewModel = remember { ExploreViewModelEnhanced() }
