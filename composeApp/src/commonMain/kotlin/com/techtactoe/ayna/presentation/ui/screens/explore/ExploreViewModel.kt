@@ -50,7 +50,7 @@ class ExploreViewModel(
                 }
             }
             is ExploreContract.UiEvent.OnHideBottomSheet -> {
-                _uiState.update { it.copy(currentBottomSheet = BottomSheetType.None) }
+                _uiState.update { it.copy(currentBottomSheet = ExploreContract.BottomSheetType.None) }
             }
             is ExploreContract.UiEvent.OnUpdateTempFilters -> {
                 _uiState.update { it.copy(tempFilters = event.filters) }
@@ -60,7 +60,7 @@ class ExploreViewModel(
                 _uiState.update {
                     it.copy(
                         filters = tempFilters,
-                        currentBottomSheet = BottomSheetType.None
+                        currentBottomSheet = ExploreContract.BottomSheetType.None
                     )
                 }
                 loadVenues(reset = true)

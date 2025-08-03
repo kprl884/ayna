@@ -42,10 +42,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.techtactoe.ayna.designsystem.ErrorContent
+import com.techtactoe.ayna.designsystem.LoadingContent
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.PriceRange
 import com.techtactoe.ayna.domain.model.Venue
-import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.ExploreSearchBar
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.FilterChipBar
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.FiltersBottomSheet
@@ -114,28 +116,28 @@ fun ExploreScreen(
                 onFiltersClick = {
                     viewModel.onEvent(
                         ExploreContract.UiEvent.OnShowBottomSheet(
-                            BottomSheetType.Filters
+                            ExploreContract.BottomSheetType.Filters
                         )
                     )
                 },
                 onSortClick = {
                     viewModel.onEvent(
                         ExploreContract.UiEvent.OnShowBottomSheet(
-                            BottomSheetType.Sort
+                            ExploreContract.BottomSheetType.Sort
                         )
                     )
                 },
                 onPriceClick = {
                     viewModel.onEvent(
                         ExploreContract.UiEvent.OnShowBottomSheet(
-                            BottomSheetType.Price
+                            ExploreContract.BottomSheetType.Price
                         )
                     )
                 },
                 onTypeClick = {
                     viewModel.onEvent(
                         ExploreContract.UiEvent.OnShowBottomSheet(
-                            BottomSheetType.VenueType
+                            ExploreContract.BottomSheetType.VenueType
                         )
                     )
                 }
@@ -167,7 +169,7 @@ fun ExploreScreen(
 
     // Bottom sheets
     when (uiState.currentBottomSheet) {
-        is BottomSheetType.Sort -> {
+        is ExploreContract.BottomSheetType.Sort -> {
             SortBottomSheet(
                 currentSort = uiState.filters.sortOption,
                 onSortSelected = { sortOption ->
@@ -179,7 +181,7 @@ fun ExploreScreen(
             )
         }
 
-        is BottomSheetType.Price -> {
+        is ExploreContract.BottomSheetType.Price -> {
             PriceBottomSheet(
                 currentPriceRange = uiState.filters.priceRange,
                 onPriceRangeChanged = { priceRange ->
@@ -195,7 +197,7 @@ fun ExploreScreen(
             )
         }
 
-        is BottomSheetType.VenueType -> {
+        is ExploreContract.BottomSheetType.VenueType -> {
             VenueTypeBottomSheet(
                 currentType = uiState.filters.venueType,
                 onTypeSelected = { venueType ->
@@ -207,7 +209,7 @@ fun ExploreScreen(
             )
         }
 
-        is BottomSheetType.Filters -> {
+        is ExploreContract.BottomSheetType.Filters -> {
             FiltersBottomSheet(
                 currentFilters = uiState.tempFilters,
                 onFiltersChanged = { filters ->
@@ -221,7 +223,7 @@ fun ExploreScreen(
             )
         }
 
-        is BottomSheetType.None -> {
+        is ExploreContract.BottomSheetType.None -> {
             // No bottom sheet shown
         }
     }
@@ -287,14 +289,14 @@ private fun ExploreContent(
 ) {
     when {
         isLoading && venues.isEmpty() -> {
-            LoadingContent(modifier = modifier)
+            LoadingContent()
         }
 
         errorMessage != null -> {
             ErrorContent(
                 message = errorMessage,
                 onRetry = onRefresh,
-                modifier = modifier
+                onClearError = onClearSearch
             )
         }
 
@@ -319,20 +321,6 @@ private fun ExploreContent(
                 modifier = modifier
             )
         }
-    }
-}
-
-@Composable
-private fun LoadingContent(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            color = Color(0xFF7B61FF)
-        )
     }
 }
 
@@ -405,51 +393,6 @@ private fun SuccessContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ErrorContent(
-    message: String,
-    onRetry: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Something went wrong",
-            style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = onRetry,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF000000),
-                contentColor = Color.White
-            )
-        ) {
-            Text("Try again")
         }
     }
 }

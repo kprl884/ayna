@@ -2,7 +2,6 @@ package com.techtactoe.ayna.presentation.ui.screens.explore
 
 import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.Venue
-import com.techtactoe.ayna.presentation.ui.screens.explore.BottomSheetType
 
 /**
  * Contract defining the UI state and events for the Explore screen
@@ -87,5 +86,13 @@ interface ExploreContract {
         VENUE_DETAIL,
         MAP,
         ADVANCED_SEARCH
+    }
+
+    sealed interface BottomSheetType {
+        data object None : BottomSheetType
+        data object Sort : BottomSheetType
+        data object Price : BottomSheetType
+        data object VenueType : BottomSheetType
+        data object Filters : BottomSheetType
     }
 }

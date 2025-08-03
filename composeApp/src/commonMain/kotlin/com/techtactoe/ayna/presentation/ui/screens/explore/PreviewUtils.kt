@@ -1,11 +1,9 @@
 package com.techtactoe.ayna.presentation.ui.screens.explore
 
-import com.techtactoe.ayna.domain.model.ExploreFilters
 import com.techtactoe.ayna.domain.model.Venue
 import com.techtactoe.ayna.domain.model.VenueLocation
 import com.techtactoe.ayna.domain.model.VenueService
 import com.techtactoe.ayna.domain.model.VenueType
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 /**
  * Sample data provider for previews and testing
@@ -106,25 +104,3 @@ fun sampleVenues(): List<Venue> = listOf(
         location = VenueLocation(41.0256, 28.9744, "Galata, Istanbul")
     )
 )
-
-/**
- * Preview parameter provider for ExploreScreen previews
- */
-class ExploreScreenPreviewProvider : PreviewParameterProvider<ExploreUiState> {
-    override val values: Sequence<ExploreUiState> = sequenceOf(
-        // Default state with venues
-        ExploreUiState.Success(
-            venues = sampleVenues(),
-            isRefreshing = false,
-            hasMorePages = true,
-            filters = ExploreFilters(),
-            isLocationPermissionGranted = false
-        ),
-        // Loading state
-        ExploreUiState.Loading,
-        // Empty state
-        ExploreUiState.Empty(),
-        // Error state
-        ExploreUiState.Error("Network connection failed")
-    )
-}
