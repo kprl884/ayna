@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.domain.model.NotificationItem
 import com.techtactoe.ayna.domain.model.NotificationType
+import com.techtactoe.ayna.presentation.navigation.Screen
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,49 +22,45 @@ class NotificationsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(NotificationsContract.UiState())
     val uiState: StateFlow<NotificationsContract.UiState> = _uiState.asStateFlow()
 
+    private val _navigationEvents = Channel<NotificationsContract.NavigationEvent>()
+    val navigationEvents = _navigationEvents.receiveAsFlow()
+
     init {
         loadNotifications()
+        // Auto-mark as read after 2 seconds when screen loads
+        markUnreadAsReadAfterDelay()
     }
 
-    /**
-     * Handle all user events from the UI
-     */
     fun onEvent(event: NotificationsContract.UiEvent) {
         when (event) {
             is NotificationsContract.UiEvent.OnInitialize -> {
                 loadNotifications()
-                // Auto-mark as read after 2 seconds
-                markUnreadAsReadAfterDelay()
             }
+
             is NotificationsContract.UiEvent.OnMarkAllAsRead -> {
                 markAllAsRead()
             }
+
             is NotificationsContract.UiEvent.OnNotificationClick -> {
                 handleNotificationClick(event.notification)
             }
+
             is NotificationsContract.UiEvent.OnToggleDoNotDisturb -> {
                 _uiState.update { it.copy(doNotDisturbEnabled = event.enabled) }
                 // TODO: Save to preferences
             }
-            is NotificationsContract.UiEvent.OnBackClick -> {
-                _uiState.update { it.copy(navigateBack = true) }
-            }
-            is NotificationsContract.UiEvent.OnNavigationHandled -> {
-                when (event.resetNavigation) {
-                    NotificationsContract.NavigationReset.BACK -> {
-                        _uiState.update { it.copy(navigateBack = false) }
-                    }
-                    NotificationsContract.NavigationReset.ROUTE -> {
-                        _uiState.update { it.copy(navigateToRoute = null) }
-                    }
-                }
-            }
+        }
+    }
+
+    fun onBackClick() {
+        viewModelScope.launch {
+            _navigationEvents.send(NotificationsContract.NavigationEvent.NavigateBack)
         }
     }
 
     private fun loadNotifications() {
         _uiState.update { it.copy(isLoading = true) }
-        
+
         // Sample notifications data
         val sampleNotifications = listOf(
             NotificationItem(
@@ -102,7 +101,7 @@ class NotificationsViewModel : ViewModel() {
                 type = NotificationType.APPOINTMENT_REMINDER
             )
         )
-        
+
         _uiState.update {
             it.copy(
                 notifications = sampleNotifications,
@@ -126,20 +125,32 @@ class NotificationsViewModel : ViewModel() {
     }
 
     private fun handleNotificationClick(notification: NotificationItem) {
-        // Mark notification as read
-        val updatedNotifications = _uiState.value.notifications.map { 
+        val updatedNotifications = _uiState.value.notifications.map {
             if (it.id == notification.id) it.copy(isRead = true) else it
         }
         _uiState.update { it.copy(notifications = updatedNotifications) }
-        
-        // Navigate based on notification type
-        val route = when (notification.type) {
+
+        val targetScreen = when (notification.type) {
             NotificationType.APPOINTMENT_REMINDER,
-            NotificationType.APPOINTMENT_CANCELLED -> "/appointment/${notification.id}"
-            NotificationType.PROFILE_COMPLETION -> notification.actionRoute ?: "/profile"
-            NotificationType.PASSWORD_CHANGED -> "/settings"
+            NotificationType.APPOINTMENT_CANCELLED -> {
+                Screen.Appointments
+            }
+
+            NotificationType.PROFILE_COMPLETION -> {
+                Screen.Profile
+            }
+
+            NotificationType.PASSWORD_CHANGED -> {
+                Screen.Profile
+            }
         }
-        
-        _uiState.update { it.copy(navigateToRoute = route) }
+
+        viewModelScope.launch {
+            _navigationEvents.send(
+                NotificationsContract.NavigationEvent.NavigateToScreen(
+                    targetScreen
+                )
+            )
+        }
     }
 }

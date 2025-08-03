@@ -34,27 +34,22 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun NotificationsScreen(
     uiState: NotificationsContract.UiState,
     onEvent: (NotificationsContract.UiEvent) -> Unit,
+    onBackClick: () -> Unit,
     navController: NavController,
+    viewModel: NotificationsViewModel,
     modifier: Modifier = Modifier
 ) {
-    // Handle navigation effects
-    LaunchedEffect(uiState.navigateBack) {
-        if (uiState.navigateBack) {
-            navController.navigateUp()
-            onEvent(NotificationsContract.UiEvent.OnNavigationHandled(NotificationsContract.NavigationReset.BACK))
-        }
-    }
-
-    LaunchedEffect(uiState.navigateToRoute) {
-        uiState.navigateToRoute?.let { route ->
-            navController.navigate(route)
-            onEvent(NotificationsContract.UiEvent.OnNavigationHandled(NotificationsContract.NavigationReset.ROUTE))
-        }
-    }
-
-    // Initialize when screen loads
     LaunchedEffect(Unit) {
-        onEvent(NotificationsContract.UiEvent.OnInitialize)
+        viewModel.navigationEvents.collect { navigationEvent ->
+            when (navigationEvent) {
+                is NotificationsContract.NavigationEvent.NavigateBack -> {
+                    navController.navigateUp()
+                }
+                is NotificationsContract.NavigationEvent.NavigateToScreen -> {
+                    navController.navigate(navigationEvent.screen)
+                }
+            }
+        }
     }
 
     Scaffold(
@@ -69,7 +64,7 @@ fun NotificationsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(NotificationsContract.UiEvent.OnBackClick) }) {
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"

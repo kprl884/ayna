@@ -15,8 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
@@ -126,7 +126,9 @@ fun AppNavigation() {
                     NotificationsScreen(
                         uiState = uiState,
                         onEvent = viewModel::onEvent,
-                        navController = navController
+                        onBackClick = viewModel::onBackClick,
+                        navController = navController,
+                        viewModel = viewModel
                     )
                 }
 
@@ -134,7 +136,6 @@ fun AppNavigation() {
                     val screen: Screen.Detail = backStackEntry.toRoute()
                     val salonId = screen.salonId
 
-                    // ViewModel is properly remembered to survive recompositions
                     val viewModel =
                         remember(salonId) { DataModule.createSalonDetailViewModel(salonId) }
                     val uiState by viewModel.uiState.collectAsState()

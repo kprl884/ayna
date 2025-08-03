@@ -55,6 +55,12 @@ fun NotificationsContent(
                 )
                 Switch(
                     checked = uiState.doNotDisturbEnabled,
+                    colors = androidx.compose.material3.SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    ),
                     onCheckedChange = {
                         onEvent(NotificationsContract.UiEvent.OnToggleDoNotDisturb(it))
                     }
