@@ -105,6 +105,7 @@ private fun NotificationIcon(
 @Composable
 fun UserHeaderPreview() {
     UserHeader(
-        userName = "John"
+        userName = "John",
+        notificationState = NotificationUiState(hasUnreadNotifications = true, unreadCount = 3)
     )
 }
