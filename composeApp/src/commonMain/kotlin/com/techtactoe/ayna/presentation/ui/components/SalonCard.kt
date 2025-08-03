@@ -2,6 +2,7 @@ package com.techtactoe.ayna.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,117 +10,159 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.DayOfWeek
 import com.techtactoe.ayna.domain.model.Employee
 import com.techtactoe.ayna.domain.model.Location
 import com.techtactoe.ayna.domain.model.Salon
 import com.techtactoe.ayna.domain.model.Service
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.designsystem.theme.Elevation
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Stable
+data class SalonCardViewState(
+    val id: String,
+    val name: String,
+    val address: String,
+    val rating: Double,
+    val reviewCount: Int,
+    val imageUrl: String?,
+    val tags: List<String>,
+    val isNew: Boolean = false
+)
 
 @Composable
 fun SalonCard(
-    salon: Salon,
+    viewState: SalonCardViewState,
     onSalonClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.width(280.dp).clickable { onSalonClick(salon.id) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = AynaColors.White)
+        modifier = modifier
+            .width(280.dp)
+            .clickable { onSalonClick(viewState.id) },
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.sm),
+        shape = AynaShapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
     ) {
         Column {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .background(AynaColors.LightGray),
+                    .clip(AynaShapes.medium)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "🪒",
-                    fontSize = 32.sp
+                    style = AynaTypography.displaySmall
                 )
             }
 
             Column(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(Spacing.medium),
+                verticalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
             ) {
-                // Salon name
-                Text(
-                    text = salon.name,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = AynaColors.PrimaryText,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                // Rating and review count
+                // Salon name and new badge
                 Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${salon.rating} ⭐",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = AynaColors.PrimaryText
+                        text = viewState.name,
+                        style = AynaTypography.titleLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    if (viewState.isNew) {
+                        Text(
+                            text = StringResources.new_text,
+                            style = AynaTypography.labelMedium,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier
+                                .background(
+                                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                                    shape = AynaShapes.small
+                                )
+                                .padding(
+                                    horizontal = Spacing.small,
+                                    vertical = Spacing.extraSmall
+                                )
+                        )
+                    }
+                }
+
+                // Rating and review count
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
+                ) {
+                    Text(
+                        text = "${viewState.rating} ⭐",
+                        style = AynaTypography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
                     Text(
-                        text = "(${salon.reviewCount})",
-                        fontSize = 14.sp,
-                        color = AynaColors.SecondaryText
+                        text = "(${viewState.reviewCount} ${StringResources.rating_text})",
+                        style = AynaTypography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
-                Spacer(modifier = Modifier.height(4.dp))
-
                 // Address
                 Text(
-                    text = salon.address,
-                    fontSize = 12.sp,
-                    color = AynaColors.SecondaryText,
+                    text = viewState.address,
+                    style = AynaTypography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Category tag
-                if (salon.tags.isNotEmpty()) {
-                    Box(
-                        modifier = Modifier
-                            .background(
-                                color = AynaColors.White,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                // Category tags
+                if (viewState.tags.isNotEmpty()) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.extraSmall)
                     ) {
-                        Text(
-                            text = salon.tags.first(),
-                            fontSize = 12.sp,
-                            color = AynaColors.SecondaryText
-                        )
+                        viewState.tags.take(2).forEach { tag ->
+                            Text(
+                                text = tag,
+                                style = AynaTypography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.secondaryContainer,
+                                        shape = AynaShapes.small
+                                    )
+                                    .padding(
+                                        horizontal = Spacing.small,
+                                        vertical = Spacing.extraSmall
+                                    )
+                            )
+                        }
                     }
                 }
             }
@@ -130,79 +173,16 @@ fun SalonCard(
 @Preview
 @Composable
 fun SalonCardPreview() {
-    val mockSalon = Salon(
+    val mockViewState = SalonCardViewState(
         id = "1",
         name = "Barbershop Dolapdere",
-        location = Location(
-            address = "Dolapdere Mahallesi, 34384 Istanbul",
-            city = "Istanbul",
-            latitude = 41.0082,
-            longitude = 28.9784
-        ),
-        imageUrls = listOf(
-            "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800",
-            "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800",
-            "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800"
-        ),
+        address = "Dolapdere Mahallesi, 34384 Istanbul",
         rating = 5.0,
         reviewCount = 69,
-        operatingHours = mapOf(
-            DayOfWeek.MONDAY to "9:00 AM - 7:00 PM",
-            DayOfWeek.TUESDAY to "9:00 AM - 7:00 PM",
-            DayOfWeek.WEDNESDAY to "9:00 AM - 7:00 PM",
-            DayOfWeek.THURSDAY to "9:00 AM - 7:00 PM",
-            DayOfWeek.FRIDAY to "9:00 AM - 8:00 PM",
-            DayOfWeek.SATURDAY to "8:00 AM - 8:00 PM",
-            DayOfWeek.SUNDAY to "Closed"
-        ),
-        employees = listOf(
-            Employee(
-                "emp1",
-                "Emre Demir",
-                "Master Barber",
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
-                4.9,
-                45
-            ),
-            Employee(
-                "emp2",
-                "Ali Yılmaz",
-                "Hair Stylist",
-                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400",
-                4.8,
-                32
-            )
-        ),
-        services = listOf(
-            Service(
-                "svc1",
-                "Haircut / Saç Kesimi",
-                "Professional men's haircut with styling",
-                700.0,
-                60
-            ),
-            Service(
-                "svc2",
-                "Haircut & Shave / Saç Kesimi & Sakal Tıraşı",
-                "Complete grooming package",
-                1175.0,
-                90
-            ),
-            Service(
-                "svc3",
-                "Full Service / Komple Bakım",
-                "Premium grooming experience",
-                1880.0,
-                120
-            )
-        ),
-        description = "Traditional Turkish barbershop offering premium men's grooming services in the heart of Dolapdere.",
-        phoneNumber = "+90 212 555 0101",
-        isOpen = true,
-        address = "Dolapdere Mahallesi, 34384 Istanbul",
         imageUrl = "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800",
-        tags = listOf("Barbershop", "Traditional")
+        tags = listOf(StringResources.barber_text, StringResources.popular_text),
+        isNew = true
     )
 
-    SalonCard(salon = mockSalon)
+    SalonCard(viewState = mockViewState)
 }
