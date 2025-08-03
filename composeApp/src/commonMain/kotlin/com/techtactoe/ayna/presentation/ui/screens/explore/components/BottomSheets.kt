@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.domain.model.*
-import com.techtactoe.ayna.presentation.theme.AynaAppTheme
+import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**

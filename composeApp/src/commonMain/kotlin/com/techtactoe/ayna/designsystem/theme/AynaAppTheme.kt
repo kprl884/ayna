@@ -1,8 +1,8 @@
-package com.techtactoe.ayna.presentation.theme
+package com.techtactoe.ayna.designsystem.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.techtactoe.ayna.presentation.typography.AynaTypography
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 
 @Composable
 fun AynaAppTheme(

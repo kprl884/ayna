@@ -24,11 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.presentation.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SectionHeader
 import com.techtactoe.ayna.presentation.ui.components.UserHeader
-import com.techtactoe.ayna.presentation.ui.screens.home.HomeContract
 
 @Composable
 fun HomeScreenContent(
@@ -43,7 +42,7 @@ fun HomeScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            val topPadding = this.maxHeight / 10
+            val topPadding = this.maxHeight / 15
             when {
                 uiState.isLoading -> {
                     Box(
@@ -79,7 +78,7 @@ fun HomeScreenContent(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = uiState.errorMessage ?: "Unknown error",
+                                text = uiState.errorMessage,
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -108,12 +107,12 @@ fun HomeScreenContent(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Spacing.large))
 
                         if (uiState.salons.isNotEmpty()) {
                             SectionHeader(title = "Recommended")
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(Spacing.large))
 
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
@@ -129,11 +128,11 @@ fun HomeScreenContent(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(Spacing.large))
 
                             SectionHeader(title = "New to Fresha")
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(Spacing.large))
 
                             LazyRow(
                                 contentPadding = PaddingValues(horizontal = 16.dp),
@@ -144,7 +143,7 @@ fun HomeScreenContent(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(32.dp))
+                            Spacer(modifier = Modifier.height(Spacing.xlarge))
                         }
                     }
                 }

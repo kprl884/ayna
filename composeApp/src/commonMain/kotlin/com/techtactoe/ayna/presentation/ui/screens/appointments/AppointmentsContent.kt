@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.techtactoe.ayna.domain.model.Appointment
-import com.techtactoe.ayna.presentation.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.presentation.ui.screens.appointments.component.AppointmentCard
 import com.techtactoe.ayna.presentation.ui.screens.appointments.model.AppointmentTab
 
@@ -27,8 +27,8 @@ fun AppointmentsContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Spacing.md),
-        verticalArrangement = Arrangement.spacedBy(Spacing.md)
+            .padding(Spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(Spacing.medium)
     ) {
         items(appointments) { appointment ->
             AppointmentCard(
