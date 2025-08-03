@@ -46,10 +46,23 @@ interface HomeContract {
         data class OnSearchQueryChanged(val query: String) : UiEvent
         data object OnSearchClick : UiEvent
 
+        // Navigation events
         data class OnSalonClick(val salonId: String) : UiEvent
         data object OnProfileClick : UiEvent
+        data object OnNavigateToNotifications : UiEvent
+        data class OnNavigationHandled(val resetNavigation: NavigationReset) : UiEvent
 
         // Error handling
         data object OnClearError : UiEvent
+    }
+
+    /**
+     * Navigation reset options
+     */
+    enum class NavigationReset {
+        SALON_DETAIL,
+        SEARCH,
+        PROFILE,
+        NOTIFICATIONS
     }
 }
