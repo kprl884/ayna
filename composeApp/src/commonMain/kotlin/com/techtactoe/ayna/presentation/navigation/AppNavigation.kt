@@ -105,6 +105,18 @@ fun AppNavigation() {
                         }
                     )
                 }
+
+                composable<Screen.ExploreMap> {
+                    val viewModel = remember { DataModule.createMapViewModel() }
+
+                    MapScreen(
+                        onBackClick = { navController.popBackStack() },
+                        onSalonClick = { salonId ->
+                            navController.navigate(Screen.Detail(salonId))
+                        },
+                        viewModel = viewModel
+                    )
+                }
                 composable<Screen.Appointments> {
                     val viewModel = remember { DataModule.createAppointmentsViewModel() }
                     val uiState by viewModel.uiState.collectAsState()
