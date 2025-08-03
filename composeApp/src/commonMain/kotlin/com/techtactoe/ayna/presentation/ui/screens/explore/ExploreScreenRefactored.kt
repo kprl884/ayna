@@ -473,18 +473,7 @@ private fun calculateActiveFiltersCount(filters: com.techtactoe.ayna.domain.mode
     return count
 }
 
-/**
- * Placeholder for enhanced ViewModel - to be implemented next
- */
-class ExploreViewModelEnhanced {
-    val uiState = kotlinx.coroutines.flow.MutableStateFlow(
-        ExploreContract.UiState()
-    )
-    
-    fun onEvent(event: ExploreContract.UiEvent) {
-        // TODO: Implement enhanced event handling
-    }
-}
+// ExploreViewModelEnhanced is imported from the separate file
 
 @Preview
 @Composable
