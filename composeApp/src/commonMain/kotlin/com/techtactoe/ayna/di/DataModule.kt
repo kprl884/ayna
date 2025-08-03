@@ -78,4 +78,8 @@ object DataModule {
     fun createNotificationsViewModel(): NotificationsViewModel {
         return NotificationsViewModel()
     }
+
+    fun createMapViewModel(): MapViewModel {
+        return MapViewModel()
+    }
 }
