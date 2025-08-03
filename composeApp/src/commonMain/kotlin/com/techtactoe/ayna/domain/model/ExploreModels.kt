@@ -8,19 +8,6 @@ import androidx.compose.runtime.Stable
  */
 
 @Stable
-data class VenueUiModel(
-    val id: String,
-    val name: String,
-    val rating: Float,
-    val reviewCount: Int,
-    val district: String,
-    val city: String,
-    val images: List<String>,
-    val services: List<VenueServiceUiModel>,
-    val isBookmarked: Boolean = false
-)
-
-@Stable
 data class VenueServiceUiModel(
     val id: String,
     val name: String,
@@ -57,7 +44,7 @@ sealed class ExploreError : Exception() {
 data class ExploreContentState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val venues: List<VenueUiModel> = emptyList(),
+    val venues: List<Venue> = emptyList(),
     val hasMorePages: Boolean = false,
     val error: ExploreError? = null
 )

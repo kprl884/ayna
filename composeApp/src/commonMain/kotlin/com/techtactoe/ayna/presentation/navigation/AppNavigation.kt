@@ -21,8 +21,7 @@ import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
-import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreenRefactored
-import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModelEnhanced
+import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModel
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.map.MapScreen
 import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsScreen
@@ -100,9 +99,9 @@ fun AppNavigation() {
                 }
                 composable<Screen.Explore> {
                     // Using the refactored version with enhanced architecture
-                    val viewModel = remember { ExploreViewModelEnhanced() }
+                    val viewModel = remember { ExploreViewModel() }
 
-                    ExploreScreenRefactored(
+                    ExploreScreen(
                         viewModel = viewModel,
                         onNavigateToVenueDetail = { venueId ->
                             navController.navigate(Screen.Detail(venueId))

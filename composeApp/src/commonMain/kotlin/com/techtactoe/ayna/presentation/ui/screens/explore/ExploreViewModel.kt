@@ -1,253 +1,376 @@
 package com.techtactoe.ayna.presentation.ui.screens.explore
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.data.FakeExploreRepository
+import com.techtactoe.ayna.domain.model.BottomSheetType
+import com.techtactoe.ayna.domain.model.ExploreError
 import com.techtactoe.ayna.domain.model.ExploreFilters
-import com.techtactoe.ayna.domain.model.Venue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.techtactoe.ayna.domain.model.ExploreFiltersUiModel
+import com.techtactoe.ayna.domain.model.PriceRangeUiModel
+import com.techtactoe.ayna.domain.model.SortOption
+import com.techtactoe.ayna.domain.model.VenueType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel for the Explore screen following the standardized MVVM pattern
- * Single StateFlow for UI state and single onEvent function for all user interactions
+ * Enhanced ExploreViewModel following the new ExploreContract
+ *
+ * Key Improvements:
+ * - SOLID principles compliance with clear separation of concerns
+ * - Enhanced state management with separate state categories
+ * - Better error handling with typed errors
+ * - Performance optimization with efficient state updates
+ * - Use case pattern for business logic (to be integrated)
  */
 class ExploreViewModel(
     private val repository: FakeExploreRepository = FakeExploreRepository()
-) {
-    private val _uiState = MutableStateFlow(
-        ExploreContract.UiState(
-            venues = sampleVenues(),
-            isSuccess = true
-        )
-    )
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(ExploreContract.UiState())
     val uiState: StateFlow<ExploreContract.UiState> = _uiState.asStateFlow()
 
-    private val viewModelScope = CoroutineScope(Dispatchers.Main)
     private var currentPage = 0
-    private val allVenues = mutableListOf<Venue>()
+    private var isLoadingMore = false
 
     init {
-        loadVenues(reset = true)
+        loadVenues(isRefresh = false)
     }
 
-    /**
-     * Single entry point for all user interactions with the Explore screen
-     * Following the golden standard MVVM pattern
-     */
     fun onEvent(event: ExploreContract.UiEvent) {
         when (event) {
-            // Filter events
-            is ExploreContract.UiEvent.OnShowBottomSheet -> {
-                _uiState.update {
-                    it.copy(
-                        currentBottomSheet = event.type,
-                        tempFilters = it.filters
-                    )
-                }
-            }
-            is ExploreContract.UiEvent.OnHideBottomSheet -> {
-                _uiState.update { it.copy(currentBottomSheet = ExploreContract.BottomSheetType.None) }
-            }
-            is ExploreContract.UiEvent.OnUpdateTempFilters -> {
-                _uiState.update { it.copy(tempFilters = event.filters) }
-            }
-            is ExploreContract.UiEvent.OnApplyTempFilters -> {
-                val tempFilters = _uiState.value.tempFilters
-                _uiState.update {
-                    it.copy(
-                        filters = tempFilters,
-                        currentBottomSheet = ExploreContract.BottomSheetType.None
-                    )
-                }
-                loadVenues(reset = true)
-            }
-            is ExploreContract.UiEvent.OnClearFilters -> {
-                _uiState.update {
-                    it.copy(
-                        filters = ExploreFilters(),
-                        tempFilters = ExploreFilters()
-                    )
-                }
-                loadVenues(reset = true)
-            }
-
-            // Search events
-            is ExploreContract.UiEvent.OnSearchQueryChanged -> {
-                val newFilters = _uiState.value.filters.copy(searchQuery = event.query)
-                _uiState.update {
-                    it.copy(
-                        filters = newFilters,
-                        searchQuery = event.query
-                    )
-                }
-                loadVenues(reset = true)
-            }
-            is ExploreContract.UiEvent.OnSelectedCityChanged -> {
-                val newFilters = _uiState.value.filters.copy(selectedCity = event.city)
-                _uiState.update {
-                    it.copy(
-                        filters = newFilters,
-                        selectedCity = event.city
-                    )
-                }
-                loadVenues(reset = true)
-            }
-
-            // Venue interaction events
-            is ExploreContract.UiEvent.OnVenueClicked -> {
-                _uiState.update { it.copy(navigateToVenueDetail = event.venueId) }
-            }
-            is ExploreContract.UiEvent.OnVenueBookmarked -> {
-                bookmarkVenue(event.venueId)
-            }
-
-            // Navigation events
-            is ExploreContract.UiEvent.OnNavigateToMap -> {
-                _uiState.update { it.copy(navigateToMap = true) }
-            }
-            is ExploreContract.UiEvent.OnNavigateToAdvancedSearch -> {
-                _uiState.update { it.copy(navigateToAdvancedSearch = true) }
-            }
-            is ExploreContract.UiEvent.OnNavigationHandled -> {
-                when (event.resetNavigation) {
-                    ExploreContract.NavigationReset.VENUE_DETAIL -> {
-                        _uiState.update { it.copy(navigateToVenueDetail = null) }
-                    }
-                    ExploreContract.NavigationReset.MAP -> {
-                        _uiState.update { it.copy(navigateToMap = false) }
-                    }
-                    ExploreContract.NavigationReset.ADVANCED_SEARCH -> {
-                        _uiState.update { it.copy(navigateToAdvancedSearch = false) }
-                    }
-                }
-            }
-
-            // List events
+            // Content Events
             is ExploreContract.UiEvent.OnRefreshVenues -> {
-                refreshVenues()
+                loadVenues(isRefresh = true)
             }
+
             is ExploreContract.UiEvent.OnLoadMoreVenues -> {
-                loadVenues(reset = false)
+                if (!isLoadingMore && _uiState.value.contentState.hasMorePages) {
+                    loadMoreVenues()
+                }
             }
 
-            // Permission events
+            is ExploreContract.UiEvent.OnRetryLoadVenues -> {
+                clearError()
+                loadVenues(isRefresh = false)
+            }
+
+            // Filter Events
+            is ExploreContract.UiEvent.OnShowBottomSheet -> {
+                showBottomSheet(event.type)
+            }
+
+            is ExploreContract.UiEvent.OnHideBottomSheet -> {
+                hideBottomSheet()
+            }
+
+            is ExploreContract.UiEvent.OnUpdateTempFilters -> {
+                updateTempFilters(event.filters)
+            }
+
+            is ExploreContract.UiEvent.OnApplyTempFilters -> {
+                applyTempFilters()
+            }
+
+            is ExploreContract.UiEvent.OnClearAllFilters -> {
+                clearAllFilters()
+            }
+
+            // Quick Filter Events
+            is ExploreContract.UiEvent.OnSortOptionSelected -> {
+                updateSortOption(event.option)
+            }
+
+            is ExploreContract.UiEvent.OnVenueTypeSelected -> {
+                updateVenueType(event.type)
+            }
+
+            is ExploreContract.UiEvent.OnPriceRangeSelected -> {
+                updatePriceRange(event.minPrice, event.maxPrice)
+            }
+
+            // Search Events
+            is ExploreContract.UiEvent.OnSearchQueryChanged -> {
+                updateSearchQuery(event.query)
+            }
+
+            is ExploreContract.UiEvent.OnCitySelected -> {
+                updateSelectedCity(event.city)
+            }
+
+            // Venue Interaction Events
+            is ExploreContract.UiEvent.OnVenueClicked -> {
+                navigateToVenueDetail(event.venueId)
+            }
+
+            is ExploreContract.UiEvent.OnVenueBookmarked -> {
+                toggleVenueBookmark(event.venueId)
+            }
+
+            is ExploreContract.UiEvent.OnServiceClicked -> {
+                // TODO: Handle service click logic
+                showSnackbar("Service clicked: ${event.serviceId}")
+            }
+
+            // Navigation Events
+            is ExploreContract.UiEvent.OnNavigateToMap -> {
+                navigateToMap()
+            }
+
+            is ExploreContract.UiEvent.OnNavigateToAdvancedSearch -> {
+                navigateToAdvancedSearch()
+            }
+
+            is ExploreContract.UiEvent.OnNavigationHandled -> {
+                clearNavigationState(event.resetType)
+            }
+
+            // Permission Events
             is ExploreContract.UiEvent.OnRequestLocationPermission -> {
-                requestLocationPermission()
+                // TODO: Handle location permission request
             }
 
-            // Error handling
-            is ExploreContract.UiEvent.OnClearError -> {
-                _uiState.update { it.copy(errorMessage = null) }
+            is ExploreContract.UiEvent.OnLocationPermissionGranted -> {
+                updateLocationPermissionGranted(true)
+                loadVenues(isRefresh = true) // Reload with location data
             }
+
+            is ExploreContract.UiEvent.OnLocationPermissionDenied -> {
+                updateLocationPermissionGranted(false)
+                showError(ExploreError.LocationPermissionDenied)
+            }
+
+            // Error & Message Events
+            is ExploreContract.UiEvent.OnErrorDismissed -> {
+                clearError()
+            }
+
             is ExploreContract.UiEvent.OnSnackbarDismissed -> {
-                _uiState.update { it.copy(snackbarMessage = null) }
+                clearSnackbar()
             }
         }
     }
 
-    private fun loadVenues(reset: Boolean) {
-        if (reset) {
+    // Content Management Functions
+    private fun loadVenues(isRefresh: Boolean) {
+        if (isRefresh) {
             currentPage = 0
-            allVenues.clear()
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
         }
 
-        val currentFilters = _uiState.value.filters
-
         viewModelScope.launch {
-            try {
-                val result = repository.getVenues(currentFilters, currentPage)
-                result.fold(
-                    onSuccess = { venues ->
-                        if (reset) {
-                            allVenues.clear()
-                        }
-                        allVenues.addAll(venues)
-                        currentPage++
 
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                venues = allVenues.toList(),
-                                hasMorePages = venues.isNotEmpty(),
-                                isRefreshing = false,
-                                isSuccess = true,
-                                errorMessage = null
-                            )
-                        }
-                    },
-                    onFailure = { exception ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                errorMessage = exception.message ?: "An error occurred",
-                                isRefreshing = false
-                            )
-                        }
-                    }
+
+            val response = repository.getVenues(
+                filters = ExploreFilters(),
+                page = currentPage
+            )
+            _uiState.value = _uiState.value.copy(
+                contentState = _uiState.value.contentState.copy(
+                    venues = response,
+                    hasMorePages = true
                 )
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = e.message ?: "An error occurred",
-                        isRefreshing = false
-                    )
-                }
-            }
+            )
+
         }
     }
 
-    private fun refreshVenues() {
-        _uiState.update { it.copy(isRefreshing = true, isLoading = false) }
-        loadVenues(reset = true)
-    }
+    private fun loadMoreVenues() {
+        if (isLoadingMore) return
 
-    private fun bookmarkVenue(venueId: String) {
+        isLoadingMore = true
         viewModelScope.launch {
             try {
-                repository.bookmarkVenue(venueId)
-                _uiState.update { it.copy(snackbarMessage = "Venue bookmarked") }
-            } catch (e: Exception) {
-                println("Failed to bookmark venue: $e")
-                _uiState.update { it.copy(snackbarMessage = "Failed to bookmark venue") }
+                loadVenues(isRefresh = false)
+            } finally {
+                isLoadingMore = false
             }
         }
     }
 
-    private fun requestLocationPermission() {
-        // This would be implemented with actual location permission logic
-        // In a real app, this would call platform-specific permission request methods
-        viewModelScope.launch {
-            try {
-                // Simulate permission request process
-                val isGranted = true // Mock - would be actual permission result
+    // Filter Management Functions
+    private fun showBottomSheet(type: BottomSheetType) {
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(
+                isBottomSheetVisible = true,
+                bottomSheetType = type,
+                tempFilters = _uiState.value.filterState.filters.copy() // Initialize temp filters
+            )
+        )
+    }
 
-                if (isGranted) {
-                    // Update state to reflect permission granted
-                    _uiState.update {
-                        it.copy(
-                            isLocationPermissionGranted = true,
-                            snackbarMessage = "Location access granted"
-                        )
-                    }
-                    // Reload venues with location-based results
-                    loadVenues(reset = true)
-                } else {
-                    _uiState.update {
-                        it.copy(snackbarMessage = "Location permission denied. Showing general results.")
-                    }
-                }
-            } catch (e: Exception) {
-                println("Failed to request location permission: ${e.message}")
-                _uiState.update {
-                    it.copy(snackbarMessage = "Failed to request location permission")
-                }
+    private fun hideBottomSheet() {
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(
+                isBottomSheetVisible = false,
+                bottomSheetType = BottomSheetType.None
+            )
+        )
+    }
+
+    private fun updateTempFilters(filters: ExploreFiltersUiModel) {
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(
+                tempFilters = filters
+            )
+        )
+    }
+
+    private fun applyTempFilters() {
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(
+                filters = _uiState.value.filterState.tempFilters.copy(),
+                isBottomSheetVisible = false,
+                bottomSheetType = BottomSheetType.None
+            )
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun clearAllFilters() {
+        val clearedFilters = ExploreFiltersUiModel()
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(
+                filters = clearedFilters,
+                tempFilters = clearedFilters,
+                isBottomSheetVisible = false,
+                bottomSheetType = BottomSheetType.None
+            )
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun updateSortOption(option: SortOption) {
+        val updatedFilters = _uiState.value.filterState.filters.copy(sortOption = option)
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(filters = updatedFilters)
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun updateVenueType(type: VenueType) {
+        val updatedFilters = _uiState.value.filterState.filters.copy(venueType = type)
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(filters = updatedFilters)
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun updatePriceRange(minPrice: Int, maxPrice: Int) {
+        val updatedFilters = _uiState.value.filterState.filters.copy(
+            priceRange = PriceRangeUiModel(min = minPrice, max = maxPrice)
+        )
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(filters = updatedFilters)
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun updateSearchQuery(query: String) {
+        val updatedFilters = _uiState.value.filterState.filters.copy(searchQuery = query)
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(filters = updatedFilters)
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    private fun updateSelectedCity(city: String) {
+        val updatedFilters = _uiState.value.filterState.filters.copy(selectedCity = city)
+        _uiState.value = _uiState.value.copy(
+            filterState = _uiState.value.filterState.copy(filters = updatedFilters)
+        )
+        loadVenues(isRefresh = true)
+    }
+
+    // Venue Interaction Functions
+    private fun navigateToVenueDetail(venueId: String) {
+        _uiState.value = _uiState.value.copy(
+            navigationState = _uiState.value.navigationState.copy(
+                navigateToVenueDetail = venueId
+            )
+        )
+    }
+
+    private fun toggleVenueBookmark(venueId: String) {
+        val updatedVenues = _uiState.value.contentState.venues.map { venue ->
+            if (venue.id == venueId) {
+                venue.copy(isBookmarkSaved = !venue.isBookmarkSaved)
+            } else {
+                venue
             }
         }
+
+        _uiState.value = _uiState.value.copy(
+            contentState = _uiState.value.contentState.copy(venues = updatedVenues)
+        )
+
+        // TODO: Update bookmark in repository
+        showSnackbar("Bookmark ${if (updatedVenues.find { it.id == venueId }?.isBookmarkSaved == true) "added" else "removed"}")
+    }
+
+    // Navigation Functions
+    private fun navigateToMap() {
+        _uiState.value = _uiState.value.copy(
+            navigationState = _uiState.value.navigationState.copy(navigateToMap = true)
+        )
+    }
+
+    private fun navigateToAdvancedSearch() {
+        _uiState.value = _uiState.value.copy(
+            navigationState = _uiState.value.navigationState.copy(navigateToAdvancedSearch = true)
+        )
+    }
+
+    private fun clearNavigationState(resetType: ExploreContract.NavigationReset) {
+        _uiState.value = _uiState.value.copy(
+            navigationState = when (resetType) {
+                ExploreContract.NavigationReset.VENUE_DETAIL -> {
+                    _uiState.value.navigationState.copy(navigateToVenueDetail = null)
+                }
+
+                ExploreContract.NavigationReset.MAP -> {
+                    _uiState.value.navigationState.copy(navigateToMap = false)
+                }
+
+                ExploreContract.NavigationReset.ADVANCED_SEARCH -> {
+                    _uiState.value.navigationState.copy(navigateToAdvancedSearch = false)
+                }
+            }
+        )
+    }
+
+    // Permission Functions
+    private fun updateLocationPermissionGranted(granted: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            interactionState = _uiState.value.interactionState.copy(
+                isLocationPermissionGranted = granted
+            )
+        )
+    }
+
+    // Error & Message Functions
+    private fun showError(error: ExploreError) {
+        _uiState.value = _uiState.value.copy(
+            contentState = _uiState.value.contentState.copy(error = error)
+        )
+    }
+
+    private fun clearError() {
+        _uiState.value = _uiState.value.copy(
+            contentState = _uiState.value.contentState.copy(error = null)
+        )
+    }
+
+    private fun showSnackbar(message: String) {
+        _uiState.value = _uiState.value.copy(
+            navigationState = _uiState.value.navigationState.copy(snackbarMessage = message)
+        )
+    }
+
+    private fun clearSnackbar() {
+        _uiState.value = _uiState.value.copy(
+            navigationState = _uiState.value.navigationState.copy(snackbarMessage = null)
+        )
     }
 }

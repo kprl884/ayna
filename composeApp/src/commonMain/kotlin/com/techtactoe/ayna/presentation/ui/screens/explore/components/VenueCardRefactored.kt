@@ -38,8 +38,8 @@ import com.techtactoe.ayna.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.designsystem.theme.Elevation
 import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.designsystem.typography.AynaTypography
-import com.techtactoe.ayna.domain.model.VenueServiceUiModel
-import com.techtactoe.ayna.domain.model.VenueUiModel
+import com.techtactoe.ayna.domain.model.Venue
+import com.techtactoe.ayna.domain.model.VenueService
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -51,7 +51,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Stable
 data class VenueCardViewState(
-    val venue: VenueUiModel,
+    val venue: Venue,
     val showFullServices: Boolean = false
 )
 
@@ -81,7 +81,7 @@ fun VenueCardRefactored(
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f)
             )
-            
+
             // Venue information section
             VenueInfoSection(
                 venue = viewState.venue,
@@ -102,10 +102,10 @@ private fun VenueImageCarouselRefactored(
         EmptyImagePlaceholder(modifier = modifier)
         return
     }
-    
+
     Box(modifier = modifier) {
         val pagerState = rememberPagerState(pageCount = { images.size })
-        
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize()
@@ -115,14 +115,11 @@ private fun VenueImageCarouselRefactored(
                 contentDescription = "Venue image ${page + 1}",
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(AynaShapes.medium.copy(
-                        bottomStart = 0.dp,
-                        bottomEnd = 0.dp
-                    )),
+                    .clip(AynaShapes.medium),
                 contentScale = ContentScale.Crop
             )
         }
-        
+
         // Page indicators
         if (images.size > 1) {
             PageIndicators(
@@ -182,7 +179,7 @@ private fun PageIndicators(
 
 @Composable
 private fun VenueInfoSection(
-    venue: VenueUiModel,
+    venue: Venue,
     showFullServices: Boolean,
     onSeeMoreClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -196,7 +193,7 @@ private fun VenueInfoSection(
             name = venue.name,
             modifier = Modifier.fillMaxWidth()
         )
-        
+
         // Rating and location
         VenueRatingAndLocation(
             rating = venue.rating,
@@ -204,7 +201,7 @@ private fun VenueInfoSection(
             district = venue.district,
             city = venue.city
         )
-        
+
         // Services
         VenueServices(
             services = venue.services,
@@ -229,7 +226,7 @@ private fun VenueName(
 
 @Composable
 private fun VenueRatingAndLocation(
-    rating: Float,
+    rating: Double,
     reviewCount: Int,
     district: String,
     city: String,
@@ -244,7 +241,7 @@ private fun VenueRatingAndLocation(
             rating = rating,
             reviewCount = reviewCount
         )
-        
+
         // Location
         Text(
             text = "$district, $city",
@@ -256,7 +253,7 @@ private fun VenueRatingAndLocation(
 
 @Composable
 private fun VenueRating(
-    rating: Float,
+    rating: Double,
     reviewCount: Int,
     modifier: Modifier = Modifier
 ) {
@@ -270,9 +267,9 @@ private fun VenueRating(
             style = AynaTypography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
-        
+
         StarRating(rating = rating)
-        
+
         Text(
             text = "($reviewCount)",
             style = AynaTypography.bodySmall,
@@ -283,7 +280,7 @@ private fun VenueRating(
 
 @Composable
 private fun StarRating(
-    rating: Float,
+    rating: Double,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -307,7 +304,7 @@ private fun StarRating(
 
 @Composable
 private fun VenueServices(
-    services: List<VenueServiceUiModel>,
+    services: List<VenueService>,
     showFullServices: Boolean,
     onSeeMoreClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -317,11 +314,11 @@ private fun VenueServices(
         verticalArrangement = Arrangement.spacedBy(Spacing.small)
     ) {
         val servicesToShow = if (showFullServices) services else services.take(3)
-        
+
         servicesToShow.forEach { service ->
             VenueServiceItem(service = service)
         }
-        
+
         // See more link
         if (services.size > 3 || services.isNotEmpty()) {
             TextButton(
@@ -340,8 +337,8 @@ private fun VenueServices(
 }
 
 @Composable
-private fun VenueServiceItem(
-    service: VenueServiceUiModel,
+fun VenueServiceItem(
+    service: VenueService,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -360,14 +357,14 @@ private fun VenueServiceItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            
+
             Text(
                 text = formatDuration(service.duration),
                 style = AynaTypography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        
+
         Text(
             text = if (service.price > 0) "TRY ${service.price / 100}" else "free",
             style = AynaTypography.bodyMedium,
@@ -390,22 +387,15 @@ private fun VenueCardRefactoredPreview() {
     MaterialTheme {
         VenueCardRefactored(
             viewState = VenueCardViewState(
-                venue = VenueUiModel(
+                venue = Venue(
                     id = "1",
                     name = "Hair Avenue",
-                    rating = 4.7f,
                     reviewCount = 312,
                     district = "Kadıköy",
                     city = "Istanbul",
                     images = listOf("https://example.com/image1.jpg"),
-                    services = listOf(
-                        VenueServiceUiModel(
-                            id = "1",
-                            name = "Haircut",
-                            duration = 45,
-                            price = 5000
-                        )
-                    )
+                    rating = 4.5,
+                    services = listOf()
                 )
             ),
             onVenueClick = {},

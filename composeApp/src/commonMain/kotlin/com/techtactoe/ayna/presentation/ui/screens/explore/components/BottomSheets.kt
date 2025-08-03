@@ -498,6 +498,8 @@ private fun getSortOptionDisplayName(option: SortOption): String {
         SortOption.RECOMMENDED -> "Recommended"
         SortOption.TOP_RATED -> "Top-rated"
         SortOption.NEAREST -> "Nearest"
+        SortOption.PRICE_LOW_TO_HIGH ->"PRICE_LOW_TO_HIGH"
+        SortOption.PRICE_HIGH_TO_LOW -> "PRICE_HIGH_TO_LOW"
     }
 }
 

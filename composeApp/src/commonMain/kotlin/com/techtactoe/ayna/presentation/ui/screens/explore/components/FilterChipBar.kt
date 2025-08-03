@@ -149,30 +149,6 @@ private fun FilterChip(
     )
 }
 
-fun getSortDisplayText(sortOption: SortOption): String {
-    return when (sortOption) {
-        SortOption.RECOMMENDED -> "Sort"
-        SortOption.TOP_RATED -> "Top-rated"
-        SortOption.NEAREST -> "Nearest"
-    }
-}
-
-fun getPriceDisplayText(maxPrice: Int): String {
-    return if (maxPrice >= 30000) {
-        "Price"
-    } else {
-        "₺${maxPrice / 100}"
-    }
-}
-
-fun getTypeDisplayText(venueType: VenueType): String {
-    return when (venueType) {
-        VenueType.EVERYONE -> "Type"
-        VenueType.MALE_ONLY -> "Male only"
-        VenueType.FEMALE_ONLY -> "Female only"
-    }
-}
-
 @Preview
 @Composable
 private fun FilterChipBarPreview() {

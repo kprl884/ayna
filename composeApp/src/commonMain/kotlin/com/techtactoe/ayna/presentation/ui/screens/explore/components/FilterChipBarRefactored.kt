@@ -238,18 +238,17 @@ private fun BaseFilterChip(
  * Helper functions for display text conversion
  * These functions convert enum values to user-friendly display text
  */
-private fun getSortDisplayText(sortOption: SortOption): String {
+fun getSortDisplayText(sortOption: SortOption): String {
     return when (sortOption) {
         SortOption.RECOMMENDED -> "Sort"
         SortOption.TOP_RATED -> "Top Rated"
-        SortOption.NEWEST -> "Newest"
         SortOption.PRICE_LOW_TO_HIGH -> "Price: Low to High"
         SortOption.PRICE_HIGH_TO_LOW -> "Price: High to Low"
-        SortOption.DISTANCE -> "Distance"
+        SortOption.NEAREST -> "Nearest"
     }
 }
 
-private fun getPriceDisplayText(maxPrice: Int): String {
+fun getPriceDisplayText(maxPrice: Int): String {
     return if (maxPrice >= 30000) {
         "Price"
     } else {
@@ -257,12 +256,11 @@ private fun getPriceDisplayText(maxPrice: Int): String {
     }
 }
 
-private fun getTypeDisplayText(venueType: VenueType): String {
+fun getTypeDisplayText(venueType: VenueType): String {
     return when (venueType) {
         VenueType.EVERYONE -> "Type"
         VenueType.FEMALE_ONLY -> "Female Only"
         VenueType.MALE_ONLY -> "Male Only"
-        VenueType.UNISEX -> "Unisex"
     }
 }
 
