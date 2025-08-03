@@ -4,40 +4,45 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.NotificationUiState
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+@Stable
+data class UserHeaderViewState(
+    val userName: String,
+    val notificationState: NotificationUiState = NotificationUiState()
+)
 
 @Composable
 fun UserHeader(
-    userName: String,
-    notificationState: NotificationUiState = NotificationUiState(),
+    viewState: UserHeaderViewState,
     onNotificationClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = Spacing.medium),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Hey, $userName",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = AynaColors.PrimaryText
+            text = "Hey, ${viewState.userName}",
+            style = AynaTypography.headlineLarge,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         NotificationIcon(
-            notificationState = notificationState,
+            notificationState = viewState.notificationState,
             onClick = onNotificationClick
         )
     }
@@ -47,7 +52,9 @@ fun UserHeader(
 @Composable
 fun UserHeaderPreview() {
     UserHeader(
-        userName = "John",
-        notificationState = NotificationUiState(hasUnreadNotifications = true, unreadCount = 3)
+        viewState = UserHeaderViewState(
+            userName = "John",
+            notificationState = NotificationUiState(hasUnreadNotifications = true, unreadCount = 3)
+        )
     )
 }
