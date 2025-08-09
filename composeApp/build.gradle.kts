@@ -74,6 +74,12 @@ kotlin {
             implementation(libs.coil.network.ktor)
             implementation(libs.koin.core)
             implementation(libs.koin.compose.viewmodel)
+            
+            // Supabase dependencies
+            implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.0")
+            implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.0")
+            implementation("io.github.jan-tennert.supabase:realtime-kt:2.6.0")
+            implementation("io.github.jan-tennert.supabase:storage-kt:2.6.0")
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
