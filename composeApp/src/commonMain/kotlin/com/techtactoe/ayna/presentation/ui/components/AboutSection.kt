@@ -36,7 +36,6 @@ data class AboutSectionViewState(
 @Composable
 fun AboutSection(
     viewState: AboutSectionViewState,
-    onReadMoreClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -57,13 +56,6 @@ fun AboutSection(
                 text = viewState.description,
                 style = AynaTypography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(
-                text = "Read more",
-                style = AynaTypography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable { onReadMoreClick() }
             )
         }
 
