@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
@@ -27,7 +27,7 @@ fun IconInCircle(
             .size(40.dp)
             .clickable { onClick() },
         shape = CircleShape,
-        color = AynaColors.White,
+        color = MaterialTheme.colorScheme.onPrimary,
         shadowElevation = shadowElevation
     ) {
         Box(

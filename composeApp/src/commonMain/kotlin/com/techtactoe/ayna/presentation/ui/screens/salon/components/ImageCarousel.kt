@@ -1,7 +1,6 @@
 package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.ic_heart
 import com.techtactoe.ayna.common.designsystem.icon.IconInCircle
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,15 +52,13 @@ fun ImageCarousel(
         ) { page ->
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(AynaColors.LightGray),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 // Placeholder for actual image loading with Coil
                 Text(
                     text = "🏢",
                     fontSize = 48.sp,
-                    color = AynaColors.SecondaryText
                 )
             }
         }
@@ -81,7 +77,7 @@ fun ImageCarousel(
                     .size(40.dp)
                     .clickable { onBackClick() },
                 shape = CircleShape,
-                color = AynaColors.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 shadowElevation = 2.dp
             ) {
                 Box(
@@ -90,7 +86,7 @@ fun ImageCarousel(
                     Text(
                         text = "←",
                         fontSize = 18.sp,
-                        color = AynaColors.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
@@ -104,7 +100,7 @@ fun ImageCarousel(
                         .size(40.dp)
                         .clickable { onShareClick() },
                     shape = CircleShape,
-                    color = AynaColors.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     shadowElevation = 2.dp
                 ) {
                     Box(
@@ -113,7 +109,7 @@ fun ImageCarousel(
                         Text(
                             text = "↗",
                             fontSize = 18.sp,
-                            color = AynaColors.Black
+                            color = MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 }
@@ -129,12 +125,12 @@ fun ImageCarousel(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = AynaShapes.medium,
                 color = Color.Black.copy(alpha = 0.6f)
             ) {
                 Text(
                     text = "${pagerState.currentPage + 1}/${images.size}",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)

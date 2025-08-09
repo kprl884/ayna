@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonService
 import com.techtactoe.ayna.domain.model.ServiceCategoryEnum
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -50,7 +49,7 @@ fun ServicesSection(
             text = "Services",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            color = AynaColors.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -81,7 +80,7 @@ fun ServicesSection(
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 16.dp),
                         thickness = 1.dp,
-                        color = AynaColors.BorderGray
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 }
             }
@@ -96,7 +95,7 @@ fun ServicesSection(
                 Text(
                     text = "No services available in this category",
                     fontSize = 16.sp,
-                    color = AynaColors.SecondaryText
+                    color = MaterialTheme.colorScheme.onSecondary,
                 )
             }
         }
@@ -124,7 +123,7 @@ private fun FilterTab(
     Surface(
         modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(50.dp), // Fully rounded
-        color = if (isSelected) AynaColors.Black else Color.Transparent
+        color = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Transparent
     ) {
         Box(
             modifier = Modifier
@@ -132,7 +131,7 @@ private fun FilterTab(
                     if (!isSelected) {
                         Modifier.border(
                             1.dp,
-                            AynaColors.BorderGray,
+                            MaterialTheme.colorScheme.onSecondary,
                             RoundedCornerShape(50.dp)
                         )
                     } else Modifier
@@ -143,7 +142,7 @@ private fun FilterTab(
                 text = categoryName,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = if (isSelected) AynaColors.White else AynaColors.Black
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground,
             )
         }
     }
@@ -168,7 +167,7 @@ private fun ServiceCard(
                 text = service.name,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = AynaColors.Black
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -187,7 +186,7 @@ private fun ServiceCard(
             Text(
                 text = detailsText,
                 fontSize = 14.sp,
-                color = AynaColors.SecondaryText
+                color = MaterialTheme.colorScheme.onSecondary,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -197,7 +196,7 @@ private fun ServiceCard(
                 text = service.priceFrom,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = AynaColors.Black
+                color = MaterialTheme.colorScheme.onBackground,
             )
         }
 
@@ -209,14 +208,14 @@ private fun ServiceCard(
         ) {
             Box(
                 modifier = Modifier
-                    .border(1.dp, AynaColors.BorderGray, RoundedCornerShape(50.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(50.dp))
                     .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
                 Text(
                     text = "Book",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = AynaColors.Black
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }

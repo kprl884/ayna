@@ -47,7 +47,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
-import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -319,7 +318,7 @@ fun JoinWaitlistScreen(
                         Text(
                             text = "See available times to book",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = brandPurple
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

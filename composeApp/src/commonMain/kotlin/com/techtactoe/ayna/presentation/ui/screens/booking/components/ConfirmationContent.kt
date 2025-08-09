@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
-import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationContract
 
 @Composable
@@ -129,7 +128,7 @@ fun ConfirmationContent(
                 .fillMaxWidth()
                 .padding(bottom = Spacing.medium),
             colors = ButtonDefaults.buttonColors(
-                containerColor = brandPurple
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             shape = MaterialTheme.shapes.medium
         ) {

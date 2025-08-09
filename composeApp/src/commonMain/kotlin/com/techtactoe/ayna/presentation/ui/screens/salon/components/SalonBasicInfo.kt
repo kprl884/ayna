@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonStatus
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors.LightPurple
 
 @Composable
 fun SalonBasicInfo(
@@ -34,7 +32,7 @@ fun SalonBasicInfo(
             text = salonDetail.name,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = AynaColors.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -43,7 +41,7 @@ fun SalonBasicInfo(
         Text(
             text = "${salonDetail.rating} ⭐⭐⭐⭐⭐ (${salonDetail.reviewCount})",
             fontSize = 16.sp,
-            color = AynaColors.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -52,7 +50,7 @@ fun SalonBasicInfo(
         Text(
             text = salonDetail.address,
             fontSize = 14.sp,
-            color = AynaColors.SecondaryText
+            color = MaterialTheme.colorScheme.onSecondary
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -67,7 +65,7 @@ fun SalonBasicInfo(
         Text(
             text = statusText,
             fontSize = 14.sp,
-            color = AynaColors.SecondaryText
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -78,7 +76,7 @@ fun SalonBasicInfo(
                 .padding(bottom = 16.dp)
                 .border(
                     1.dp,
-                    LightPurple,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     MaterialTheme.shapes.medium
                 )
 
@@ -86,7 +84,7 @@ fun SalonBasicInfo(
             Text(
                 text = "Featured",
                 fontSize = 14.sp,
-                color = AynaColors.Purple,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             )

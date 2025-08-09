@@ -47,7 +47,6 @@ import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.common.designsystem.theme.BorderThickness
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
-import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 import com.techtactoe.ayna.domain.model.TimeSlot
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -195,7 +194,7 @@ private fun DateChip(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
-        dateOption.isSelected -> brandPurple
+        dateOption.isSelected -> MaterialTheme.colorScheme.primary
         dateOption.isDisabled -> Color.Transparent
         else -> Color.Transparent
     }
@@ -249,7 +248,7 @@ private fun LoadingContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = brandPurple)
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -290,7 +289,7 @@ private fun FullyBookedContent(
         Icon(
             imageVector = Icons.Default.DateRange,
             contentDescription = null,
-            tint = brandPurple,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .size(Spacing.xxxlarge)
                 .padding(bottom = Spacing.large)
@@ -357,13 +356,13 @@ private fun TimeSlotItem(
     onClick: () -> Unit
 ) {
     val backgroundColor = if (isSelected) {
-        brandPurple.copy(alpha = 0.1f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
     } else {
         MaterialTheme.colorScheme.surface
     }
 
     val borderColor = if (isSelected) {
-        brandPurple
+        MaterialTheme.colorScheme.primary
     } else {
         MaterialTheme.colorScheme.outline
     }

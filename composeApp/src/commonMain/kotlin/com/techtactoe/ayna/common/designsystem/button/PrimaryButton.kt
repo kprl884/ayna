@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +17,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -25,8 +25,8 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = AynaColors.Black,
-    contentColor: Color = AynaColors.White,
+    backgroundColor: Color = MaterialTheme.colorScheme.onBackground,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     cornerRadius: Dp = 16.dp,
     horizontalPadding: Dp = 24.dp,
     verticalPadding: Dp = 14.dp,
@@ -39,7 +39,7 @@ fun PrimaryButton(
             .clickable(enabled = enabled, onClick = onClick)
             .background(
                 color = if (enabled) backgroundColor else backgroundColor.copy(alpha = 0.5f),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(cornerRadius)
+                shape = RoundedCornerShape(cornerRadius)
             )
             .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         contentAlignment = Alignment.Center

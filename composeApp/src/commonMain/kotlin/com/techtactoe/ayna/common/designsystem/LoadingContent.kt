@@ -6,7 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.common.designsystem.theme.brandPurple
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun LoadingContent() {
@@ -14,6 +14,6 @@ fun LoadingContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(color = brandPurple)
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }
