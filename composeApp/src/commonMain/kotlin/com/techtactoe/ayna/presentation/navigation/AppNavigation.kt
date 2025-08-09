@@ -260,6 +260,132 @@ fun AppNavigation() {
                         navController = navController
                     )
                 }
+
+                // Authentication Screens
+                composable<Screen.Login> {
+                    val viewModel = remember { LoginViewModel() }
+
+                    LoginScreen(
+                        viewModel = viewModel,
+                        onNavigateToSignUp = {
+                            navController.navigate(Screen.SignUp)
+                        },
+                        onNavigateToForgotPassword = {
+                            navController.navigate(Screen.ForgotPassword)
+                        },
+                        onNavigateToHome = {
+                            navController.navigate(Screen.Home) {
+                                popUpTo(Screen.Login) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+
+                composable<Screen.SignUp> {
+                    val viewModel = remember { SignUpViewModel() }
+
+                    SignUpScreen(
+                        viewModel = viewModel,
+                        onNavigateToLogin = {
+                            navController.navigate(Screen.Login) {
+                                popUpTo(Screen.SignUp) { inclusive = true }
+                            }
+                        },
+                        onNavigateToEmailVerification = { email ->
+                            navController.navigate(Screen.EmailVerification(email))
+                        },
+                        onNavigateToTerms = {
+                            navController.navigate(Screen.Terms)
+                        },
+                        onNavigateToPrivacyPolicy = {
+                            navController.navigate(Screen.PrivacyPolicy)
+                        }
+                    )
+                }
+
+                composable<Screen.ForgotPassword> {
+                    // TODO: Implement ForgotPasswordScreen
+                    // For now, navigate back to login
+                    LaunchedEffect(Unit) {
+                        navController.popBackStack()
+                    }
+                }
+
+                composable<Screen.EmailVerification> { backStackEntry ->
+                    val screen: Screen.EmailVerification = backStackEntry.toRoute()
+                    // TODO: Implement EmailVerificationScreen
+                    // For now, navigate to home after a delay
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(3000)
+                        navController.navigate(Screen.Home) {
+                            popUpTo(Screen.EmailVerification(screen.email)) { inclusive = true }
+                        }
+                    }
+                }
+
+                composable<Screen.Terms> {
+                    // TODO: Implement TermsScreen
+                    // For now, show a simple screen
+                    Scaffold { paddingValues ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues)
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "Terms of Service",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Terms and conditions content would go here...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Button(
+                                onClick = { navController.popBackStack() }
+                            ) {
+                                Text("Back")
+                            }
+                        }
+                    }
+                }
+
+                composable<Screen.PrivacyPolicy> {
+                    // TODO: Implement PrivacyPolicyScreen
+                    // For now, show a simple screen
+                    Scaffold { paddingValues ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(paddingValues)
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "Privacy Policy",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Privacy policy content would go here...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Button(
+                                onClick = { navController.popBackStack() }
+                            ) {
+                                Text("Back")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
