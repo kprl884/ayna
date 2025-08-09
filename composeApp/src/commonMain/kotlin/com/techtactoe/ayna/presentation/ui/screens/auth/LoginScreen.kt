@@ -413,15 +413,7 @@ private fun LoginFooter(
     }
 }
 
-// Temporary ViewModel placeholder - will be implemented properly next
-class LoginViewModel {
-    val uiState = kotlinx.coroutines.flow.MutableStateFlow(LoginContract.UiState())
-    val uiEffect = kotlinx.coroutines.flow.MutableSharedFlow<LoginContract.UiEffect>()
-    
-    fun onEvent(event: LoginContract.UiEvent) {
-        // TODO: Implement proper event handling
-    }
-}
+// LoginViewModel is now imported from the separate file
 
 @Preview
 @Composable
