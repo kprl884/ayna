@@ -1,7 +1,6 @@
 package com.techtactoe.ayna.presentation.ui.screens.salon.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,10 +8,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,11 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ayna.composeapp.generated.resources.Res
-import ayna.composeapp.generated.resources.ic_heart
 import com.techtactoe.ayna.common.designsystem.component.icon.IconInCircle
 import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -63,59 +62,27 @@ fun ImageCarousel(
             }
         }
 
-        // Top overlay controls
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            // Back button
-            Surface(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clickable { onBackClick() },
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.onPrimary,
-                shadowElevation = 2.dp
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "←",
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-            }
+            IconInCircle(
+                onClick = { onBackClick() },
+                resource = rememberVectorPainter(image = Icons.AutoMirrored.Default.ArrowBack),
+            )
 
-            // Share and favorite buttons
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Surface(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clickable { onShareClick() },
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "↗",
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    }
-                }
+                /*
+                    todo: implement share button when share feature comes
+                 */
                 IconInCircle(
                     onClick = { onFavoriteClick() },
-                    resource = Res.drawable.ic_heart
+                    resource = rememberVectorPainter(image = Icons.Filled.Favorite),
                 )
             }
         }

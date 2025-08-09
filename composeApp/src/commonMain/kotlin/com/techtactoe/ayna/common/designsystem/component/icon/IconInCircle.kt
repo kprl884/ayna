@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
@@ -41,4 +42,33 @@ fun IconInCircle(
         }
     }
 }
+
+@Composable
+fun IconInCircle(
+    onClick: () -> Unit,
+    resource: Painter,
+    contentDescription: String? = null,
+    shadowElevation: Dp = 2.dp
+) {
+    Surface(
+        modifier = Modifier
+            .size(40.dp)
+            .clickable { onClick() },
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.onPrimary,
+        shadowElevation = shadowElevation
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = resource,
+                contentDescription = contentDescription,
+            )
+        }
+    }
+}
+
+
 

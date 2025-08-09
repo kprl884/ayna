@@ -46,7 +46,7 @@ fun HomeScreenContent(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            val topPadding = this.maxHeight / 15
+            val topPadding = this.maxHeight / 50
             when {
                 uiState.isLoading -> {
                     Box(
@@ -103,7 +103,6 @@ fun HomeScreenContent(
                         UserHeader(
                             UserHeaderViewState(
                                 userName = uiState.userName,
-
                                 notificationState = NotificationUiState(
                                     hasUnreadNotifications = true,
                                     unreadCount = 3

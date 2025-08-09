@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,9 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
-import ayna.composeapp.generated.resources.Res
-import ayna.composeapp.generated.resources.ic_heart
 import com.techtactoe.ayna.common.designsystem.component.icon.IconInCircle
 import com.techtactoe.ayna.common.designsystem.component.icon.IconWithImageVector
 import com.techtactoe.ayna.common.designsystem.theme.AnimationDuration
@@ -80,7 +80,7 @@ fun StickyTabBar(
                 Spacer(modifier = Modifier.weight(1f))
                 IconInCircle(
                     onClick = { onFavoriteClick() },
-                    resource = Res.drawable.ic_heart,
+                    resource = rememberVectorPainter(image = Icons.Outlined.Favorite),
                     shadowElevation = 0.dp
                 )
             }

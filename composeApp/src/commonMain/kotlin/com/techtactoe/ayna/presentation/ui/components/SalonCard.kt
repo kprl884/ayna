@@ -84,7 +84,7 @@ fun SalonCard(
                 ) {
                     Text(
                         text = viewState.name,
-                        style = AynaTypography.titleLarge,
+                        style = AynaTypography.titleMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)

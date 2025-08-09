@@ -32,7 +32,7 @@ fun SectionHeader(
     ) {
         Text(
             text = title,
-            style = AynaTypography.headlineMedium,
+            style = AynaTypography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
 

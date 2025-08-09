@@ -54,7 +54,7 @@ class SalonDetailViewModel(
             }
 
             is SalonDetailContract.UiEvent.OnBackClick -> {
-                // Handled in UI layer
+                sendEffect(SalonDetailEffect.NavigateUp)
             }
 
             is SalonDetailContract.UiEvent.OnShareClick -> {

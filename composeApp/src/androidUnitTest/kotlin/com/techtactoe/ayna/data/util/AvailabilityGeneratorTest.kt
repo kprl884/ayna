@@ -4,13 +4,15 @@ import kotlinx.datetime.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.time.ExperimentalTime
 
 class AvailabilityGeneratorTest {
 
+    @OptIn(ExperimentalTime::class)
     @Test
     fun generates_no_slots_on_sunday() {
         // Find next Sunday
-        var date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        var date = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         while (date.dayOfWeek != DayOfWeek.SUNDAY) {
             date = date.plus(1, DateTimeUnit.DAY)
         }
@@ -18,10 +20,11 @@ class AvailabilityGeneratorTest {
         assertTrue(slots.isEmpty())
     }
 
+    @OptIn(ExperimentalTime::class)
     @Test
     fun removes_slots_during_lunch_break() {
         // Use a known weekday
-        var date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        var date = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         if (date.dayOfWeek == DayOfWeek.SUNDAY) date = date.plus(1, DateTimeUnit.DAY)
         val slots = AvailabilityGenerator.generate(date, breaks = listOf(LocalTime(13,0) to LocalTime(14,0)))
         // Ensure no slot starts at 13:00 or 13:15 etc.
