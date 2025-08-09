@@ -6,6 +6,7 @@ import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.filter
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -21,15 +22,23 @@ class SupabaseRealtimeManager {
      */
     fun listenToUserAppointments(userId: String): Flow<AppointmentRealtimeEvent> {
         val channel = realtime.channel("user_appointments_$userId")
-        
-        return channel.postgresChangeFlow<JsonObject>(schema = "public") {
+
+        return channel.postgresChangeFlow<PostgresAction>(schema = "public") {
             table = "appointments"
-            filter = "user_id=eq.$userId"
-        }.map { change ->
-            when (change.eventType) {
-                PostgresAction.INSERT -> AppointmentRealtimeEvent.Created(change.record)
-                PostgresAction.UPDATE -> AppointmentRealtimeEvent.Updated(change.record)
-                PostgresAction.DELETE -> AppointmentRealtimeEvent.Deleted(change.oldRecord)
+        }
+        .filter { action ->
+            when (action) {
+                is PostgresAction.Insert -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Update -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Delete -> action.oldRecord?.get("user_id")?.toString()?.trim('"') == userId
+                else -> false
+            }
+        }
+        .map { action: PostgresAction ->
+            when (action) {
+                is PostgresAction.Insert -> AppointmentRealtimeEvent.Created(action.record)
+                is PostgresAction.Update -> AppointmentRealtimeEvent.Updated(action.record)
+                is PostgresAction.Delete -> AppointmentRealtimeEvent.Deleted(action.oldRecord)
                 else -> AppointmentRealtimeEvent.Unknown
             }
         }
@@ -40,15 +49,23 @@ class SupabaseRealtimeManager {
      */
     fun listenToTimeSlotChanges(salonId: String): Flow<TimeSlotRealtimeEvent> {
         val channel = realtime.channel("salon_slots_$salonId")
-        
-        return channel.postgresChangeFlow<JsonObject>(schema = "public") {
+
+        return channel.postgresChangeFlow<PostgresAction>(schema = "public") {
             table = "time_slots"
-            filter = "salon_id=eq.$salonId"
-        }.map { change ->
-            when (change.eventType) {
-                PostgresAction.INSERT -> TimeSlotRealtimeEvent.SlotAdded(change.record)
-                PostgresAction.UPDATE -> TimeSlotRealtimeEvent.SlotUpdated(change.record)
-                PostgresAction.DELETE -> TimeSlotRealtimeEvent.SlotRemoved(change.oldRecord)
+        }
+        .filter { action ->
+            when (action) {
+                is PostgresAction.Insert -> action.record["salon_id"]?.toString()?.trim('"') == salonId
+                is PostgresAction.Update -> action.record["salon_id"]?.toString()?.trim('"') == salonId
+                is PostgresAction.Delete -> action.oldRecord?.get("salon_id")?.toString()?.trim('"') == salonId
+                else -> false
+            }
+        }
+        .map { action: PostgresAction ->
+            when (action) {
+                is PostgresAction.Insert -> TimeSlotRealtimeEvent.SlotAdded(action.record)
+                is PostgresAction.Update -> TimeSlotRealtimeEvent.SlotUpdated(action.record)
+                is PostgresAction.Delete -> TimeSlotRealtimeEvent.SlotRemoved(action.oldRecord)
                 else -> TimeSlotRealtimeEvent.Unknown
             }
         }
@@ -59,14 +76,22 @@ class SupabaseRealtimeManager {
      */
     fun listenToUserNotifications(userId: String): Flow<NotificationRealtimeEvent> {
         val channel = realtime.channel("user_notifications_$userId")
-        
-        return channel.postgresChangeFlow<JsonObject>(schema = "public") {
+
+        return channel.postgresChangeFlow<PostgresAction>(schema = "public") {
             table = "notifications"
-            filter = "user_id=eq.$userId"
-        }.map { change ->
-            when (change.eventType) {
-                PostgresAction.INSERT -> NotificationRealtimeEvent.NewNotification(change.record)
-                PostgresAction.UPDATE -> NotificationRealtimeEvent.NotificationUpdated(change.record)
+        }
+        .filter { action ->
+            when (action) {
+                is PostgresAction.Insert -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Update -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Delete -> action.oldRecord?.get("user_id")?.toString()?.trim('"') == userId
+                else -> false
+            }
+        }
+        .map { action: PostgresAction ->
+            when (action) {
+                is PostgresAction.Insert -> NotificationRealtimeEvent.NewNotification(action.record)
+                is PostgresAction.Update -> NotificationRealtimeEvent.NotificationUpdated(action.record)
                 else -> NotificationRealtimeEvent.Unknown
             }
         }
@@ -77,39 +102,23 @@ class SupabaseRealtimeManager {
      */
     fun listenToWaitlistUpdates(userId: String): Flow<WaitlistRealtimeEvent> {
         val channel = realtime.channel("user_waitlist_$userId")
-        
-        return channel.postgresChangeFlow<JsonObject>(schema = "public") {
+
+        return channel.postgresChangeFlow<PostgresAction>(schema = "public") {
             table = "waitlist_requests"
-            filter = "user_id=eq.$userId"
-        }.map { change ->
-            when (change.eventType) {
-                PostgresAction.UPDATE -> WaitlistRealtimeEvent.StatusChanged(change.record)
-                else -> WaitlistRealtimeEvent.Unknown
+        }
+        .filter { action ->
+            when (action) {
+                is PostgresAction.Update -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Insert -> action.record["user_id"]?.toString()?.trim('"') == userId
+                is PostgresAction.Delete -> action.oldRecord?.get("user_id")?.toString()?.trim('"') == userId
+                else -> false
             }
         }
-    }
-
-    /**
-     * Subscribe to a channel (call this to start listening)
-     */
-    suspend fun subscribeToChannel(channelName: String) {
-        try {
-            val channel = realtime.channel(channelName)
-            channel.subscribe()
-        } catch (e: Exception) {
-            println("Error subscribing to channel $channelName: ${e.message}")
-        }
-    }
-
-    /**
-     * Unsubscribe from a channel
-     */
-    suspend fun unsubscribeFromChannel(channelName: String) {
-        try {
-            val channel = realtime.channel(channelName)
-            channel.unsubscribe()
-        } catch (e: Exception) {
-            println("Error unsubscribing from channel $channelName: ${e.message}")
+        .map { action: PostgresAction ->
+            when (action) {
+                is PostgresAction.Update -> WaitlistRealtimeEvent.StatusChanged(action.record)
+                else -> WaitlistRealtimeEvent.Unknown
+            }
         }
     }
 }

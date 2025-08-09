@@ -47,8 +47,8 @@ kotlin {
             implementation(libs.androidx.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
-            implementation("com.google.maps.android:maps-compose:2.15.0")
-            implementation("com.google.android.gms:play-services-maps:18.2.0")
+            implementation("com.google.maps.android:maps-compose:6.7.1")
+            implementation("com.google.android.gms:play-services-maps:19.2.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -60,7 +60,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
 
             implementation(libs.navigation.compose)
             implementation(libs.lifecycle.runtime.compose)
@@ -75,11 +75,11 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose.viewmodel)
             
-            // Supabase dependencies
-            implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.0")
-            implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.0")
-            implementation("io.github.jan-tennert.supabase:realtime-kt:2.6.0")
-            implementation("io.github.jan-tennert.supabase:storage-kt:2.6.0")
+            // Supabase dependencies (aligned to 3.3.x for DSL support)
+            implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.2")
+            implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1")
+            implementation("io.github.jan-tennert.supabase:realtime-kt:3.2.2")
+            implementation("io.github.jan-tennert.supabase:storage-kt:3.2.2")
         }
         commonTest.dependencies {
             implementation(kotlin("test"))

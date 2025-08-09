@@ -1,7 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.screens.selecttime
 
 import com.techtactoe.ayna.domain.model.TimeSlot
-import kotlinx.datetime.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Contract defining the UI state and events for the SelectTime screen
@@ -12,11 +12,11 @@ interface SelectTimeContract {
     /**
      * Single source of truth for all UI state in the SelectTime screen
      */
-    data class UiState(
+    data class UiState @OptIn(ExperimentalTime::class) constructor(
         // Time slot data
         val availableSlots: List<TimeSlot> = emptyList(),
         val selectedTimeSlot: TimeSlot? = null,
-        val selectedDate: Long = Clock.System.now().toEpochMilliseconds(),
+        val selectedDate: Long = kotlin.time.Clock.System.now().toEpochMilliseconds(),
         
         // Date options for selector
         val dateOptions: List<DateOption> = emptyList(),

@@ -22,7 +22,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen(
-    viewModel: ExploreViewModel = ExploreViewModel(),
+    viewModel: ExploreViewModel = com.techtactoe.ayna.di.SupabaseDataModule.createExploreViewModel(),
     onNavigateToVenueDetail: (String) -> Unit = {},
     onNavigateToMap: () -> Unit = {},
     onNavigateToAdvancedSearch: () -> Unit = {},

@@ -3,17 +3,17 @@ package com.techtactoe.ayna.data.repository
 import com.techtactoe.ayna.data.supabase.AynaSupabaseClient
 import com.techtactoe.ayna.data.supabase.dto.AppointmentDto
 import com.techtactoe.ayna.data.supabase.dto.TimeSlotDto
-import com.techtactoe.ayna.data.supabase.dto.WaitlistRequestDto
-import com.techtactoe.ayna.data.supabase.mapper.toDomain
+import com.techtactoe.ayna.data.supabase.mapper.appointmentDtoToAppointmentDomainModel
+import com.techtactoe.ayna.data.supabase.mapper.timeSlotDtoToTimeSlotDomainModel
 import com.techtactoe.ayna.data.supabase.mapper.toCreateDto
 import com.techtactoe.ayna.domain.model.Appointment
-import com.techtactoe.ayna.domain.model.AppointmentStatus
 import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.domain.model.WaitlistRequest
 import com.techtactoe.ayna.domain.repository.AppointmentRepository
 import io.github.jan.supabase.postgrest.query.Columns
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import io.github.jan.supabase.postgrest.query.Order
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Supabase implementation of AppointmentRepository
@@ -28,24 +28,30 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
             val appointmentsResponse = client
                 .from("appointments")
                 .select(
-                    """
-                    *,
-                    salons!inner(name),
-                    services!inner(name),
-                    employees(name)
-                    """.trimIndent()
-                )
-                .eq("user_id", userId)
-                .order("appointment_date", ascending = false)
+                    columns = Columns.raw(
+                        """
+                        *,
+                        salons!inner(name),
+                        services!inner(name),
+                        employees(name)
+                        """.trimIndent()
+                    )
+                ) {
+                    filter { eq("user_id", userId) }
+                    order("appointment_date", order = Order.DESCENDING)
+                }
                 .decodeList<Map<String, Any>>()
 
-            appointmentsResponse.map { appointmentMap ->
+            appointmentsResponse.map { appointmentMap: Map<String, Any> ->
                 val appointmentDto = parseAppointmentFromMap(appointmentMap)
-                val salonName = (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val serviceName = (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val employeeName = (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val salonName =
+                    (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val serviceName =
+                    (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val employeeName =
+                    (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
 
-                appointmentDto.toDomain(
+                appointmentDto.appointmentDtoToAppointmentDomainModel(
                     salonName = salonName,
                     serviceName = serviceName,
                     employeeName = employeeName
@@ -57,31 +63,40 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun getUpcomingAppointments(userId: String): List<Appointment> {
         return try {
             val appointmentsResponse = client
                 .from("appointments")
                 .select(
-                    """
-                    *,
-                    salons!inner(name),
-                    services!inner(name),
-                    employees(name)
-                    """.trimIndent()
-                )
-                .eq("user_id", userId)
-                .eq("status", "UPCOMING")
-                .gte("appointment_date", kotlinx.datetime.Clock.System.now().toString())
-                .order("appointment_date", ascending = true)
+                    columns = Columns.raw(
+                        """
+                        *,
+                        salons!inner(name),
+                        services!inner(name),
+                        employees(name)
+                        """.trimIndent()
+                    )
+                ) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("status", "UPCOMING")
+                        gte("appointment_date", Clock.System.now().toEpochMilliseconds().toString())
+                    }
+                    order("appointment_date", order = Order.ASCENDING)
+                }
                 .decodeList<Map<String, Any>>()
 
-            appointmentsResponse.map { appointmentMap ->
+            appointmentsResponse.map { appointmentMap: Map<String, Any> ->
                 val appointmentDto = parseAppointmentFromMap(appointmentMap)
-                val salonName = (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val serviceName = (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val employeeName = (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val salonName =
+                    (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val serviceName =
+                    (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val employeeName =
+                    (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
 
-                appointmentDto.toDomain(
+                appointmentDto.appointmentDtoToAppointmentDomainModel(
                     salonName = salonName,
                     serviceName = serviceName,
                     employeeName = employeeName
@@ -98,25 +113,32 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
             val appointmentsResponse = client
                 .from("appointments")
                 .select(
-                    """
-                    *,
-                    salons!inner(name),
-                    services!inner(name),
-                    employees(name)
-                    """.trimIndent()
-                )
-                .eq("user_id", userId)
-                .`in`("status", listOf("COMPLETED", "CANCELLED"))
-                .order("appointment_date", ascending = false)
+                    columns = Columns.raw(
+                        """
+                        *,
+                        salons!inner(name),
+                        services!inner(name),
+                        employees(name)
+                        """.trimIndent()
+                    )
+                ) {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                    order("appointment_date", order = Order.DESCENDING)
+                }
                 .decodeList<Map<String, Any>>()
 
-            appointmentsResponse.map { appointmentMap ->
+            appointmentsResponse.map { appointmentMap: Map<String, Any> ->
                 val appointmentDto = parseAppointmentFromMap(appointmentMap)
-                val salonName = (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val serviceName = (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
-                val employeeName = (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val salonName =
+                    (appointmentMap["salons"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val serviceName =
+                    (appointmentMap["services"] as? Map<String, Any>)?.get("name") as? String ?: ""
+                val employeeName =
+                    (appointmentMap["employees"] as? Map<String, Any>)?.get("name") as? String ?: ""
 
-                appointmentDto.toDomain(
+                appointmentDto.appointmentDtoToAppointmentDomainModel(
                     salonName = salonName,
                     serviceName = serviceName,
                     employeeName = employeeName
@@ -145,8 +167,9 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
         return try {
             client
                 .from("appointments")
-                .update(mapOf("status" to "CANCELLED"))
-                .eq("id", appointmentId)
+                .update(mapOf("status" to "CANCELLED")) {
+                    filter { eq("id", appointmentId) }
+                }
 
             true
         } catch (e: Exception) {
@@ -155,16 +178,20 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun rescheduleAppointment(appointmentId: String, newDateTime: Long): Boolean {
         return try {
             client
                 .from("appointments")
                 .update(
                     mapOf(
-                        "appointment_date" to kotlinx.datetime.Instant.fromEpochMilliseconds(newDateTime).toString()
+                        "appointment_date" to kotlinx.datetime.Instant.fromEpochMilliseconds(
+                            newDateTime
+                        ).toString()
                     )
-                )
-                .eq("id", appointmentId)
+                ) {
+                    filter { eq("id", appointmentId) }
+                }
 
             true
         } catch (e: Exception) {
@@ -173,26 +200,31 @@ class SupabaseAppointmentRepositoryImpl : AppointmentRepository {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun getAvailableTimeSlots(
         salonId: String,
         serviceId: String,
         date: Long
     ): List<TimeSlot> {
         return try {
-            val dateString = kotlinx.datetime.Instant.fromEpochMilliseconds(date).toString().split("T")[0]
-            
+            val dateString =
+                kotlinx.datetime.Instant.fromEpochMilliseconds(date).toString().split("T")[0]
+
             val timeSlotsResponse = client
                 .from("time_slots")
-                .select(Columns.ALL)
-                .eq("salon_id", salonId)
-                .eq("service_id", serviceId)
-                .gte("start_time", "${dateString}T00:00:00Z")
-                .lt("start_time", "${dateString}T23:59:59Z")
-                .eq("is_available", true)
-                .order("start_time", ascending = true)
+                .select(columns = Columns.ALL) {
+                    filter {
+                        eq("salon_id", salonId)
+                        eq("service_id", serviceId)
+                        gte("start_time", "${dateString}T00:00:00Z")
+                        lt("start_time", "${dateString}T23:59:59Z")
+                        eq("is_available", true)
+                    }
+                    order("start_time", order = Order.ASCENDING)
+                }
                 .decodeList<TimeSlotDto>()
 
-            timeSlotsResponse.map { it.toDomain() }
+            timeSlotsResponse.map { dto: TimeSlotDto -> dto.timeSlotDtoToTimeSlotDomainModel() }
         } catch (e: Exception) {
             println("Error fetching available time slots: ${e.message}")
             emptyList()

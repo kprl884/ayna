@@ -12,7 +12,10 @@ import com.techtactoe.ayna.domain.model.VenueService
 import com.techtactoe.ayna.domain.model.VenueType
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.TextSearchType
 
 /**
  * Supabase implementation for Explore feature
@@ -28,68 +31,61 @@ class SupabaseExploreRepositoryImpl {
         pageSize: Int = 20
     ): List<Venue> {
         return try {
-            var query = client
+            val salonsResponse = client
                 .from("salons")
-                .select(Columns.ALL)
-
-            // Apply search filter
-            if (filters.searchQuery.isNotBlank()) {
-                query = query.textSearch("name", filters.searchQuery)
-            }
-
-            // Apply city filter
-            if (filters.selectedCity.isNotBlank() && filters.selectedCity != "Istanbul") {
-                query = query.eq("city", filters.selectedCity)
-            }
-
-            // Apply venue type filter
-            if (filters.venueType != VenueType.EVERYONE) {
-                query = query.eq("venue_type", filters.venueType.name)
-            }
-
-            // Apply sorting
-            query = when (filters.sortOption) {
-                SortOption.TOP_RATED -> query.order("rating", ascending = false)
-                SortOption.NEAREST -> query.order("city", ascending = true) // TODO: Implement proper distance sorting
-                SortOption.PRICE_LOW_TO_HIGH -> query.order("id", ascending = true) // TODO: Order by min service price
-                SortOption.PRICE_HIGH_TO_LOW -> query.order("id", ascending = false) // TODO: Order by max service price
-                else -> query.order("is_featured", ascending = false).order("rating", ascending = false)
-            }
-
-            // Apply pagination
-            query = query.range(page * pageSize, (page + 1) * pageSize - 1)
-
-            val salonsResponse = query.decodeList<SalonDto>()
-
-            // Convert to Venue domain objects
-            salonsResponse.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id, filters.priceRange) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-
-                    val services = servicesDeferred.await()
-                    val images = imagesDeferred.await()
-
-                    Venue(
-                        id = salonDto.id,
-                        name = salonDto.name,
-                        rating = salonDto.rating,
-                        reviewCount = salonDto.reviewCount,
-                        district = salonDto.district ?: "",
-                        city = salonDto.city,
-                        images = images,
-                        services = services,
-                        venueType = VenueType.valueOf(salonDto.venueType),
-                        location = if (salonDto.latitude != null && salonDto.longitude != null) {
-                            VenueLocation(
-                                latitude = salonDto.latitude,
-                                longitude = salonDto.longitude,
-                                address = salonDto.address
-                            )
-                        } else null,
-                        isBookmarkSaved = false // TODO: Check user favorites
-                    )
+                .select(columns = Columns.ALL) {
+                    if (filters.searchQuery.isNotBlank()) {
+                        filter { textSearch("name", filters.searchQuery, TextSearchType.WEBSEARCH) }
+                    }
+                    if (filters.selectedCity.isNotBlank() && filters.selectedCity != "Istanbul") {
+                        filter { eq("city", filters.selectedCity) }
+                    }
+                    if (filters.venueType != VenueType.EVERYONE) {
+                        filter { eq("venue_type", filters.venueType.name) }
+                    }
+                    when (filters.sortOption) {
+                        SortOption.TOP_RATED -> order("rating", order = Order.DESCENDING)
+                        SortOption.NEAREST -> order("city", order = Order.ASCENDING) // TODO: Implement proper distance sorting
+                        SortOption.PRICE_LOW_TO_HIGH -> order("id", order = Order.ASCENDING) // TODO: Order by min service price
+                        SortOption.PRICE_HIGH_TO_LOW -> order("id", order = Order.DESCENDING) // TODO: Order by max service price
+                        else -> {
+                            order("is_featured", order = Order.DESCENDING)
+                            order("rating", order = Order.DESCENDING)
+                        }
+                    }
+                    range((page * pageSize).toLong(), ((page + 1) * pageSize - 1).toLong())
                 }
+                .decodeList<SalonDto>()
+
+            // Convert to Venue domain objects concurrently
+            coroutineScope {
+                val deferredVenues = salonsResponse.map { salonDto: SalonDto ->
+                    async {
+                        val services = getServicesForSalon(salonDto.id, filters.priceRange)
+                        val images = getImagesForSalon(salonDto.id)
+
+                        Venue(
+                            id = salonDto.id,
+                            name = salonDto.name,
+                            rating = salonDto.rating,
+                            reviewCount = salonDto.reviewCount,
+                            district = salonDto.district ?: "",
+                            city = salonDto.city,
+                            images = images,
+                            services = services,
+                            venueType = VenueType.valueOf(salonDto.venueType),
+                            location = if (salonDto.latitude != null && salonDto.longitude != null) {
+                                VenueLocation(
+                                    latitude = salonDto.latitude,
+                                    longitude = salonDto.longitude,
+                                    address = salonDto.address
+                                )
+                            } else null,
+                            isBookmarkSaved = false // TODO: Check user favorites
+                        )
+                    }
+                }
+                deferredVenues.awaitAll()
             }
         } catch (e: Exception) {
             println("Error fetching venues: ${e.message}")
@@ -102,18 +98,24 @@ class SupabaseExploreRepositoryImpl {
             // Check if already bookmarked
             val existing = client
                 .from("user_favorites")
-                .select("id")
-                .eq("user_id", userId)
-                .eq("salon_id", venueId)
+                .select(columns = Columns.raw("id")) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("salon_id", venueId)
+                    }
+                }
                 .decodeSingleOrNull<Map<String, String>>()
 
             if (existing != null) {
                 // Remove bookmark
                 client
                     .from("user_favorites")
-                    .delete()
-                    .eq("user_id", userId)
-                    .eq("salon_id", venueId)
+                    .delete {
+                        filter {
+                            eq("user_id", userId)
+                            eq("salon_id", venueId)
+                        }
+                    }
             } else {
                 // Add bookmark
                 client
@@ -151,15 +153,18 @@ class SupabaseExploreRepositoryImpl {
         return try {
             val servicesResponse = client
                 .from("services")
-                .select(Columns.ALL)
-                .eq("salon_id", salonId)
-                .eq("is_active", true)
-                .gte("price_cents", priceRange.min)
-                .lte("price_cents", priceRange.max)
-                .order("price_cents", ascending = true)
+                .select(columns = Columns.ALL) {
+                    filter {
+                        eq("salon_id", salonId)
+                        eq("is_active", true)
+                        gte("price_cents", priceRange.min)
+                        lte("price_cents", priceRange.max)
+                    }
+                    order("price_cents", order = Order.ASCENDING)
+                }
                 .decodeList<ServiceDto>()
 
-            servicesResponse.map { serviceDto ->
+            servicesResponse.map { serviceDto: ServiceDto ->
                 VenueService(
                     id = serviceDto.id,
                     name = serviceDto.name,
@@ -178,11 +183,12 @@ class SupabaseExploreRepositoryImpl {
         return try {
             client
                 .from("salon_images")
-                .select("image_url")
-                .eq("salon_id", salonId)
-                .order("sort_order", ascending = true)
+                .select(columns = Columns.raw("image_url")) {
+                    filter { eq("salon_id", salonId) }
+                    order("sort_order", order = Order.ASCENDING)
+                }
                 .decodeList<SalonImageDto>()
-                .map { it.imageUrl }
+                .map { dto: SalonImageDto -> dto.imageUrl }
         } catch (e: Exception) {
             println("Error fetching images for salon $salonId: ${e.message}")
             emptyList()

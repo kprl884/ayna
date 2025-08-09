@@ -1,7 +1,7 @@
 package com.techtactoe.ayna.presentation.ui.screens.waitlist
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 /**
  * Contract defining the UI state and events for the JoinWaitlist screen
@@ -12,9 +12,9 @@ interface JoinWaitlistContract {
     /**
      * Single source of truth for all UI state in the JoinWaitlist screen
      */
-    data class UiState(
+    data class UiState @OptIn(ExperimentalTime::class) constructor(
         // Form data
-        val selectedDate: Long = Clock.System.now().toEpochMilliseconds(),
+        val selectedDate: Long = kotlin.time.Clock.System.now().toEpochMilliseconds(),
         val selectedTimeRange: String = "Any time",
         val timeRangeOptions: List<String> = listOf("Any time", "Morning", "Afternoon", "Evening"),
 
@@ -36,6 +36,7 @@ interface JoinWaitlistContract {
         val navigateBack: Boolean = false,
         val navigateToClose: Boolean = false
     ) {
+        @OptIn(ExperimentalTime::class)
         val formattedDate: String
             get() {
                 val selectedDate = kotlinx.datetime.Instant.fromEpochMilliseconds(selectedDate)

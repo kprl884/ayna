@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
@@ -21,6 +20,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 /**
  * ViewModel for the Select Time screen following the standardized MVVM pattern
@@ -160,6 +160,7 @@ class SelectTimeViewModel(
     /**
      * Create appointment with selected time slot
      */
+    @OptIn(ExperimentalTime::class)
     fun createAppointment(salonName: String, serviceName: String) {
         val selectedSlot = _uiState.value.selectedTimeSlot
         when (val validation = validateSlotSelectionUseCase(selectedSlot)) {
@@ -174,7 +175,7 @@ class SelectTimeViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isCreatingAppointment = true, errorMessage = null) }
 
-            val generatedId = "apt_${Clock.System.now().toEpochMilliseconds()}"
+            val generatedId = "apt_${kotlin.time.Clock.System.now().toEpochMilliseconds()}"
             val appointment = Appointment(
                 id = generatedId,
                 salonId = _uiState.value.salonId,
@@ -196,7 +197,7 @@ class SelectTimeViewModel(
                     }
 
                     is Resource.Success -> {
-                        val appointmentId = "${Clock.System.now().toEpochMilliseconds()}" // Mock ID generation
+                        val appointmentId = "${kotlin.time.Clock.System.now().toEpochMilliseconds()}" // Mock ID generation
                         _uiState.update {
                             it.copy(
                                 isCreatingAppointment = false,
@@ -221,6 +222,7 @@ class SelectTimeViewModel(
     /**
      * Go to the next available date
      */
+    @OptIn(ExperimentalTime::class)
     private fun goToNextAvailableDate() {
         var currentDate = Instant.fromEpochMilliseconds(_uiState.value.selectedDate)
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -237,8 +239,9 @@ class SelectTimeViewModel(
     /**
      * Get generated date options for the date selector
      */
+    @OptIn(ExperimentalTime::class)
     private fun getDateOptions(selectedDate: Long = _uiState.value.selectedDate): List<DateOption> {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dateOptions = mutableListOf<DateOption>()
 
         for (i in 0..6) { // Show 7 days
@@ -274,6 +277,7 @@ class SelectTimeViewModel(
     /**
      * Get formatted next available date (skipping Sundays)
      */
+    @OptIn(ExperimentalTime::class)
     private fun getNextAvailableDate(currentDate: Long): String {
         var nextDate = Instant.fromEpochMilliseconds(currentDate)
             .toLocalDateTime(TimeZone.currentSystemDefault()).date

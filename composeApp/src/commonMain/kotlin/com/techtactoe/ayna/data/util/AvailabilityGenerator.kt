@@ -2,6 +2,8 @@ package com.techtactoe.ayna.data.util
 
 import com.techtactoe.ayna.domain.model.TimeSlot
 import kotlinx.datetime.*
+import kotlinx.datetime.LocalDate
+import kotlin.time.ExperimentalTime
 
 /**
  * Deterministic availability generator for mock data.
@@ -15,6 +17,7 @@ object AvailabilityGenerator {
      * Generate all slots for a given date with 15-min granularity and filter out overlaps
      * with existing bookings and breaks/closed times.
      */
+    @OptIn(ExperimentalTime::class)
     fun generate(
         date: LocalDate,
         openHour: Int = 9,
@@ -26,15 +29,15 @@ object AvailabilityGenerator {
         timeZone: TimeZone = TimeZone.currentSystemDefault()
     ): List<TimeSlot> {
         val slots = mutableListOf<TimeSlot>()
-        var t = LocalDateTime(date.year, date.monthNumber, date.dayOfMonth, openHour, 0)
-        val endOfDay = LocalDateTime(date.year, date.monthNumber, date.dayOfMonth, closeHour, 0)
+        val t = LocalDateTime(date.year, date.month.number, date.day, openHour, 0)
+        val endOfDay = LocalDateTime(date.year, date.month.number, date.day, closeHour, 0)
         var tMs = t.toInstant(timeZone).toEpochMilliseconds()
         val endMs = endOfDay.toInstant(timeZone).toEpochMilliseconds()
 
         fun overlapsBreak(start: LocalDateTime, end: LocalDateTime): Boolean {
             return breaks.any { (bs, be) ->
-                val bStart = LocalDateTime(date.year, date.monthNumber, date.dayOfMonth, bs.hour, bs.minute)
-                val bEnd = LocalDateTime(date.year, date.monthNumber, date.dayOfMonth, be.hour, be.minute)
+                val bStart = LocalDateTime(date.year, date.month.number, date.day, bs.hour, bs.minute)
+                val bEnd = LocalDateTime(date.year, date.month.number, date.day, be.hour, be.minute)
                 start < bEnd && end > bStart
             }
         }

@@ -2,7 +2,7 @@ package com.techtactoe.ayna.presentation.ui.screens.explore
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.techtactoe.ayna.data.FakeExploreRepository
+import com.techtactoe.ayna.data.repository.SupabaseExploreRepositoryImpl
 import com.techtactoe.ayna.domain.model.BottomSheetType
 import com.techtactoe.ayna.domain.model.ExploreError
 import com.techtactoe.ayna.domain.model.ExploreFilters
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
  * - Use case pattern for business logic (to be integrated)
  */
 class ExploreViewModel(
-    private val repository: FakeExploreRepository = FakeExploreRepository()
+    private val exploreRepository: SupabaseExploreRepositoryImpl
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ExploreContract.UiState())
@@ -162,7 +162,7 @@ class ExploreViewModel(
         viewModelScope.launch {
 
 
-            val response = repository.getVenues(
+            val response = exploreRepository.getVenues(
                 filters = ExploreFilters(),
                 page = currentPage
             )

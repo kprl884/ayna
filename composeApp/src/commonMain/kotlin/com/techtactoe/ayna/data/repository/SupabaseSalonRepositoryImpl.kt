@@ -1,18 +1,23 @@
 package com.techtactoe.ayna.data.repository
 
 import com.techtactoe.ayna.data.supabase.AynaSupabaseClient
-import com.techtactoe.ayna.data.supabase.dto.SalonDto
-import com.techtactoe.ayna.data.supabase.dto.ServiceDto
 import com.techtactoe.ayna.data.supabase.dto.EmployeeDto
-import com.techtactoe.ayna.data.supabase.dto.SalonImageDto
 import com.techtactoe.ayna.data.supabase.dto.OpeningHourDto
-import com.techtactoe.ayna.data.supabase.mapper.toDomain
+import com.techtactoe.ayna.data.supabase.dto.SalonDto
+import com.techtactoe.ayna.data.supabase.dto.SalonImageDto
+import com.techtactoe.ayna.data.supabase.dto.ServiceDto
+import com.techtactoe.ayna.data.supabase.mapper.*
 import com.techtactoe.ayna.domain.model.DayOfWeek
 import com.techtactoe.ayna.domain.model.Salon
 import com.techtactoe.ayna.domain.repository.SalonRepository
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.query.filter.TextSearchType
+import io.github.jan.supabase.postgrest.rpc
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import com.techtactoe.ayna.data.supabase.mapper.salonDtoToSalonDomainModel as toDomain
 
 /**
  * Supabase implementation of SalonRepository
@@ -29,26 +34,29 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
                 .select(Columns.ALL)
                 .decodeList<SalonDto>()
 
-            // Fetch related data for each salon
-            salonsResponse.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id) }
-                    val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-                    val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
+            // Fetch related data for each salon concurrently
+            coroutineScope {
+                val deferredSalons = salonsResponse.map { salonDto: SalonDto ->
+                    async {
+                        val servicesDeferred = async { getServicesForSalon(salonDto.id) }
+                        val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
+                        val imagesDeferred = async { getImagesForSalon(salonDto.id) }
+                        val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
 
-                    val services = servicesDeferred.await()
-                    val employees = employeesDeferred.await()
-                    val images = imagesDeferred.await()
-                    val hours = hoursDeferred.await()
+                        val services = servicesDeferred.await()
+                        val employees = employeesDeferred.await()
+                        val images = imagesDeferred.await()
+                        val hours = hoursDeferred.await()
 
-                    salonDto.toDomain(
-                        services = services,
-                        employees = employees,
-                        images = images,
-                        operatingHours = hours
-                    )
+                        salonDto.toDomain(
+                            services = services,
+                            employees = employees,
+                            images = images,
+                            operatingHours = hours
+                        )
+                    }
                 }
+                deferredSalons.awaitAll()
             }
         } catch (e: Exception) {
             println("Error fetching nearby salons: ${e.message}")
@@ -60,32 +68,35 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             val salonsResponse = client
                 .from("salons")
-                .select(Columns.ALL)
-                .eq("is_featured", true)
-                .order("rating", ascending = false)
-                .limit(10)
+                .select(columns = Columns.ALL) {
+                    filter { eq("is_featured", true) }
+                    order("rating", order = Order.DESCENDING)
+                }
                 .decodeList<SalonDto>()
 
-            // Fetch related data for each salon
-            salonsResponse.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id) }
-                    val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-                    val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
+            // Fetch related data for each salon concurrently
+            coroutineScope {
+                val deferredSalons = salonsResponse.map { salonDto: SalonDto ->
+                    async {
+                        val servicesDeferred = async { getServicesForSalon(salonDto.id) }
+                        val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
+                        val imagesDeferred = async { getImagesForSalon(salonDto.id) }
+                        val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
 
-                    val services = servicesDeferred.await()
-                    val employees = employeesDeferred.await()
-                    val images = imagesDeferred.await()
-                    val hours = hoursDeferred.await()
+                        val services = servicesDeferred.await()
+                        val employees = employeesDeferred.await()
+                        val images = imagesDeferred.await()
+                        val hours = hoursDeferred.await()
 
-                    salonDto.toDomain(
-                        services = services,
-                        employees = employees,
-                        images = images,
-                        operatingHours = hours
-                    )
+                        salonDto.toDomain(
+                            services = services,
+                            employees = employees,
+                            images = images,
+                            operatingHours = hours
+                        )
+                    }
                 }
+                deferredSalons.awaitAll()
             }
         } catch (e: Exception) {
             println("Error fetching recommended salons: ${e.message}")
@@ -97,51 +108,58 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             val salonsResponse = client
                 .from("salons")
-                .select(Columns.ALL)
-                .textSearch("name", query)
+                .select(columns = Columns.ALL) {
+                    filter { textSearch("name", query, TextSearchType.WEBSEARCH) }
+                }
                 .decodeList<SalonDto>()
 
             // Also search in services
             val serviceResults = client
                 .from("services")
-                .select("salon_id")
-                .textSearch("name", query)
+                .select(columns = Columns.raw("salon_id")) {
+                    filter { textSearch("name", query, TextSearchType.WEBSEARCH) }
+                }
                 .decodeList<Map<String, String>>()
 
-            val salonIdsFromServices = serviceResults.mapNotNull { it["salon_id"] }
+            val salonIdsFromServices =
+                serviceResults.mapNotNull { map: Map<String, String> -> map["salon_id"] }
 
             // Combine results
-            val allSalonIds = (salonsResponse.map { it.id } + salonIdsFromServices).distinct()
+            val allSalonIds =
+                (salonsResponse.map { dto: SalonDto -> dto.id } + salonIdsFromServices).distinct()
 
             val allSalons = if (allSalonIds.isNotEmpty()) {
                 client
                     .from("salons")
-                    .select(Columns.ALL)
-                    .`in`("id", allSalonIds)
+                    .select(columns = Columns.ALL)
                     .decodeList<SalonDto>()
+                    .filter { dto -> dto.id in allSalonIds }
             } else {
                 salonsResponse
             }
 
-            allSalons.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id) }
-                    val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-                    val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
+            coroutineScope {
+                val deferredSalons = allSalons.map { salonDto: SalonDto ->
+                    async {
+                        val servicesDeferred = async { getServicesForSalon(salonDto.id) }
+                        val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
+                        val imagesDeferred = async { getImagesForSalon(salonDto.id) }
+                        val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
 
-                    val services = servicesDeferred.await()
-                    val employees = employeesDeferred.await()
-                    val images = imagesDeferred.await()
-                    val hours = hoursDeferred.await()
+                        val services = servicesDeferred.await()
+                        val employees = employeesDeferred.await()
+                        val images = imagesDeferred.await()
+                        val hours = hoursDeferred.await()
 
-                    salonDto.toDomain(
-                        services = services,
-                        employees = employees,
-                        images = images,
-                        operatingHours = hours
-                    )
+                        salonDto.toDomain(
+                            services = services,
+                            employees = employees,
+                            images = images,
+                            operatingHours = hours
+                        )
+                    }
                 }
+                deferredSalons.awaitAll()
             }
         } catch (e: Exception) {
             println("Error searching salons: ${e.message}")
@@ -151,13 +169,15 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
 
     override suspend fun getSalonDetails(id: String): Salon? {
         return try {
-            val salonResponse = client
+            val salonResponse: SalonDto? = client
                 .from("salons")
-                .select(Columns.ALL)
-                .eq("id", id)
+                .select(columns = Columns.ALL) {
+                    filter { eq("id", id) }
+                }
                 .decodeSingleOrNull<SalonDto>()
 
-            salonResponse?.let { salonDto ->
+            if (salonResponse != null) {
+                val salonDto: SalonDto = salonResponse
                 coroutineScope {
                     val servicesDeferred = async { getServicesForSalon(salonDto.id) }
                     val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
@@ -176,6 +196,8 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
                         operatingHours = hours
                     )
                 }
+            } else {
+                null
             }
         } catch (e: Exception) {
             println("Error fetching salon details: ${e.message}")
@@ -190,38 +212,38 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
     ): List<Salon> {
         return try {
             // Using PostGIS for geographic queries
-            val salonsResponse = client
-                .from("salons")
-                .select(Columns.ALL)
-                .rpc(
-                    "salons_within_radius",
-                    mapOf(
-                        "lat" to latitude,
-                        "lng" to longitude,
-                        "radius_km" to radiusKm
-                    )
+            val salonsResponse = client.rpc(
+                "salons_within_radius",
+                mapOf(
+                    "lat" to latitude,
+                    "lng" to longitude,
+                    "radius_km" to radiusKm
                 )
+            )
                 .decodeList<SalonDto>()
 
-            salonsResponse.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id) }
-                    val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-                    val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
+            coroutineScope {
+                val deferredSalons = salonsResponse.map { salonDto: SalonDto ->
+                    async {
+                        val servicesDeferred = async { getServicesForSalon(salonDto.id) }
+                        val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
+                        val imagesDeferred = async { getImagesForSalon(salonDto.id) }
+                        val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
 
-                    val services = servicesDeferred.await()
-                    val employees = employeesDeferred.await()
-                    val images = imagesDeferred.await()
-                    val hours = hoursDeferred.await()
+                        val services = servicesDeferred.await()
+                        val employees = employeesDeferred.await()
+                        val images = imagesDeferred.await()
+                        val hours = hoursDeferred.await()
 
-                    salonDto.toDomain(
-                        services = services,
-                        employees = employees,
-                        images = images,
-                        operatingHours = hours
-                    )
+                        salonDto.toDomain(
+                            services = services,
+                            employees = employees,
+                            images = images,
+                            operatingHours = hours
+                        )
+                    }
                 }
+                deferredSalons.awaitAll()
             }
         } catch (e: Exception) {
             println("Error fetching salons near location: ${e.message}")
@@ -234,11 +256,12 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
             // First get services in the category
             val serviceResults = client
                 .from("services")
-                .select("salon_id")
-                .eq("category_id", category)
+                .select(columns = Columns.raw("salon_id")) {
+                    filter { eq("category_id", category) }
+                }
                 .decodeList<Map<String, String>>()
 
-            val salonIds = serviceResults.mapNotNull { it["salon_id"] }
+            val salonIds = serviceResults.mapNotNull { map: Map<String, String> -> map["salon_id"] }
 
             if (salonIds.isEmpty()) {
                 return emptyList()
@@ -246,29 +269,32 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
 
             val salonsResponse = client
                 .from("salons")
-                .select(Columns.ALL)
-                .`in`("id", salonIds)
+                .select(columns = Columns.ALL)
                 .decodeList<SalonDto>()
+                .filter { dto -> dto.id in salonIds }
 
-            salonsResponse.map { salonDto ->
-                coroutineScope {
-                    val servicesDeferred = async { getServicesForSalon(salonDto.id) }
-                    val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
-                    val imagesDeferred = async { getImagesForSalon(salonDto.id) }
-                    val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
+            coroutineScope {
+                val deferredSalons = salonsResponse.map { salonDto: SalonDto ->
+                    async {
+                        val servicesDeferred = async { getServicesForSalon(salonDto.id) }
+                        val employeesDeferred = async { getEmployeesForSalon(salonDto.id) }
+                        val imagesDeferred = async { getImagesForSalon(salonDto.id) }
+                        val hoursDeferred = async { getOpeningHoursForSalon(salonDto.id) }
 
-                    val services = servicesDeferred.await()
-                    val employees = employeesDeferred.await()
-                    val images = imagesDeferred.await()
-                    val hours = hoursDeferred.await()
+                        val services = servicesDeferred.await()
+                        val employees = employeesDeferred.await()
+                        val images = imagesDeferred.await()
+                        val hours = hoursDeferred.await()
 
-                    salonDto.toDomain(
-                        services = services,
-                        employees = employees,
-                        images = images,
-                        operatingHours = hours
-                    )
+                        salonDto.toDomain(
+                            services = services,
+                            employees = employees,
+                            images = images,
+                            operatingHours = hours
+                        )
+                    }
                 }
+                deferredSalons.awaitAll()
             }
         } catch (e: Exception) {
             println("Error fetching salons by category: ${e.message}")
@@ -281,12 +307,15 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             client
                 .from("services")
-                .select(Columns.ALL)
-                .eq("salon_id", salonId)
-                .eq("is_active", true)
-                .order("price_cents", ascending = true)
+                .select(columns = Columns.ALL) {
+                    filter {
+                        eq("salon_id", salonId)
+                        eq("is_active", true)
+                    }
+                    order("price_cents", order = Order.ASCENDING)
+                }
                 .decodeList<ServiceDto>()
-                .map { it.toDomain() }
+                .map { dto: ServiceDto -> dto.serviceDtoToServiceDomainModel() }
         } catch (e: Exception) {
             println("Error fetching services for salon $salonId: ${e.message}")
             emptyList()
@@ -297,12 +326,15 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             client
                 .from("employees")
-                .select(Columns.ALL)
-                .eq("salon_id", salonId)
-                .eq("is_active", true)
-                .order("rating", ascending = false)
+                .select(columns = Columns.ALL) {
+                    filter {
+                        eq("salon_id", salonId)
+                        eq("is_active", true)
+                    }
+                    order("rating", order = Order.DESCENDING)
+                }
                 .decodeList<EmployeeDto>()
-                .map { it.toDomain() }
+                .map { dto: EmployeeDto -> dto.employeeDtoToEmployeeDomainModel() }
         } catch (e: Exception) {
             println("Error fetching employees for salon $salonId: ${e.message}")
             emptyList()
@@ -313,11 +345,12 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             client
                 .from("salon_images")
-                .select("image_url")
-                .eq("salon_id", salonId)
-                .order("sort_order", ascending = true)
+                .select(columns = Columns.raw("image_url")) {
+                    filter { eq("salon_id", salonId) }
+                    order("sort_order", order = Order.ASCENDING)
+                }
                 .decodeList<SalonImageDto>()
-                .map { it.imageUrl }
+                .map { dto: SalonImageDto -> dto.imageUrl }
         } catch (e: Exception) {
             println("Error fetching images for salon $salonId: ${e.message}")
             emptyList()
@@ -328,12 +361,13 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
         return try {
             val hours = client
                 .from("opening_hours")
-                .select(Columns.ALL)
-                .eq("salon_id", salonId)
-                .order("day_of_week", ascending = true)
+                .select(columns = Columns.ALL) {
+                    filter { eq("salon_id", salonId) }
+                    order("day_of_week", order = Order.ASCENDING)
+                }
                 .decodeList<OpeningHourDto>()
 
-            hours.associate { hour ->
+            hours.associate { hour: OpeningHourDto ->
                 val dayOfWeek = when (hour.dayOfWeek) {
                     0 -> DayOfWeek.SUNDAY
                     1 -> DayOfWeek.MONDAY
@@ -345,11 +379,12 @@ class SupabaseSalonRepositoryImpl : SalonRepository {
                     else -> DayOfWeek.MONDAY
                 }
 
-                val timeString = if (hour.isOpen && hour.openTime != null && hour.closeTime != null) {
-                    "${hour.openTime} - ${hour.closeTime}"
-                } else {
-                    "Closed"
-                }
+                val timeString =
+                    if (hour.isOpen && hour.openTime != null && hour.closeTime != null) {
+                        "${hour.openTime} - ${hour.closeTime}"
+                    } else {
+                        "Closed"
+                    }
 
                 dayOfWeek to timeString
             }

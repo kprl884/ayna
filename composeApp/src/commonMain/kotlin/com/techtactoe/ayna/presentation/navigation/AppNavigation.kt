@@ -18,11 +18,14 @@ import androidx.navigation.toRoute
 import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
-import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentDetailScreen
+import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
+import com.techtactoe.ayna.presentation.ui.screens.auth.AuthLoginScreen
+import com.techtactoe.ayna.presentation.ui.screens.auth.CreateAccountScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModel
+import com.techtactoe.ayna.di.SupabaseDataModule
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.map.MapScreen
 import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsScreen
@@ -99,8 +102,8 @@ fun AppNavigation() {
                     SearchScreen() // Temporary fallback
                 }
                 composable<Screen.Explore> {
-                    // Using the refactored version with enhanced architecture
-                    val viewModel = remember { ExploreViewModel() }
+                    // Using SupabaseDataModule to provide dependencies
+                    val viewModel = remember { SupabaseDataModule.createExploreViewModel() }
 
                     ExploreScreen(
                         viewModel = viewModel,
@@ -141,6 +144,8 @@ fun AppNavigation() {
                     )
                 }
                 composable<Screen.Profile> { ProfileScreen() }
+                composable<Screen.AuthLogin> { AuthLoginScreen(navController) }
+                composable<Screen.AuthRegister> { CreateAccountScreen(navController) }
 
                 composable<Screen.Notifications> {
                     val viewModel = remember { DataModule.createNotificationsViewModel() }

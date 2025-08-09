@@ -16,8 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,17 +44,19 @@ import com.techtactoe.ayna.presentation.ui.components.ReviewsSectionViewState
 import com.techtactoe.ayna.presentation.ui.components.TeamSection
 import com.techtactoe.ayna.presentation.ui.components.TeamSectionViewState
 import com.techtactoe.ayna.presentation.ui.screens.salon.components.ImageCarousel
-import kotlinx.datetime.Instant
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Appointment Detail screen: mirrors Salon detail structure where relevant.
  * Sections: hero images, opening hours, reviews, experts, services, appointment info,
  * payment status, postpone/cancel buttons, expandable map view with a marker.
  */
+@OptIn(ExperimentalTime::class)
 @Composable
 fun AppointmentDetailScreen(
     appointmentId: String,
@@ -70,7 +73,7 @@ fun AppointmentDetailScreen(
             serviceName = "Haircut & Styling",
             employeeId = "emp-42",
             employeeName = "Elif Kaya",
-            appointmentDateTime = kotlinx.datetime.Clock.System.now().toEpochMilliseconds() + 86_400_000L,
+            appointmentDateTime = kotlin.time.Clock.System.now().toEpochMilliseconds() + 86_400_000L,
             status = AppointmentStatus.UPCOMING,
             price = 650.0,
             durationInMinutes = 60,
@@ -188,6 +191,7 @@ fun AppointmentDetailScreen(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun AppointmentInfoSection(appointment: Appointment, isPaid: MutableState<Boolean>) {
     ElevatedCard(
@@ -213,11 +217,10 @@ private fun AppointmentInfoSection(appointment: Appointment, isPaid: MutableStat
                 Month.OCTOBER -> "Oct"
                 Month.NOVEMBER -> "Nov"
                 Month.DECEMBER -> "Dec"
-                else -> dt.month.name.take(3)
             }
             val hour = if (dt.hour == 0) 12 else if (dt.hour > 12) dt.hour - 12 else dt.hour
             val amPm = if (dt.hour < 12) "AM" else "PM"
-            val formattedDate = "$month ${dt.dayOfMonth}, ${dt.year} at $hour:${dt.minute.toString().padStart(2, '0')} $amPm"
+            val formattedDate = "$month ${dt.day}, ${dt.year} at $hour:${dt.minute.toString().padStart(2, '0')} $amPm"
 
             Text("$formattedDate • ${appointment.durationInMinutes} min", style = MaterialTheme.typography.bodyMedium)
 
@@ -233,7 +236,11 @@ private fun AppointmentInfoSection(appointment: Appointment, isPaid: MutableStat
             }
 
             if (appointment.notes.isNotBlank()) {
-                Divider(modifier = Modifier.padding(vertical = Spacing.small))
+                HorizontalDivider(
+                    Modifier.padding(vertical = Spacing.small),
+                    DividerDefaults.Thickness,
+                    DividerDefaults.color
+                )
                 Text("Notes", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold))
                 Text(appointment.notes, style = MaterialTheme.typography.bodyMedium)
             }

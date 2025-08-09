@@ -2,13 +2,14 @@ package com.techtactoe.ayna.data.repository
 
 import com.techtactoe.ayna.data.supabase.AynaSupabaseClient
 import com.techtactoe.ayna.data.supabase.dto.ProfileDto
-import com.techtactoe.ayna.data.supabase.mapper.toDomain
-import com.techtactoe.ayna.data.supabase.mapper.toUpdateDto
+import com.techtactoe.ayna.data.supabase.mapper.*
+import com.techtactoe.ayna.data.supabase.mapper.profileDtoToUserProfileDomainModel
 import com.techtactoe.ayna.domain.model.PaymentMethod
 import com.techtactoe.ayna.domain.model.PaymentMethodType
 import com.techtactoe.ayna.domain.model.UserProfile
 import com.techtactoe.ayna.domain.repository.ProfileRepository
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 
 /**
  * Supabase implementation of ProfileRepository
@@ -20,21 +21,26 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
 
     override suspend fun getUserProfile(userId: String): UserProfile? {
         return try {
-            val profileResponse = client
+            val profileResponse: ProfileDto? = client
                 .from("profiles")
-                .select(Columns.ALL)
-                .eq("id", userId)
+                .select(columns = Columns.ALL) {
+                    filter { eq("id", userId) }
+                }
                 .decodeSingleOrNull<ProfileDto>()
 
-            profileResponse?.let { profileDto ->
+            val result: UserProfile? = if (profileResponse != null) {
                 val paymentMethods = getPaymentMethodsForUser(userId)
                 val favoriteServices = getFavoriteServicesForUser(userId)
 
-                profileDto.toDomain(
+                val dto: ProfileDto = profileResponse
+                dto.profileDtoToUserProfileDomainModel(
                     paymentMethods = paymentMethods,
                     favoriteServices = favoriteServices
                 )
+            } else {
+                null
             }
+            result
         } catch (e: Exception) {
             println("Error fetching user profile: ${e.message}")
             null
@@ -45,8 +51,9 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
         return try {
             client
                 .from("profiles")
-                .update(profile.toUpdateDto())
-                .eq("id", profile.id)
+                .update(profile.toUpdateDto()) {
+                    filter { eq("id", profile.id) }
+                }
 
             true
         } catch (e: Exception) {
@@ -61,8 +68,9 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
             if (paymentMethod.isDefault) {
                 client
                     .from("payment_methods")
-                    .update(mapOf("is_default" to false))
-                    .eq("user_id", userId)
+                    .update(mapOf("is_default" to false)) {
+                        filter { eq("user_id", userId) }
+                    }
             }
 
             client
@@ -88,9 +96,12 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
         return try {
             client
                 .from("payment_methods")
-                .delete()
-                .eq("id", paymentMethodId)
-                .eq("user_id", userId)
+                .delete {
+                    filter {
+                        eq("id", paymentMethodId)
+                        eq("user_id", userId)
+                    }
+                }
 
             true
         } catch (e: Exception) {
@@ -104,8 +115,9 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
             // Remove existing favorites
             client
                 .from("user_favorites")
-                .delete()
-                .eq("user_id", userId)
+                .delete {
+                    filter { eq("user_id", userId) }
+                }
 
             // Add new favorites
             if (serviceIds.isNotEmpty()) {
@@ -133,12 +145,13 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
         return try {
             val paymentMethodsResponse = client
                 .from("payment_methods")
-                .select(Columns.ALL)
-                .eq("user_id", userId)
-                .order("is_default", ascending = false)
+                .select(columns = Columns.ALL) {
+                    filter { eq("user_id", userId) }
+                    order("is_default", order = Order.DESCENDING)
+                }
                 .decodeList<Map<String, Any>>()
 
-            paymentMethodsResponse.map { paymentMap ->
+            paymentMethodsResponse.map { paymentMap: Map<String, Any> ->
                 PaymentMethod(
                     id = paymentMap["id"] as String,
                     type = PaymentMethodType.valueOf(paymentMap["type"] as String),
@@ -157,11 +170,12 @@ class SupabaseProfileRepositoryImpl : ProfileRepository {
         return try {
             val favoritesResponse = client
                 .from("user_favorites")
-                .select("salon_id")
-                .eq("user_id", userId)
+                .select(columns = Columns.raw("salon_id")) {
+                    filter { eq("user_id", userId) }
+                }
                 .decodeList<Map<String, String>>()
 
-            favoritesResponse.mapNotNull { it["salon_id"] }
+            favoritesResponse.mapNotNull { map: Map<String, String> -> map["salon_id"] }
         } catch (e: Exception) {
             println("Error fetching favorite services: ${e.message}")
             emptyList()

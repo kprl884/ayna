@@ -6,11 +6,13 @@ import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.domain.model.WaitlistRequest
 import com.techtactoe.ayna.domain.repository.AppointmentRepository
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * Mock implementation of AppointmentRepository with realistic hardcoded data
@@ -136,6 +138,7 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun getAvailableTimeSlots(
         salonId: String,
         serviceId: String,
@@ -153,10 +156,26 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
         val tz = TimeZone.currentSystemDefault()
         val existing: List<Pair<LocalDateTime, LocalDateTime>> = listOf(
             // One booking at 10:00-10:45 and another at 16:30-17:15
-            Pair(LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 10, 0),
-                 LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 10, 45)),
-            Pair(LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 16, 30),
-                 LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 17, 15))
+            Pair(
+                LocalDateTime(
+                    requestedDate.year,
+                    requestedDate.month.number, requestedDate.day, 10, 0
+                ),
+                LocalDateTime(
+                    requestedDate.year,
+                    requestedDate.month.number, requestedDate.day, 10, 45
+                )
+            ),
+            Pair(
+                LocalDateTime(
+                    requestedDate.year,
+                    requestedDate.month.number, requestedDate.day, 16, 30
+                ),
+                LocalDateTime(
+                    requestedDate.year,
+                    requestedDate.month.number, requestedDate.day, 17, 15
+                )
+            )
         )
 
         // Generate slots with breaks and buffer around bookings

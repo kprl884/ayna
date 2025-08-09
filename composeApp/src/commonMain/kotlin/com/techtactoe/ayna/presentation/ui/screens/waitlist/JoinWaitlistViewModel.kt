@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
+import kotlin.time.ExperimentalTime
 
 /**
  * ViewModel for the Join Waitlist screen following the golden standard MVVM pattern
@@ -132,6 +133,7 @@ class JoinWaitlistViewModel(
     /**
      * Check if there are available slots for the selected date
      */
+    @OptIn(ExperimentalTime::class)
     private fun checkAvailableSlots() {
         // Simulate checking for available slots
         // In this example, we'll say there are available slots for Saturday
