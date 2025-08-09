@@ -7,6 +7,7 @@ import com.techtactoe.ayna.domain.model.WaitlistRequest
 import com.techtactoe.ayna.domain.repository.AppointmentRepository
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
@@ -142,60 +143,36 @@ class MockAppointmentRepositoryImpl : AppointmentRepository {
         serviceId: String,
         date: Long
     ): List<TimeSlot> {
-        delay(1200) // Simulate network latency
+        delay(800) // Simulate network latency
 
         val requestedDate = Instant.fromEpochMilliseconds(date)
             .toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val dayOfWeek = requestedDate.dayOfWeek
 
-        // Return empty list for Sundays to simulate "fully booked" scenario
-        if (dayOfWeek == kotlinx.datetime.DayOfWeek.SUNDAY) {
-            return emptyList()
-        }
+        // Closed/holiday example: Sundays
+        if (requestedDate.dayOfWeek == kotlinx.datetime.DayOfWeek.SUNDAY) return emptyList()
 
-        // Generate realistic time slots for the day
-        val timeSlots = mutableListOf<TimeSlot>()
-
-        // Morning slots (10:30 AM - 11:30 AM)
-        val morningSlots = listOf(
-            LocalTime(10, 30) to "10:30 AM",
-            LocalTime(11, 0) to "11:00 AM",
-            LocalTime(11, 30) to "11:30 AM"
+        // Create mock existing bookings to test overlap removal
+        val tz = TimeZone.currentSystemDefault()
+        val existing: List<Pair<LocalDateTime, LocalDateTime>> = listOf(
+            // One booking at 10:00-10:45 and another at 16:30-17:15
+            Pair(LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 10, 0),
+                 LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 10, 45)),
+            Pair(LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 16, 30),
+                 LocalDateTime(requestedDate.year, requestedDate.monthNumber, requestedDate.dayOfMonth, 17, 15))
         )
 
-        morningSlots.forEach { (time, formattedTime) ->
-            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
-            timeSlots.add(
-                TimeSlot(
-                    dateTime = dateTime.toEpochMilliseconds(),
-                    isAvailable = true,
-                    formattedTime = formattedTime
-                )
-            )
-        }
-
-        // Afternoon slots (4:00 PM - 5:15 PM)
-        val afternoonSlots = listOf(
-            LocalTime(16, 0) to "4:00 PM",
-            LocalTime(16, 15) to "4:15 PM",
-            LocalTime(16, 30) to "4:30 PM",
-            LocalTime(16, 45) to "4:45 PM",
-            LocalTime(17, 0) to "5:00 PM",
-            LocalTime(17, 15) to "5:15 PM"
+        // Generate slots with breaks and buffer around bookings
+        val slots = com.techtactoe.ayna.data.util.AvailabilityGenerator.generate(
+            date = requestedDate,
+            openHour = 9,
+            closeHour = 19,
+            stepMinutes = 15,
+            breaks = listOf(LocalTime(13, 0) to LocalTime(14, 0)),
+            existingBookings = existing,
+            buffersMinutes = 0,
+            timeZone = tz
         )
-
-        afternoonSlots.forEach { (time, formattedTime) ->
-            val dateTime = requestedDate.atTime(time).toInstant(TimeZone.currentSystemDefault())
-            timeSlots.add(
-                TimeSlot(
-                    dateTime = dateTime.toEpochMilliseconds(),
-                    isAvailable = true,
-                    formattedTime = formattedTime
-                )
-            )
-        }
-
-        return timeSlots
+        return slots
     }
 
     override suspend fun joinWaitlist(request: WaitlistRequest): Boolean {

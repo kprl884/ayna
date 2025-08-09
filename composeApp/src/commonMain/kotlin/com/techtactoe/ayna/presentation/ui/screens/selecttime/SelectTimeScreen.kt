@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -44,12 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.designsystem.theme.BorderThickness
 import com.techtactoe.ayna.designsystem.theme.Spacing
 import com.techtactoe.ayna.designsystem.theme.brandPurple
+import com.techtactoe.ayna.domain.model.TimeSlot
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -136,7 +135,11 @@ fun SelectTimeScreen(
                         dateOption = dateOption,
                         onClick = {
                             if (!dateOption.isDisabled) {
-                                viewModel.onEvent(SelectTimeContract.UiEvent.OnDateSelected(dateOption.date))
+                                viewModel.onEvent(
+                                    SelectTimeContract.UiEvent.OnDateSelected(
+                                        dateOption.date
+                                    )
+                                )
                             }
                         }
                     )
@@ -171,7 +174,12 @@ fun SelectTimeScreen(
                         onTimeSlotClick = { timeSlot ->
                             viewModel.onEvent(SelectTimeContract.UiEvent.OnTimeSlotSelected(timeSlot))
                             // Create appointment automatically when time slot is selected
-                            viewModel.onEvent(SelectTimeContract.UiEvent.OnCreateAppointment("Sample Salon", "Sample Service"))
+                            viewModel.onEvent(
+                                SelectTimeContract.UiEvent.OnCreateAppointment(
+                                    "Sample Salon",
+                                    "Sample Service"
+                                )
+                            )
                         }
                     )
                 }

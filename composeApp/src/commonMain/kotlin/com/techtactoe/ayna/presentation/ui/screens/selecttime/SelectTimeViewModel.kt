@@ -29,7 +29,8 @@ import kotlinx.datetime.toLocalDateTime
  */
 class SelectTimeViewModel(
     private val getAvailableTimeSlotsUseCase: GetAvailableTimeSlotsUseCase,
-    private val createAppointmentUseCase: CreateAppointmentUseCase
+    private val createAppointmentUseCase: CreateAppointmentUseCase,
+    private val validateSlotSelectionUseCase: com.techtactoe.ayna.domain.usecase.ValidateSlotSelectionUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SelectTimeContract.UiState())
@@ -161,7 +162,15 @@ class SelectTimeViewModel(
      * Create appointment with selected time slot
      */
     fun createAppointment(salonName: String, serviceName: String) {
-        val selectedSlot = _uiState.value.selectedTimeSlot ?: return
+        val selectedSlot = _uiState.value.selectedTimeSlot
+        when (val validation = validateSlotSelectionUseCase(selectedSlot)) {
+            is com.techtactoe.ayna.domain.usecase.ValidateSlotSelectionUseCase.Result.Error -> {
+                _uiState.update { it.copy(errorMessage = "Invalid or unavailable time slot.") }
+                return
+            }
+            com.techtactoe.ayna.domain.usecase.ValidateSlotSelectionUseCase.Result.Ok -> { /* proceed */ }
+        }
+        val nonNullSlot = selectedSlot!!
 
         viewModelScope.launch {
             _uiState.update { it.copy(isCreatingAppointment = true, errorMessage = null) }
@@ -173,7 +182,7 @@ class SelectTimeViewModel(
                 serviceName = serviceName,
                 employeeId = "default", // Could be selected by user in future
                 employeeName = "Available Staff",
-                appointmentDateTime = selectedSlot.dateTime,
+                appointmentDateTime = nonNullSlot.dateTime,
                 status = AppointmentStatus.COMPLETED,
                 price = 50.0, // Could be passed from service selection
                 durationInMinutes = 60,

@@ -1,19 +1,13 @@
 package com.techtactoe.ayna.presentation.ui.screens.booking
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import com.techtactoe.ayna.designsystem.ErrorContent
+import com.techtactoe.ayna.designsystem.LoadingContent
 import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.brandPurple
+import com.techtactoe.ayna.presentation.ui.screens.booking.components.ConfirmationContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -28,7 +22,6 @@ fun BookingConfirmationScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    // Initialize with appointment ID
     LaunchedEffect(appointmentId) {
         onEvent(BookingConfirmationContract.UiEvent.OnInitialize(appointmentId))
     }
@@ -39,7 +32,11 @@ fun BookingConfirmationScreen(
             navController.navigate("appointments") {
                 popUpTo("home") { inclusive = false }
             }
-            onEvent(BookingConfirmationContract.UiEvent.OnNavigationHandled(BookingConfirmationContract.NavigationReset.APPOINTMENTS))
+            onEvent(
+                BookingConfirmationContract.UiEvent.OnNavigationHandled(
+                    BookingConfirmationContract.NavigationReset.APPOINTMENTS
+                )
+            )
         }
     }
 
@@ -48,7 +45,11 @@ fun BookingConfirmationScreen(
             navController.navigate("home") {
                 popUpTo("home") { inclusive = true }
             }
-            onEvent(BookingConfirmationContract.UiEvent.OnNavigationHandled(BookingConfirmationContract.NavigationReset.HOME))
+            onEvent(
+                BookingConfirmationContract.UiEvent.OnNavigationHandled(
+                    BookingConfirmationContract.NavigationReset.HOME
+                )
+            )
         }
     }
 
@@ -56,6 +57,7 @@ fun BookingConfirmationScreen(
         uiState.isLoading -> {
             LoadingContent()
         }
+
         uiState.errorMessage != null -> {
             ErrorContent(
                 message = uiState.errorMessage,
@@ -63,181 +65,12 @@ fun BookingConfirmationScreen(
                 onClearError = { onEvent(BookingConfirmationContract.UiEvent.OnClearError) }
             )
         }
+
         uiState.isConfirmed -> {
             ConfirmationContent(
                 uiState = uiState,
                 onEvent = onEvent,
                 modifier = modifier
-            )
-        }
-    }
-}
-
-@Composable
-private fun LoadingContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(color = brandPurple)
-    }
-}
-
-@Composable
-private fun ErrorContent(
-    message: String,
-    onRetry: () -> Unit,
-    onClearError: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(Spacing.xlarge),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.medium)
-        )
-
-        Button(
-            onClick = onRetry,
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(
-                "Try again",
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
-    }
-}
-
-@Composable
-private fun ConfirmationContent(
-    uiState: BookingConfirmationContract.UiState,
-    onEvent: (BookingConfirmationContract.UiEvent) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(Spacing.xlarge),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            imageVector = Icons.Default.CheckCircle,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .size(Spacing.xxxlarge + Spacing.medium)
-                .padding(bottom = Spacing.xlarge)
-        )
-
-        Text(
-            text = "Booking Confirmed!",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold
-            ),
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.medium)
-        )
-
-        Text(
-            text = "Your appointment has been successfully booked. You'll receive a confirmation email shortly.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xlarge)
-        )
-
-        // Appointment details
-        if (uiState.salonName.isNotEmpty()) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = Spacing.large),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                ),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Column(
-                    modifier = Modifier.padding(Spacing.medium)
-                ) {
-                    Text(
-                        text = uiState.salonName,
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = uiState.serviceName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.extraSmall)
-                    )
-
-                    Text(
-                        text = uiState.appointmentDateTime,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = Spacing.extraSmall)
-                    )
-
-                    if (uiState.price.isNotEmpty()) {
-                        Text(
-                            text = uiState.price,
-                            style = MaterialTheme.typography.titleSmall.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            modifier = Modifier.padding(top = Spacing.small)
-                        )
-                    }
-                }
-            }
-        }
-
-        Text(
-            text = "Appointment ID: ${uiState.appointmentId}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = Spacing.xlarge)
-        )
-
-        Button(
-            onClick = { onEvent(BookingConfirmationContract.UiEvent.OnGoToAppointmentsClick) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = Spacing.medium),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = brandPurple
-            ),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(
-                "View My Appointments",
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
-
-        OutlinedButton(
-            onClick = { onEvent(BookingConfirmationContract.UiEvent.OnDoneClick) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(
-                "Done",
-                style = MaterialTheme.typography.labelLarge
             )
         }
     }

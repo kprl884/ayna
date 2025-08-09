@@ -10,6 +10,7 @@ import com.techtactoe.ayna.domain.usecase.BookAppointmentUseCase
 import com.techtactoe.ayna.domain.usecase.CancelAppointmentUseCase
 import com.techtactoe.ayna.domain.usecase.CreateAppointmentUseCase
 import com.techtactoe.ayna.domain.usecase.GetAvailableTimeSlotsUseCase
+import com.techtactoe.ayna.domain.usecase.ValidateSlotSelectionUseCase
 import com.techtactoe.ayna.domain.usecase.GetNearbySalonsUseCase
 import com.techtactoe.ayna.domain.usecase.GetRecommendedSalonsUseCase
 import com.techtactoe.ayna.domain.usecase.GetSalonDetailsUseCase
@@ -49,6 +50,7 @@ object DataModule {
     val getAvailableTimeSlotsUseCase = GetAvailableTimeSlotsUseCase(appointmentRepository)
     val joinWaitlistUseCase = JoinWaitlistUseCase(appointmentRepository)
     val createAppointmentUseCase = CreateAppointmentUseCase(appointmentRepository)
+    val validateSlotSelectionUseCase = ValidateSlotSelectionUseCase()
 
     // ViewModel factory functions
     fun createHomeViewModel(): HomeViewModel {
@@ -60,7 +62,7 @@ object DataModule {
     }
 
     fun createSelectTimeViewModel(): SelectTimeViewModel {
-        return SelectTimeViewModel(getAvailableTimeSlotsUseCase, createAppointmentUseCase)
+        return SelectTimeViewModel(getAvailableTimeSlotsUseCase, createAppointmentUseCase, validateSlotSelectionUseCase)
     }
 
     fun createJoinWaitlistViewModel(): JoinWaitlistViewModel {

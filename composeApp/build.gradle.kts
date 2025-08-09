@@ -75,6 +75,13 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose.viewmodel)
         }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+        androidUnitTest.dependencies {
+            implementation(kotlin("test-junit"))
+            implementation("junit:junit:4.13.2")
+        }
     }
 }
 

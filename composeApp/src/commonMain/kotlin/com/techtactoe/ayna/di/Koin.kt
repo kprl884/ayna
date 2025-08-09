@@ -34,7 +34,6 @@ val dataModule = module {
         }
     }
 
-    // Salon repository ve use case'leri
     single<SalonRepository> { MockSalonRepositoryImpl() }
     single { GetNearbySalonsUseCase(get()) }
 }

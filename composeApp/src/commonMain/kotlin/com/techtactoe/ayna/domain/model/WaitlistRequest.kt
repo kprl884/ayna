@@ -15,13 +15,3 @@ data class WaitlistRequest(
     val status: WaitlistStatus = WaitlistStatus.PENDING,
     val createdAt: Long = Clock.System.now().toEpochMilliseconds()
 )
-
-/**
- * Status of a waitlist request
- */
-enum class WaitlistStatus {
-    PENDING,
-    NOTIFIED,
-    CONVERTED,
-    EXPIRED
-}

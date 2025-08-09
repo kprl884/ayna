@@ -31,7 +31,6 @@ data class PriceRangeUiModel(
     val max: Int = 30000
 )
 
-// Error types for better error handling
 sealed class ExploreError : Exception() {
     data object NetworkError : ExploreError()
     data object LocationPermissionDenied : ExploreError()
@@ -39,7 +38,6 @@ sealed class ExploreError : Exception() {
     data class UnknownError(override val message: String) : ExploreError()
 }
 
-// UI State models following MVVM best practices
 @Stable
 data class ExploreContentState(
     val isLoading: Boolean = false,
@@ -71,10 +69,4 @@ data class ExploreInteractionState(
     val selectedVenueId: String? = null
 )
 
-sealed interface BottomSheetType {
-    data object None : BottomSheetType
-    data object Filters : BottomSheetType
-    data object Sort : BottomSheetType
-    data object Price : BottomSheetType
-    data object VenueType : BottomSheetType
-}
+
