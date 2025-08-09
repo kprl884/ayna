@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
-import com.techtactoe.ayna.domain.model.TimeSlot
 import com.techtactoe.ayna.domain.usecase.CreateAppointmentUseCase
 import com.techtactoe.ayna.domain.usecase.GetAvailableTimeSlotsUseCase
 import com.techtactoe.ayna.domain.util.Resource
