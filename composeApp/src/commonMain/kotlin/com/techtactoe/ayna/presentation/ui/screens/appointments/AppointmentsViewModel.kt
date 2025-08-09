@@ -70,15 +70,20 @@ class AppointmentsViewModel(
         viewModelScope.launch {
             getUserAppointmentsUseCase(currentUserId).collect { result ->
                 when (result) {
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                    }
                     is Resource.Success -> {
-                        val appointments = emptyList<Appointment>()
-                        val upcoming = emptyList<Appointment>()
-                        val past = emptyList<Appointment>()
+                        val appointments = result.data ?: emptyList()
+                        val upcoming = appointments.filter { it.status == com.techtactoe.ayna.domain.model.AppointmentStatus.UPCOMING }
+                            .sortedBy { it.appointmentDateTime }
+                        val past = appointments.filter { it.status == com.techtactoe.ayna.domain.model.AppointmentStatus.COMPLETED || it.status == com.techtactoe.ayna.domain.model.AppointmentStatus.CANCELLED }
+                            .sortedByDescending { it.appointmentDateTime }
 
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
+                                isRefreshing = false,
                                 appointments = appointments,
                                 upcomingAppointments = upcoming,
                                 pastAppointments = past,

@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import com.techtactoe.ayna.common.designsystem.component.content.ErrorContent
 import com.techtactoe.ayna.common.designsystem.component.content.LoadingContent
 import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.presentation.navigation.Screen
 import com.techtactoe.ayna.presentation.ui.screens.booking.components.ConfirmationContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -29,8 +30,8 @@ fun BookingConfirmationScreen(
     // Handle navigation effects
     LaunchedEffect(uiState.navigateToAppointments) {
         if (uiState.navigateToAppointments) {
-            navController.navigate("appointments") {
-                popUpTo("home") { inclusive = false }
+            navController.navigate(Screen.Appointments) {
+                popUpTo<Screen.Home> { inclusive = false }
             }
             onEvent(
                 BookingConfirmationContract.UiEvent.OnNavigationHandled(
@@ -42,8 +43,8 @@ fun BookingConfirmationScreen(
 
     LaunchedEffect(uiState.navigateToHome) {
         if (uiState.navigateToHome) {
-            navController.navigate("home") {
-                popUpTo("home") { inclusive = true }
+            navController.navigate(Screen.Home) {
+                popUpTo<Screen.Home> { inclusive = true }
             }
             onEvent(
                 BookingConfirmationContract.UiEvent.OnNavigationHandled(

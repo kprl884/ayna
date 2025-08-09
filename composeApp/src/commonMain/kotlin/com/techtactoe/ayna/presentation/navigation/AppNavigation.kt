@@ -19,6 +19,7 @@ import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.di.DataModule
 import com.techtactoe.ayna.presentation.ui.components.AppBottomNavigation
 import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentsScreen
+import com.techtactoe.ayna.presentation.ui.screens.appointments.AppointmentDetailScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModel
@@ -135,7 +136,7 @@ fun AppNavigation() {
                         onEvent = viewModel::onEvent,
                         navigateToSearch = { navController.navigate(Screen.Search) },
                         navigateToAppointmentDetail = { appointmentId ->
-                            //navController.navigate(Screen.AppointmentDetail(appointmentId))
+                            navController.navigate(Screen.AppointmentDetail(appointmentId))
                         }
                     )
                 }
@@ -253,6 +254,14 @@ fun AppNavigation() {
                         onEvent = viewModel::onEvent,
                         appointmentId = screen.appointmentId,
                         navController = navController
+                    )
+                }
+
+                composable<Screen.AppointmentDetail> { backStackEntry ->
+                    val screen: Screen.AppointmentDetail = backStackEntry.toRoute()
+                    AppointmentDetailScreen(
+                        appointmentId = screen.appointmentId,
+                        onBackClick = { navController.popBackStack() }
                     )
                 }
             }

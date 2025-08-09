@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.HorizontalDivider
@@ -85,7 +87,8 @@ fun StickyTabBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Spacing.medium),
+                    .padding(horizontal = Spacing.medium)
+                    .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.large)
             ) {
                 SalonDetailTab.entries.forEach { tab ->
@@ -142,7 +145,8 @@ private fun TabItem(
                     SalonDetailTab.ABOUT -> StringResources.about_text
                 },
                 style = if (isSelected) AynaTypography.labelLarge else AynaTypography.labelMedium,
-                color = textColor
+                color = textColor,
+                maxLines = 1
             )
 
             Box(

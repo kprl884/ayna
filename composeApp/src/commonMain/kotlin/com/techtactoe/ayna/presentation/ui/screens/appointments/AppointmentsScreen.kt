@@ -117,7 +117,13 @@ fun AppointmentsScreen(
                             selectedTab = uiState.selectedTab,
                             upcomingAppointments = uiState.upcomingAppointments,
                             pastAppointments = uiState.pastAppointments,
-                            onAppointmentClick = { }
+                            onAppointmentClick = { appointment ->
+                                onEvent(
+                                    AppointmentsContract.UiEvent.OnAppointmentClicked(
+                                        appointmentId = appointment.id
+                                    )
+                                )
+                            }
                         )
                     }
                 }

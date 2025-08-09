@@ -45,6 +45,9 @@ sealed interface Screen {
 
     @Serializable
     data class BookingConfirmation(val appointmentId: String) : Screen
+
+    @Serializable
+    data class AppointmentDetail(val appointmentId: String) : Screen
 }
 
 /**
