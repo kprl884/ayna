@@ -23,6 +23,10 @@ import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationSc
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreenRefactored
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModelEnhanced
+import com.techtactoe.ayna.presentation.ui.screens.auth.LoginScreen
+import com.techtactoe.ayna.presentation.ui.screens.auth.LoginViewModel
+import com.techtactoe.ayna.presentation.ui.screens.auth.SignUpScreen
+import com.techtactoe.ayna.presentation.ui.screens.auth.SignUpViewModel
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.map.MapScreen
 import com.techtactoe.ayna.presentation.ui.screens.notifications.NotificationsScreen
