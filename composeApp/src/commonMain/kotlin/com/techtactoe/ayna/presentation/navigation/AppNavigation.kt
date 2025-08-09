@@ -24,7 +24,6 @@ import com.techtactoe.ayna.presentation.ui.screens.auth.AuthLoginScreen
 import com.techtactoe.ayna.presentation.ui.screens.auth.CreateAccountScreen
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationScreen
 import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreScreen
-import com.techtactoe.ayna.presentation.ui.screens.explore.ExploreViewModel
 import com.techtactoe.ayna.di.SupabaseDataModule
 import com.techtactoe.ayna.presentation.ui.screens.home.HomeScreen
 import com.techtactoe.ayna.presentation.ui.screens.map.MapScreen

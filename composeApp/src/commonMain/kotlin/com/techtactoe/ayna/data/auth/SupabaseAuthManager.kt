@@ -1,7 +1,6 @@
 package com.techtactoe.ayna.data.auth
 
 import com.techtactoe.ayna.data.supabase.AynaSupabaseClient
-import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
