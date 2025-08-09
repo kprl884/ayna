@@ -154,7 +154,9 @@ fun AppNavigation() {
                         }
                     )
                 }
-                composable<Screen.Profile> { ProfileScreen() }
+                composable<Screen.Profile> {
+                    ProfileScreen(navController = navController)
+                }
 
                 composable<Screen.Notifications> {
                     val viewModel = remember { DataModule.createNotificationsViewModel() }
