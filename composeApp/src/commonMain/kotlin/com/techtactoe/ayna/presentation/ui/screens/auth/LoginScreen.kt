@@ -366,10 +366,10 @@ private fun SocialLoginButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    SecondaryButton(
-        text = "",
+    androidx.compose.material3.OutlinedButton(
         onClick = onClick,
         enabled = enabled,
+        shape = AynaShapes.medium,
         modifier = modifier
     ) {
         Row(
