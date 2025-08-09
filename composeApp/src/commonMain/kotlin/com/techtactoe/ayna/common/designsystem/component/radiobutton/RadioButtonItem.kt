@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.radiobutton
+package com.techtactoe.ayna.common.designsystem.component.radiobutton
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

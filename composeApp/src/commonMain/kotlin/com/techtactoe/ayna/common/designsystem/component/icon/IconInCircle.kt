@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.icon
+package com.techtactoe.ayna.common.designsystem.component.icon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

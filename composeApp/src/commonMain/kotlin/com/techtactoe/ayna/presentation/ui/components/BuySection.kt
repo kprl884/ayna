@@ -9,14 +9,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.techtactoe.ayna.domain.model.BuyOption
 import com.techtactoe.ayna.domain.model.BuyOptionType
-import com.techtactoe.ayna.common.designsystem.button.PrimaryButton
+import com.techtactoe.ayna.common.designsystem.component.button.PrimaryButton
 import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.common.designsystem.theme.Elevation
 import com.techtactoe.ayna.common.designsystem.theme.Spacing

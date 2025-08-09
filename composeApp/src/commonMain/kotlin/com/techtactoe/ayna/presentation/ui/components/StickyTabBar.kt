@@ -28,8 +28,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.ic_heart
-import com.techtactoe.ayna.common.designsystem.icon.IconInCircle
-import com.techtactoe.ayna.common.designsystem.icon.IconWithImageVector
+import com.techtactoe.ayna.common.designsystem.component.icon.IconInCircle
+import com.techtactoe.ayna.common.designsystem.component.icon.IconWithImageVector
 import com.techtactoe.ayna.common.designsystem.theme.AnimationDuration
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import com.techtactoe.ayna.common.designsystem.theme.StringResources

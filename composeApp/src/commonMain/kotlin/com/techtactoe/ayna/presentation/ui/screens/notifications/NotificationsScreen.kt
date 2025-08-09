@@ -17,7 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import com.techtactoe.ayna.common.designsystem.LoadingContent
+import com.techtactoe.ayna.common.designsystem.component.content.LoadingContent
 import com.techtactoe.ayna.domain.model.NotificationItem
 import com.techtactoe.ayna.domain.model.NotificationType
 import com.techtactoe.ayna.presentation.ui.screens.notifications.components.EmptyNotificationsContent

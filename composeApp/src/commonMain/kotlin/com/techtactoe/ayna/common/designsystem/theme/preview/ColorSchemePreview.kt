@@ -36,7 +36,7 @@ private fun ColorRow(item: RoleSwatch) {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(text = item.name, fontWeight = FontWeight.SemiBold)
-            val hex = item.bg.value.toULong().toString(16).uppercase().padStart(8, '0')
+            val hex = item.bg.value.toString(16).uppercase().padStart(8, '0')
             Text(text = "#" + hex)
         }
         if (item.on != null) {

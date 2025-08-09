@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.chip
+package com.techtactoe.ayna.common.designsystem.component.chip
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement

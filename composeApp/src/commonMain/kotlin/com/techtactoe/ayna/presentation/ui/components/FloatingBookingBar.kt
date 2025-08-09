@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.common.designsystem.button.PrimaryButton
+import com.techtactoe.ayna.common.designsystem.component.button.PrimaryButton
 import com.techtactoe.ayna.common.designsystem.theme.AnimationDuration
 import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.common.designsystem.theme.Elevation

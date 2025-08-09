@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.button
+package com.techtactoe.ayna.common.designsystem.component.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

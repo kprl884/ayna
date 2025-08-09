@@ -34,7 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.common.designsystem.button.PrimaryButton
+import com.techtactoe.ayna.common.designsystem.component.button.PrimaryButton
 import com.techtactoe.ayna.common.designsystem.theme.AnimationDuration
 import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
 import com.techtactoe.ayna.common.designsystem.theme.Elevation
@@ -153,7 +153,7 @@ fun FilterBottomSheet(
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.small)
                         ) {
-                            items(ServiceType.values()) { serviceType ->
+                            items(ServiceType.entries.toTypedArray()) { serviceType ->
                                 ServiceTypeChip(
                                     serviceType = serviceType,
                                     isSelected = viewState.filterState.serviceType == serviceType,

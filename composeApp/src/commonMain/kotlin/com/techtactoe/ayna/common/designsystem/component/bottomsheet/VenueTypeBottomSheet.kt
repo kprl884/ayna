@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.bottomsheet
+package com.techtactoe.ayna.common.designsystem.component.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,18 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.domain.model.SortOption
-import com.techtactoe.ayna.common.designsystem.radiobutton.RadioButtonItem
-import com.techtactoe.ayna.common.designsystem.utils.Utils.getSortOptionDisplayName
+import com.techtactoe.ayna.common.designsystem.component.radiobutton.RadioButtonItem
+import com.techtactoe.ayna.common.designsystem.utils.Utils.getVenueTypeDisplayName
+import com.techtactoe.ayna.domain.model.VenueType
 
 /**
- * Sort options bottom sheet
+ * Venue type bottom sheet
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SortBottomSheet(
-    currentSort: SortOption,
-    onSortSelected: (SortOption) -> Unit,
+fun VenueTypeBottomSheet(
+    currentType: VenueType,
+    onTypeSelected: (VenueType) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -41,6 +41,7 @@ fun SortBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         dragHandle = { BottomSheetDefaults.DragHandle() },
+        // FIXED: Renamed 'windowInsets' to 'contentWindowInsets' and provided it as a lambda.
         contentWindowInsets = { WindowInsets(0.dp) }
     ) {
         Column(
@@ -55,7 +56,7 @@ fun SortBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Sort by",
+                    text = "Venue type",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -73,12 +74,12 @@ fun SortBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Sort options
-            SortOption.entries.forEach { option ->
+            // Venue type options
+            VenueType.entries.forEach { type ->
                 RadioButtonItem(
-                    text = getSortOptionDisplayName(option),
-                    selected = currentSort == option,
-                    onClick = { onSortSelected(option) }
+                    text = getVenueTypeDisplayName(type),
+                    selected = currentType == type,
+                    onClick = { onTypeSelected(type) }
                 )
             }
 

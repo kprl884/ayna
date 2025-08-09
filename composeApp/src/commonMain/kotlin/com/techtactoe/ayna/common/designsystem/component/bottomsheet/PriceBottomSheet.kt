@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem.bottomsheet
+package com.techtactoe.ayna.common.designsystem.component.bottomsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,15 +8,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +24,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,27 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.common.designsystem.radiobutton.RadioButtonItem
-import com.techtactoe.ayna.common.designsystem.utils.Utils.getSortOptionDisplayName
-import com.techtactoe.ayna.common.designsystem.utils.Utils.getVenueTypeDisplayName
-import com.techtactoe.ayna.domain.model.ExploreFilters
-import com.techtactoe.ayna.domain.model.SortOption
-import com.techtactoe.ayna.domain.model.VenueType
+import com.techtactoe.ayna.domain.model.PriceRange
 
 /**
- * Combined filters bottom sheet
+ * Price range bottom sheet with slider
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FiltersBottomSheet(
-    currentFilters: ExploreFilters,
-    onFiltersChanged: (ExploreFilters) -> Unit,
-    onClearAll: () -> Unit,
+fun PriceBottomSheet(
+    currentPriceRange: PriceRange,
+    onPriceRangeChanged: (PriceRange) -> Unit,
+    onClear: () -> Unit,
     onApply: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var tempFilters by rememberSaveable { mutableStateOf(currentFilters) }
+    var tempMaxPrice by rememberSaveable { mutableFloatStateOf(currentPriceRange.max.toFloat()) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -76,7 +68,7 @@ fun FiltersBottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Filters",
+                    text = "Price",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -94,31 +86,7 @@ fun FiltersBottomSheet(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Sort by section
-            Text(
-                text = "Sort by",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SortOption.entries.forEach { option ->
-                RadioButtonItem(
-                    text = getSortOptionDisplayName(option),
-                    selected = tempFilters.sortOption == option,
-                    onClick = {
-                        tempFilters = tempFilters.copy(sortOption = option)
-                        onFiltersChanged(tempFilters)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Maximum price section
+            // Price label
             Text(
                 text = "Maximum price",
                 style = MaterialTheme.typography.titleMedium.copy(
@@ -127,8 +95,9 @@ fun FiltersBottomSheet(
                 color = MaterialTheme.colorScheme.onSurface
             )
 
+            // Price value
             Text(
-                text = "₺${tempFilters.priceRange.max / 100}",
+                text = "₺${(tempMaxPrice / 100).toInt()}",
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -136,16 +105,15 @@ fun FiltersBottomSheet(
                 modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
             )
 
+            // Price slider
             Slider(
-                value = tempFilters.priceRange.max.toFloat(),
+                value = tempMaxPrice,
                 onValueChange = {
-                    tempFilters = tempFilters.copy(
-                        priceRange = tempFilters.priceRange.copy(max = it.toInt())
-                    )
-                    onFiltersChanged(tempFilters)
+                    tempMaxPrice = it
+                    onPriceRangeChanged(currentPriceRange.copy(max = it.toInt()))
                 },
                 valueRange = 0f..30000f,
-                steps = 299,
+                steps = 299, // 100 TRY steps
                 colors = SliderDefaults.colors(
                     thumbColor = Color(0xFF7B61FF),
                     activeTrackColor = Color(0xFF7B61FF),
@@ -153,56 +121,6 @@ fun FiltersBottomSheet(
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Venue type section
-            Text(
-                text = "Venue type",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Venue type chips
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                VenueType.entries.forEach { type ->
-                    FilterChip(
-                        selected = tempFilters.venueType == type,
-                        onClick = {
-                            tempFilters = tempFilters.copy(venueType = type)
-                            onFiltersChanged(tempFilters)
-                        },
-                        label = {
-                            Text(
-                                text = getVenueTypeDisplayName(type),
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.Medium
-                                )
-                            )
-                        },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF7B61FF),
-                            selectedLabelColor = Color.White,
-                            containerColor = MaterialTheme.colorScheme.surface,
-                            labelColor = MaterialTheme.colorScheme.onSurface
-                        ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            enabled = true,
-                            selected = tempFilters.venueType == type,
-                            borderColor = MaterialTheme.colorScheme.outline,
-                            selectedBorderColor = Color(0xFF7B61FF)
-                        ),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -212,13 +130,13 @@ fun FiltersBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 OutlinedButton(
-                    onClick = onClearAll,
+                    onClick = onClear,
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.onSurface
                     )
                 ) {
-                    Text("Clear all")
+                    Text("Clear")
                 }
 
                 Button(

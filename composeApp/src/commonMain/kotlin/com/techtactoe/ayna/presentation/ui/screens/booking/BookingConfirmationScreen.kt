@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.techtactoe.ayna.common.designsystem.ErrorContent
-import com.techtactoe.ayna.common.designsystem.LoadingContent
+import com.techtactoe.ayna.common.designsystem.component.content.ErrorContent
+import com.techtactoe.ayna.common.designsystem.component.content.LoadingContent
 import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.booking.components.ConfirmationContent
 import org.jetbrains.compose.ui.tooling.preview.Preview

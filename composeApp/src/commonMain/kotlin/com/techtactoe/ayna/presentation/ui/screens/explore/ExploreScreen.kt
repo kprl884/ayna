@@ -36,17 +36,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.common.designsystem.ErrorContent
-import com.techtactoe.ayna.common.designsystem.LoadingContent
-import com.techtactoe.ayna.common.designsystem.button.PrimaryButton
+import com.techtactoe.ayna.common.designsystem.component.content.LoadingContent
+import com.techtactoe.ayna.common.designsystem.component.button.PrimaryButton
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.BottomSheetType
-import com.techtactoe.ayna.domain.model.ExploreError
 import com.techtactoe.ayna.domain.model.Venue
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.ExploreSearchBar
-import com.techtactoe.ayna.common.designsystem.chip.FilterChipBarRefactored
-import com.techtactoe.ayna.common.designsystem.chip.FilterChipBarViewState
+import com.techtactoe.ayna.common.designsystem.component.chip.FilterChipBarRefactored
+import com.techtactoe.ayna.common.designsystem.component.chip.FilterChipBarViewState
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueCardRefactored
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueCardViewState
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -397,59 +395,9 @@ private fun EmptyContentRefactored(
     }
 }
 
-@Composable
-private fun ErrorContentRefactored(
-    error: ExploreError,
-    onRetry: () -> Unit,
-    onClearFilters: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val (_, message, primaryAction, secondaryAction) = when (error) {
-        is ExploreError.NetworkError -> ErrorInfo(
-            title = "Connection Problem",
-            message = "Please check your internet connection and try again.",
-            primaryAction = "Retry" to onRetry,
-            secondaryAction = null
-        )
 
-        is ExploreError.LocationPermissionDenied -> ErrorInfo(
-            title = "Location Permission Needed",
-            message = "Please enable location permission to find venues near you.",
-            primaryAction = "Clear Filters" to onClearFilters,
-            secondaryAction = null
-        )
 
-        is ExploreError.NoDataError -> ErrorInfo(
-            title = "No Data Available",
-            message = "Unable to load venue data at the moment.",
-            primaryAction = "Retry" to onRetry,
-            secondaryAction = "Clear Filters" to onClearFilters
-        )
 
-        is ExploreError.UnknownError -> ErrorInfo(
-            title = "Something went wrong",
-            message = error.message,
-            primaryAction = "Retry" to onRetry,
-            secondaryAction = "Clear Filters" to onClearFilters
-        )
-    }
-
-    ErrorContent(
-        message = message,
-        onRetry = primaryAction.second,
-        onClearError = secondaryAction?.second ?: onClearFilters
-    )
-}
-
-/**
- * Data class to hold error information for better error handling
- */
-private data class ErrorInfo(
-    val title: String,
-    val message: String,
-    val primaryAction: Pair<String, () -> Unit>,
-    val secondaryAction: Pair<String, () -> Unit>? = null
-)
 
 /**
  * Helper function to calculate active filters count

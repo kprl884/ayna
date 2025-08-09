@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.common.designsystem
+package com.techtactoe.ayna.common.designsystem.component.content
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
