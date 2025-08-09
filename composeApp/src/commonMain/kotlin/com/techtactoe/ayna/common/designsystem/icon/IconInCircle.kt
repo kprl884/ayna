@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.icon
+package com.techtactoe.ayna.common.designsystem.icon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 

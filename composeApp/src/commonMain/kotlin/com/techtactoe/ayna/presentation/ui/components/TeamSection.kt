@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import com.techtactoe.ayna.domain.model.TeamMember
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

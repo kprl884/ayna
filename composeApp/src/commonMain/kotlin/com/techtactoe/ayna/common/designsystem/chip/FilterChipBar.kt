@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.presentation.ui.screens.explore.components
+package com.techtactoe.ayna.common.designsystem.chip
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +21,10 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
-import com.techtactoe.ayna.designsystem.theme.BorderThickness
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.common.designsystem.theme.BorderThickness
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.ExploreFiltersUiModel
 import com.techtactoe.ayna.domain.model.SortOption
 import com.techtactoe.ayna.domain.model.VenueType

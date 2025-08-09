@@ -10,10 +10,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.StringResources
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

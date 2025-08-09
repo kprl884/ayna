@@ -20,9 +20,9 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.StringResources
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.OpeningHour
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

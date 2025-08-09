@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.theme
+package com.techtactoe.ayna.common.designsystem.theme
 
 /**
  * Centralized string resources for the Ayna

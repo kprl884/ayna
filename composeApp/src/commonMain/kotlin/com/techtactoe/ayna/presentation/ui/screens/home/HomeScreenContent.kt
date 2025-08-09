@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.StringResources
 import com.techtactoe.ayna.domain.model.NotificationUiState
 import com.techtactoe.ayna.presentation.ui.components.SalonCard
 import com.techtactoe.ayna.presentation.ui.components.SalonCardViewState

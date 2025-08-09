@@ -16,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.techtactoe.ayna.designsystem.ErrorContent
-import com.techtactoe.ayna.designsystem.LoadingContent
-import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.common.designsystem.ErrorContent
+import com.techtactoe.ayna.common.designsystem.LoadingContent
+import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
 import com.techtactoe.ayna.presentation.ui.screens.appointments.component.EmptyAppointmentsContent
 import com.techtactoe.ayna.presentation.ui.screens.appointments.model.AppointmentTab
 import org.jetbrains.compose.ui.tooling.preview.Preview

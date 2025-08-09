@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.typography
+package com.techtactoe.ayna.common.designsystem.typography
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

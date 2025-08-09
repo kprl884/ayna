@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.brandPurple
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 import com.techtactoe.ayna.presentation.ui.screens.booking.BookingConfirmationContract
 
 @Composable

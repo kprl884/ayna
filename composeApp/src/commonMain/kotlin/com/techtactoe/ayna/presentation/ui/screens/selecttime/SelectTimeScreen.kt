@@ -43,11 +43,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
-import com.techtactoe.ayna.designsystem.theme.BorderThickness
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.brandPurple
+import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.common.designsystem.theme.BorderThickness
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 import com.techtactoe.ayna.domain.model.TimeSlot
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.techtactoe.ayna.domain.model.SalonDetail
 import com.techtactoe.ayna.domain.model.SalonStatus
-import com.techtactoe.ayna.designsystem.theme.AynaColors
-import com.techtactoe.ayna.designsystem.theme.AynaColors.LightPurple
+import com.techtactoe.ayna.common.designsystem.theme.AynaColors
+import com.techtactoe.ayna.common.designsystem.theme.AynaColors.LightPurple
 
 @Composable
 fun SalonBasicInfo(

@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.icon
+package com.techtactoe.ayna.common.designsystem.icon
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon

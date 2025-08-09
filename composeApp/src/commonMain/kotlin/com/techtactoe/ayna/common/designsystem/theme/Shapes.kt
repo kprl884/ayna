@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.theme
+package com.techtactoe.ayna.common.designsystem.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp

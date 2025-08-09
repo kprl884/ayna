@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem
+package com.techtactoe.ayna.common.designsystem
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -6,7 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.designsystem.theme.brandPurple
+import com.techtactoe.ayna.common.designsystem.theme.brandPurple
 
 @Composable
 fun LoadingContent() {

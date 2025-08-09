@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.button
+package com.techtactoe.ayna.common.designsystem.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

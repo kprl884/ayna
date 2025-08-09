@@ -24,12 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
-import com.techtactoe.ayna.designsystem.theme.CornerRadius
-import com.techtactoe.ayna.designsystem.theme.Elevation
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.common.designsystem.theme.Elevation
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.StringResources
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 
 @Stable
 data class TeamMemberCardViewState(

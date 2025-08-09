@@ -28,12 +28,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.ic_heart
-import com.techtactoe.ayna.designsystem.icon.IconInCircle
-import com.techtactoe.ayna.designsystem.icon.IconWithImageVector
-import com.techtactoe.ayna.designsystem.theme.AnimationDuration
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.theme.StringResources
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.icon.IconInCircle
+import com.techtactoe.ayna.common.designsystem.icon.IconWithImageVector
+import com.techtactoe.ayna.common.designsystem.theme.AnimationDuration
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.StringResources
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.presentation.ui.model.SalonDetailTab
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

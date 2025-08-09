@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

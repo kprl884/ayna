@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.techtactoe.ayna.domain.model.Appointment
 import com.techtactoe.ayna.domain.model.AppointmentStatus
-import com.techtactoe.ayna.designsystem.theme.Elevation
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.Elevation
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import kotlinx.datetime.Instant
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone

@@ -2,8 +2,8 @@ package com.techtactoe.ayna.presentation.ui.screens.salon
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.techtactoe.ayna.designsystem.ErrorContent
-import com.techtactoe.ayna.designsystem.LoadingContent
+import com.techtactoe.ayna.common.designsystem.ErrorContent
+import com.techtactoe.ayna.common.designsystem.LoadingContent
 
 /**
  * Content for the SalonDetail screen, handling UI rendering based on state

@@ -36,32 +36,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.ErrorContent
-import com.techtactoe.ayna.designsystem.LoadingContent
-import com.techtactoe.ayna.designsystem.button.PrimaryButton
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.ErrorContent
+import com.techtactoe.ayna.common.designsystem.LoadingContent
+import com.techtactoe.ayna.common.designsystem.button.PrimaryButton
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.BottomSheetType
 import com.techtactoe.ayna.domain.model.ExploreError
 import com.techtactoe.ayna.domain.model.Venue
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.ExploreSearchBar
-import com.techtactoe.ayna.presentation.ui.screens.explore.components.FilterChipBarRefactored
-import com.techtactoe.ayna.presentation.ui.screens.explore.components.FilterChipBarViewState
+import com.techtactoe.ayna.common.designsystem.chip.FilterChipBarRefactored
+import com.techtactoe.ayna.common.designsystem.chip.FilterChipBarViewState
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueCardRefactored
 import com.techtactoe.ayna.presentation.ui.screens.explore.components.VenueCardViewState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-/**
- * Refactored ExploreScreen with complete design system integration
- * Following MVVM Contract pattern with enhanced separation of concerns
- *
- * Key Improvements:
- * - Complete design system integration (AynaTypography, Spacing, MaterialTheme)
- * - SOLID principles compliance
- * - Performance optimization with @Stable components
- * - Enhanced error handling with typed errors
- * - Atomic component architecture
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen(
@@ -74,7 +63,6 @@ fun ExploreScreen(
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Handle navigation effects
     LaunchedEffect(uiState.navigationState.navigateToVenueDetail) {
         uiState.navigationState.navigateToVenueDetail?.let { venueId ->
             onNavigateToVenueDetail(venueId)
@@ -96,7 +84,6 @@ fun ExploreScreen(
         }
     }
 
-    // Handle snackbar messages
     LaunchedEffect(uiState.navigationState.snackbarMessage) {
         uiState.navigationState.snackbarMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
@@ -293,7 +280,6 @@ private fun SuccessContentRefactored(
 ) {
     val listState = rememberLazyListState()
 
-    // Pagination logic with performance optimization
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collect { lastVisibleIndex ->

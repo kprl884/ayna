@@ -34,10 +34,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.techtactoe.ayna.designsystem.theme.AynaShapes
-import com.techtactoe.ayna.designsystem.theme.Elevation
-import com.techtactoe.ayna.designsystem.theme.Spacing
-import com.techtactoe.ayna.designsystem.typography.AynaTypography
+import com.techtactoe.ayna.common.designsystem.theme.AynaShapes
+import com.techtactoe.ayna.common.designsystem.theme.Elevation
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
 import com.techtactoe.ayna.domain.model.Venue
 import com.techtactoe.ayna.domain.model.VenueService
 import org.jetbrains.compose.ui.tooling.preview.Preview

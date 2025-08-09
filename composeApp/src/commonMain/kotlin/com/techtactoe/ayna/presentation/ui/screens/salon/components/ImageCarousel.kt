@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ayna.composeapp.generated.resources.Res
 import ayna.composeapp.generated.resources.ic_heart
-import com.techtactoe.ayna.designsystem.icon.IconInCircle
-import com.techtactoe.ayna.designsystem.theme.AynaColors
+import com.techtactoe.ayna.common.designsystem.icon.IconInCircle
+import com.techtactoe.ayna.common.designsystem.theme.AynaColors
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalFoundationApi::class)

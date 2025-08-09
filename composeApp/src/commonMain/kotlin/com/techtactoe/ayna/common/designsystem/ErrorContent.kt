@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem
+package com.techtactoe.ayna.common.designsystem
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 
 @Composable
 fun ErrorContent(

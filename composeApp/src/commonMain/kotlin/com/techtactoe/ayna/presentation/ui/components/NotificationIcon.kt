@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.icon.IconWithImageVector
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.icon.IconWithImageVector
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import com.techtactoe.ayna.domain.model.NotificationUiState
 
 @Composable

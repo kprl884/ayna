@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.techtactoe.ayna.designsystem.theme.AynaAppTheme
-import com.techtactoe.ayna.designsystem.theme.Spacing
+import com.techtactoe.ayna.common.designsystem.theme.AynaAppTheme
+import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

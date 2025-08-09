@@ -1,4 +1,4 @@
-package com.techtactoe.ayna.designsystem.theme
+package com.techtactoe.ayna.common.designsystem.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
