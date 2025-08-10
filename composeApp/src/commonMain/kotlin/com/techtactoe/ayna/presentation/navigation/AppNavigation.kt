@@ -167,7 +167,7 @@ fun AppNavigation() {
 
                         if (!isAuthenticated) {
                             navController.navigate(Screen.AuthLogin) {
-                                popUpTo<com.techtactoe.ayna.presentation.navigation.Screen.Profile> { inclusive = true }
+                                popUpTo<Screen.Profile> { inclusive = true }
                                 launchSingleTop = true
                             }
                         }
