@@ -8,7 +8,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.techtactoe.ayna.domain.repository.SocialAuthResult
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -18,18 +17,18 @@ import kotlin.coroutines.resumeWithException
  * Supports Google Sign-In with proper error handling and state management
  */
 actual class SocialAuthManager {
-    
+
     private lateinit var context: Context
     private lateinit var googleSignInClient: GoogleSignInClient
-    
+
     companion object {
         // Shared continuation for Activity result handling
         private var pendingContinuation: kotlin.coroutines.Continuation<String>? = null
-        
+
         // Web Client ID - Replace with your actual Google Console Web Client ID
         private const val WEB_CLIENT_ID = "YOUR_GOOGLE_WEB_CLIENT_ID"
     }
-    
+
     fun initialize(context: Context) {
         this.context = context
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -37,10 +36,10 @@ actual class SocialAuthManager {
             .requestEmail()
             .requestProfile()
             .build()
-        
+
         this.googleSignInClient = GoogleSignIn.getClient(context, gso)
     }
-    
+
     /**
      * Get Google Sign-In intent for launching
      */
@@ -50,7 +49,7 @@ actual class SocialAuthManager {
         }
         return googleSignInClient.signInIntent
     }
-    
+
     /**
      * Request Google Sign-In and wait for result
      */
@@ -58,17 +57,17 @@ actual class SocialAuthManager {
         if (!this::googleSignInClient.isInitialized) {
             throw IllegalStateException("SocialAuthManager not initialized")
         }
-        
+
         return suspendCancellableCoroutine { continuation ->
             // Store continuation and wait for Activity result
             pendingContinuation = continuation
-            
+
             continuation.invokeOnCancellation {
                 pendingContinuation = null
             }
         }
     }
-    
+
     /**
      * Handle Google Sign-In result from Activity
      */
@@ -92,7 +91,7 @@ actual class SocialAuthManager {
             }
         }
     }
-    
+
     /**
      * Check if user is currently signed in to Google
      */
@@ -103,7 +102,7 @@ actual class SocialAuthManager {
             false
         }
     }
-    
+
     /**
      * Get current Google account if signed in
      */
@@ -114,7 +113,7 @@ actual class SocialAuthManager {
             null
         }
     }
-    
+
     /**
      * Sign out from Google
      */
@@ -125,7 +124,7 @@ actual class SocialAuthManager {
             }
         }
     }
-    
+
     /**
      * Revoke Google access (stronger than sign out)
      */
@@ -137,6 +136,3 @@ actual class SocialAuthManager {
         }
     }
 }
-
-// Add missing import for GoogleSignInStatusCodes
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes

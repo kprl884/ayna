@@ -61,31 +61,46 @@ Bu dokümanda Google ve Apple ile giriş özelliklerini Supabase'de nasıl aktif
 
 ## 3. Environment Variables
 
+Supabase URL ve anon (public) key nerede bulunur?
+- Supabase Dashboard > Project Settings > API
+- Project URL: https://[YOUR_PROJECT_REF].supabase.co
+- anon (public) key: "Project API keys" bölümündeki "anon public" anahtar
+
 ### 3.1 Android
 
-`composeApp/src/androidMain/kotlin/com/techtactoe/ayna/data/supabase/SupabaseEnv.android.kt`:
+Artık Supabase bilgileriniz Gradle üzerinden BuildConfig'e enjekte ediliyor. Değerleri projenize şu yöntemlerden biriyle sağlayın:
 
-```kotlin
-package com.techtactoe.ayna.data.supabase
-
-actual object SupabaseEnv {
-    actual val url: String = "https://[YOUR_PROJECT_REF].supabase.co"
-    actual val anonKey: String = "[YOUR_ANON_KEY]"
-}
+- Yöntem A: local.properties dosyasına ekleyin (commit etmeyin):
 ```
+SUPABASE_URL=https://[YOUR_PROJECT_REF].supabase.co
+SUPABASE_ANON_KEY=[YOUR_ANON_KEY]
+```
+
+- Yöntem B: Build öncesi ortam değişkeni olarak ayarlayın:
+- macOS/Linux:
+```
+export SUPABASE_URL=https://[YOUR_PROJECT_REF].supabase.co
+export SUPABASE_ANON_KEY=[YOUR_ANON_KEY]
+```
+- Windows (PowerShell):
+```
+$Env:SUPABASE_URL="https://[YOUR_PROJECT_REF].supabase.co"
+$Env:SUPABASE_ANON_KEY="[YOUR_ANON_KEY]"
+```
+
+Kod tarafında `composeApp/src/androidMain/kotlin/com/techtactoe/ayna/data/supabase/SupabaseEnv.android.kt` dosyası bu değerleri `BuildConfig.SUPABASE_URL` ve `BuildConfig.SUPABASE_ANON_KEY` üzerinden okur. Değerler boşsa çalışma zamanı anlaşılır bir hata verir.
 
 ### 3.2 iOS
 
-`composeApp/src/iosMain/kotlin/com/techtactoe/ayna/data/supabase/SupabaseEnv.ios.kt`:
-
-```kotlin
-package com.techtactoe.ayna.data.supabase
-
-actual object SupabaseEnv {
-    actual val url: String = "https://[YOUR_PROJECT_REF].supabase.co"
-    actual val anonKey: String = "[YOUR_ANON_KEY]"
-}
+iOS tarafında değerleri Info.plist'e ekleyin (`iosApp/iosApp/Info.plist`):
+```xml
+<key>SUPABASE_URL</key>
+<string>https://[YOUR_PROJECT_REF].supabase.co</string>
+<key>SUPABASE_ANON_KEY</key>
+<string>[YOUR_ANON_KEY]</string>
 ```
+
+Paylaşımlı modülde `composeApp/src/iosMain/kotlin/com/techtactoe/ayna/data/supabase/SupabaseEnv.ios.kt` bu anahtarları NSBundle üzerinden okur ve eksikse anlaşılır bir hata üretir.
 
 ## 4. Test Etme
 

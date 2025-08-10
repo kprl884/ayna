@@ -11,6 +11,7 @@ import io.github.jan.supabase.gotrue.providers.builtin.OTP
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Enhanced authentication manager using Supabase Auth
@@ -208,9 +209,9 @@ class SupabaseAuthManager : AuthRepository {
     /**
      * Update user profile data
      */
-    suspend fun updateUserProfile(updates: Map<String, Any>): Result<Unit> = runCatching {
+    override suspend fun updateUserProfile(updates: Map<String, Any>): Result<Unit> = runCatching {
         auth.updateUser {
-            data = updates
+            data = updates as JsonObject?
         }
         Unit
     }.mapError()
@@ -218,14 +219,14 @@ class SupabaseAuthManager : AuthRepository {
     /**
      * Check if email is confirmed
      */
-    suspend fun isEmailConfirmed(): Boolean {
+    override suspend fun isEmailConfirmed(): Boolean {
         return auth.currentUserOrNull()?.emailConfirmedAt != null
     }
 
     /**
      * Resend confirmation email
      */
-    suspend fun resendConfirmationEmail(): Result<Unit> = runCatching {
+    override suspend fun resendConfirmationEmail(): Result<Unit> = runCatching {
         val user = auth.currentUserOrNull()
             ?: throw IllegalStateException("No authenticated user")
         
@@ -269,7 +270,7 @@ class SupabaseAuthManager : AuthRepository {
         if (email.isBlank()) {
             throw IllegalArgumentException("Email cannot be empty")
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!EMAIL_ADDRESS.matcher(email).matches()) {
             throw IllegalArgumentException("Invalid email format")
         }
     }

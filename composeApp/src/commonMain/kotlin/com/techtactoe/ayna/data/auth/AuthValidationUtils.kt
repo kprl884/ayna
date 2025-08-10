@@ -1,5 +1,7 @@
 package com.techtactoe.ayna.data.auth
 
+import androidx.compose.runtime.Composable
+
 /**
  * Utility functions for authentication validation
  * Provides consistent validation across the app
