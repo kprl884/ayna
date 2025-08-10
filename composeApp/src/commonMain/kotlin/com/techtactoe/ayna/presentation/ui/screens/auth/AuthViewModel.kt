@@ -2,6 +2,7 @@ package com.techtactoe.ayna.presentation.ui.screens.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.techtactoe.ayna.data.auth.SocialAuthManager
 import com.techtactoe.ayna.data.auth.SupabaseAuthManager
 import com.techtactoe.ayna.domain.repository.AuthRepository
 import io.github.jan.supabase.gotrue.user.UserInfo
@@ -14,7 +15,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    private val auth: AuthRepository = SupabaseAuthManager()
+    private val auth: AuthRepository = SupabaseAuthManager(),
+    private val socialAuth: SocialAuthManager = SocialAuthManager()
 ) : ViewModel() {
 
     data class UiState(
@@ -29,6 +31,7 @@ class AuthViewModel(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    @Suppress("unused")
     val currentUser: StateFlow<UserInfo?> = auth.currentUser.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
@@ -40,8 +43,10 @@ class AuthViewModel(
         false
     )
 
+    @Suppress("unused")
     val navigationEvents = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
+    @Suppress("unused")
     fun onEmailChange(value: String) {
         _uiState.value = _uiState.value.copy(email = value)
     }
@@ -101,7 +106,52 @@ class AuthViewModel(
             res.onSuccess {
                 onSuccess()
             }.onFailure { e ->
-                _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "Registration failed")
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = e.message ?: "Registration failed")
+            }
+        }
+    }
+
+    fun signInWithGoogle(onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            try {
+                val idToken = socialAuth.requestSocialSignIn()
+                val res = auth.signInWithGoogle(idToken)
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                res.onSuccess {
+                    onSuccess()
+                }.onFailure { e ->
+                    _uiState.value =
+                        _uiState.value.copy(errorMessage = e.message ?: "Google sign-in failed")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Google sign-in failed"
+                )
+            }
+        }
+    }
+
+    fun signInWithApple(onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            try {
+                val idToken = socialAuth.requestSocialSignIn()
+                val res = auth.signInWithApple(idToken)
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                res.onSuccess {
+                    onSuccess()
+                }.onFailure { e ->
+                    _uiState.value =
+                        _uiState.value.copy(errorMessage = e.message ?: "Apple sign-in failed")
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Apple sign-in failed"
+                )
             }
         }
     }
@@ -124,11 +174,13 @@ class AuthViewModel(
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             val res = auth.signOut()
             _uiState.value = _uiState.value.copy(isLoading = false)
-            res.onSuccess { onSuccess() }
-                .onFailure { e ->
-                    _uiState.value =
-                        _uiState.value.copy(errorMessage = e.message ?: "Logout failed")
-                }
+            res.onSuccess {
+                socialAuth.signOutFromSocial()
+                onSuccess()
+            }.onFailure { e ->
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = e.message ?: "Logout failed")
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,17 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
     val isEmailValid = remember(email) { EMAIL_REGEX.matches(email) }
 
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // Navigate away when authenticated
+    val isAuthenticated by authViewModel.isAuthenticated.collectAsState(initial = false)
+    LaunchedEffect(isAuthenticated) {
+        if (isAuthenticated) {
+            navController.navigate(Screen.Profile) {
+                popUpTo<Screen.AuthLogin> { inclusive = true }
+                launchSingleTop = true
+            }
+        }
+    }
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val topPad = maxHeight / 20
@@ -73,7 +85,27 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
             )
 
             SocialButton(text = "Continue with Facebook")
-            SocialButton(text = "Continue with Google")
+
+            // Show Google only on Android
+            if (com.techtactoe.ayna.util.Platform.isAndroid) {
+                SocialButton(
+                    text = "Continue with Google",
+                    onClick = {
+                        // Start ViewModel flow first (sets up pending continuation)
+                        authViewModel.signInWithGoogle()
+                        // Then launch Android Google Sign-In UI
+                        com.techtactoe.ayna.util.launchGoogleSignIn()
+                    }
+                )
+            }
+
+            // Show Apple only on iOS
+            if (com.techtactoe.ayna.util.Platform.isIos) {
+                SocialButton(
+                    text = "Continue with Apple",
+                    onClick = { authViewModel.signInWithApple() }
+                )
+            }
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text("OR", color = MaterialTheme.colorScheme.onSurfaceVariant)

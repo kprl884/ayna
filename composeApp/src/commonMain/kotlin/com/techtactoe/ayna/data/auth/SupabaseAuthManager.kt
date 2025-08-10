@@ -3,7 +3,10 @@ package com.techtactoe.ayna.data.auth
 import com.techtactoe.ayna.data.supabase.AynaSupabaseClient
 import com.techtactoe.ayna.domain.repository.AuthRepository
 import io.github.jan.supabase.gotrue.SessionStatus
+import io.github.jan.supabase.gotrue.providers.Apple
+import io.github.jan.supabase.gotrue.providers.Google
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -49,8 +52,8 @@ class SupabaseAuthManager : AuthRepository {
         // If a session exists immediately (no confirmation required), create or update profile
         val user = auth.currentUserOrNull()
         if (user != null) {
-            // Try insert first
-            val profile: Map<String, Any?> = mapOf(
+            // Try insert first - explicit type specification
+            val profile = mapOf<String, Any?>(
                 "id" to user.id,
                 "name" to name,
                 "email" to email
@@ -60,10 +63,12 @@ class SupabaseAuthManager : AuthRepository {
             }.onFailure { _ ->
                 // If insert fails (e.g., row exists), try update instead
                 runCatching {
-                    db.from("profiles").update(mapOf(
-                        "name" to name,
-                        "email" to email
-                    )) {
+                    db.from("profiles").update(
+                        mapOf<String, Any?>(
+                            "name" to name,
+                            "email" to email
+                        )
+                    ) {
                         filter { eq("id", user.id) }
                     }
                 }
@@ -80,7 +85,33 @@ class SupabaseAuthManager : AuthRepository {
             this.email = email
             this.password = password
         }
-        auth.currentUserOrNull() ?: throw IllegalStateException("Unable to retrieve user after sign-in")
+        auth.currentUserOrNull()
+            ?: throw IllegalStateException("Unable to retrieve user after sign-in")
+    }.mapError()
+
+    /**
+     * Sign in with Google using ID token from native Google Sign-In
+     */
+    override suspend fun signInWithGoogle(idToken: String): Result<UserInfo> = runCatching {
+        // Authenticate with Supabase using Google ID token
+        auth.signInWith(IDToken) {
+            this.idToken = idToken
+            this.provider = Google // Use Google provider enum instead of string
+        }
+        auth.currentUserOrNull()
+            ?: throw IllegalStateException("Unable to retrieve user after Google sign-in")
+    }.mapError()
+
+    /**
+     * Sign in with Apple using ID token from native Apple Sign-In
+     */
+    override suspend fun signInWithApple(idToken: String): Result<UserInfo> = runCatching {
+        auth.signInWith(IDToken) {
+            this.idToken = idToken
+            this.provider = Apple
+        }
+        auth.currentUserOrNull()
+            ?: throw IllegalStateException("Unable to retrieve user after Apple sign-in")
     }.mapError()
 
     /**

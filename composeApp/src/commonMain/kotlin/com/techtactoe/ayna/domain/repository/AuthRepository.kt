@@ -17,4 +17,8 @@ interface AuthRepository {
     suspend fun updatePassword(newPassword: String): Result<Unit>
     suspend fun refreshSession(): Result<Unit>
     suspend fun getCurrentUserId(): String?
+    
+    // Social authentication methods
+    suspend fun signInWithGoogle(idToken: String): Result<UserInfo>
+    suspend fun signInWithApple(idToken: String): Result<UserInfo>
 }
