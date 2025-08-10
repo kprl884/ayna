@@ -8,12 +8,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.techtactoe.ayna.domain.repository.SocialAuthResult
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 /**
- * Android-specific social authentication manager for Google Sign-In
+ * Enhanced Android-specific social authentication manager
+ * Supports Google Sign-In with proper error handling and state management
  */
 actual class SocialAuthManager {
     
@@ -21,39 +23,54 @@ actual class SocialAuthManager {
     private lateinit var googleSignInClient: GoogleSignInClient
     
     companion object {
-        // One-shot continuation to resume when Activity result arrives (shared across instances)
+        // Shared continuation for Activity result handling
         private var pendingContinuation: kotlin.coroutines.Continuation<String>? = null
+        
+        // Web Client ID - Replace with your actual Google Console Web Client ID
+        private const val WEB_CLIENT_ID = "YOUR_GOOGLE_WEB_CLIENT_ID"
     }
     
     fun initialize(context: Context) {
         this.context = context
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("YOUR_WEB_CLIENT_ID") // TODO: Replace with your Web Client ID from Google Console
+            .requestIdToken(WEB_CLIENT_ID)
             .requestEmail()
+            .requestProfile()
             .build()
         
         this.googleSignInClient = GoogleSignIn.getClient(context, gso)
     }
     
     /**
-     * Get Google Sign-In intent
+     * Get Google Sign-In intent for launching
      */
     fun getGoogleSignInIntent(): Intent {
+        if (!this::googleSignInClient.isInitialized) {
+            throw IllegalStateException("SocialAuthManager not initialized. Call initialize() first.")
+        }
         return googleSignInClient.signInIntent
     }
     
     /**
-     * Request Google Sign-In: waits until Activity result provides an ID token
+     * Request Google Sign-In and wait for result
      */
     actual suspend fun requestSocialSignIn(): String {
+        if (!this::googleSignInClient.isInitialized) {
+            throw IllegalStateException("SocialAuthManager not initialized")
+        }
+        
         return suspendCancellableCoroutine { continuation ->
-            // store continuation and wait for onActivityResult to resume
+            // Store continuation and wait for Activity result
             pendingContinuation = continuation
+            
+            continuation.invokeOnCancellation {
+                pendingContinuation = null
+            }
         }
     }
     
     /**
-     * Handle Google Sign-In result and resume waiting continuation
+     * Handle Google Sign-In result from Activity
      */
     fun handleGoogleSignInResult(data: Intent?) {
         val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -77,11 +94,49 @@ actual class SocialAuthManager {
     }
     
     /**
+     * Check if user is currently signed in to Google
+     */
+    fun isSignedIn(): Boolean {
+        return if (this::googleSignInClient.isInitialized) {
+            GoogleSignIn.getLastSignedInAccount(context) != null
+        } else {
+            false
+        }
+    }
+    
+    /**
+     * Get current Google account if signed in
+     */
+    fun getCurrentAccount(): GoogleSignInAccount? {
+        return if (this::googleSignInClient.isInitialized) {
+            GoogleSignIn.getLastSignedInAccount(context)
+        } else {
+            null
+        }
+    }
+    
+    /**
      * Sign out from Google
      */
     actual fun signOutFromSocial() {
         if (this::googleSignInClient.isInitialized) {
-            googleSignInClient.signOut()
+            googleSignInClient.signOut().addOnCompleteListener {
+                println("Google sign-out completed")
+            }
+        }
+    }
+    
+    /**
+     * Revoke Google access (stronger than sign out)
+     */
+    fun revokeAccess() {
+        if (this::googleSignInClient.isInitialized) {
+            googleSignInClient.revokeAccess().addOnCompleteListener {
+                println("Google access revoked")
+            }
         }
     }
 }
+
+// Add missing import for GoogleSignInStatusCodes
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes

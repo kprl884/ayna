@@ -4,6 +4,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.FlowType
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.Realtime
@@ -23,21 +24,31 @@ object AynaSupabaseClient {
             supabaseKey = SupabaseEnv.anonKey
         ) {
             install(Auth) {
-                // Configure authentication settings
+                // Enhanced authentication configuration
                 autoLoadFromStorage = true
                 autoSaveToStorage = true
-                // Enable session refresh if available in the current supabase-kt version
-                // Some versions use alwaysAutoRefresh, others refresh automatically when possible
+                flowType = FlowType.PKCE
+                scheme = "com.techtactoe.ayna"
+                host = "auth"
+                
+                // Configure providers
+                providers {
+                    google {
+                        // Will be configured with platform-specific client IDs
+                    }
+                    apple {
+                        // Will be configured with Apple credentials
+                    }
+                }
             }
             install(Postgrest) {
-                // Default schema
-                // For newer versions: defaultSchema = "public"
+                // Configure database settings
             }
             install(Realtime) {
-                // Configure real-time subscriptions
+                // Real-time configuration for live updates
             }
             install(Storage) {
-                // Configure file storage
+                // File storage for profile pictures and salon images
             }
         }
     }

@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.techtactoe.ayna.data.auth.SocialAuthManager
 import com.techtactoe.ayna.data.auth.SupabaseAuthManager
+import com.techtactoe.ayna.domain.repository.AuthError
 import com.techtactoe.ayna.domain.repository.AuthRepository
+import com.techtactoe.ayna.domain.repository.EmailValidator
+import com.techtactoe.ayna.domain.repository.PasswordValidation
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +17,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * Enhanced AuthViewModel with comprehensive authentication features
+ * Supports email/password, social auth, magic links, and OTP verification
+ */
 class AuthViewModel(
     private val auth: AuthRepository = SupabaseAuthManager(),
     private val socialAuth: SocialAuthManager = SocialAuthManager()
@@ -25,8 +32,23 @@ class AuthViewModel(
         val firstName: String = "",
         val lastName: String = "",
         val isLoading: Boolean = false,
-        val errorMessage: String? = null
+        val errorMessage: String? = null,
+        val isEmailValid: Boolean = true,
+        val passwordValidation: PasswordValidation = PasswordValidation(true),
+        val showPassword: Boolean = false,
+        val authMethod: AuthMethod = AuthMethod.EMAIL_PASSWORD,
+        val otpSent: Boolean = false,
+        val otpCode: String = "",
+        val magicLinkSent: Boolean = false
     )
+    
+    enum class AuthMethod {
+        EMAIL_PASSWORD,
+        MAGIC_LINK,
+        OTP,
+        GOOGLE,
+        APPLE
+    }
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -46,13 +68,21 @@ class AuthViewModel(
     @Suppress("unused")
     val navigationEvents = MutableSharedFlow<String>(extraBufferCapacity = 1)
 
-    @Suppress("unused")
     fun onEmailChange(value: String) {
-        _uiState.value = _uiState.value.copy(email = value)
+        val isValid = EmailValidator.isValid(value)
+        _uiState.value = _uiState.value.copy(
+            email = value,
+            isEmailValid = isValid,
+            errorMessage = if (!isValid && value.isNotEmpty()) EmailValidator.validate(value) else null
+        )
     }
 
     fun onPasswordChange(value: String) {
-        _uiState.value = _uiState.value.copy(password = value)
+        val validation = PasswordValidation.validate(value)
+        _uiState.value = _uiState.value.copy(
+            password = value,
+            passwordValidation = validation
+        )
     }
 
     fun onFirstNameChange(value: String) {
@@ -61,6 +91,18 @@ class AuthViewModel(
 
     fun onLastNameChange(value: String) {
         _uiState.value = _uiState.value.copy(lastName = value)
+    }
+
+    fun onOtpCodeChange(value: String) {
+        _uiState.value = _uiState.value.copy(otpCode = value)
+    }
+
+    fun togglePasswordVisibility() {
+        _uiState.value = _uiState.value.copy(showPassword = !_uiState.value.showPassword)
+    }
+
+    fun setAuthMethod(method: AuthMethod) {
+        _uiState.value = _uiState.value.copy(authMethod = method)
     }
 
     fun clearError() {
@@ -110,6 +152,79 @@ class AuthViewModel(
                     _uiState.value.copy(errorMessage = e.message ?: "Registration failed")
             }
         }
+    }
+
+    fun signInWithMagicLink(onSuccess: () -> Unit = {}) {
+        val email = _uiState.value.email
+        if (!EmailValidator.isValid(email)) {
+            _uiState.value = _uiState.value.copy(errorMessage = "Please enter a valid email address")
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            
+            // Cast to SupabaseAuthManager to access magic link method
+            val supabaseAuth = auth as? SupabaseAuthManager
+            val res = supabaseAuth?.signInWithMagicLink(email) ?: Result.failure(Exception("Magic link not supported"))
+            
+            _uiState.value = _uiState.value.copy(isLoading = false)
+            res.onSuccess {
+                _uiState.value = _uiState.value.copy(magicLinkSent = true)
+                onSuccess()
+            }.onFailure { e ->
+                _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "Magic link failed")
+            }
+        }
+    }
+
+    fun verifyOTP(onSuccess: () -> Unit = {}) {
+        val email = _uiState.value.email
+        val otpCode = _uiState.value.otpCode
+        
+        if (otpCode.length != 6) {
+            _uiState.value = _uiState.value.copy(errorMessage = "Please enter a valid 6-digit code")
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            
+            // Cast to SupabaseAuthManager to access OTP method
+            val supabaseAuth = auth as? SupabaseAuthManager
+            val res = supabaseAuth?.verifyOTP(email, otpCode) ?: Result.failure(Exception("OTP not supported"))
+            
+            _uiState.value = _uiState.value.copy(isLoading = false)
+            res.onSuccess {
+                onSuccess()
+            }.onFailure { e ->
+                _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "OTP verification failed")
+            }
+        }
+    }
+
+    fun resendConfirmationEmail(onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            
+            // Cast to SupabaseAuthManager to access resend method
+            val supabaseAuth = auth as? SupabaseAuthManager
+            val res = supabaseAuth?.resendConfirmationEmail() ?: Result.failure(Exception("Resend not supported"))
+            
+            _uiState.value = _uiState.value.copy(isLoading = false)
+            res.onSuccess {
+                onSuccess()
+            }.onFailure { e ->
+                _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "Failed to resend email")
+            }
+        }
+    }
+
+    fun checkEmailConfirmation(): Boolean {
+        return viewModelScope.launch {
+            val supabaseAuth = auth as? SupabaseAuthManager
+            supabaseAuth?.isEmailConfirmed() ?: false
+        }.let { false } // Simplified for now
     }
 
     fun signInWithGoogle(onSuccess: () -> Unit = {}) {
@@ -181,6 +296,39 @@ class AuthViewModel(
                 _uiState.value =
                     _uiState.value.copy(errorMessage = e.message ?: "Logout failed")
             }
+        }
+    }
+
+    /**
+     * Validate form before submission
+     */
+    fun validateForm(): Boolean {
+        val state = _uiState.value
+        val emailValid = EmailValidator.isValid(state.email)
+        val passwordValid = state.passwordValidation.isValid
+        
+        if (!emailValid) {
+            _uiState.value = state.copy(errorMessage = "Please enter a valid email address")
+            return false
+        }
+        
+        if (!passwordValid && state.authMethod == AuthMethod.EMAIL_PASSWORD) {
+            _uiState.value = state.copy(errorMessage = state.passwordValidation.errors.firstOrNull())
+            return false
+        }
+        
+        return true
+    }
+
+    /**
+     * Get user-friendly error message
+     */
+    private fun getErrorMessage(error: Throwable): String {
+        return when {
+            error.message?.contains("invalid", ignoreCase = true) == true -> "Invalid email or password"
+            error.message?.contains("network", ignoreCase = true) == true -> "Network error. Please check your connection."
+            error.message?.contains("rate limit", ignoreCase = true) == true -> "Too many attempts. Please try again later."
+            else -> error.message ?: "An unexpected error occurred"
         }
     }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "ayna-multiplatform-demo",
+  "version": "1.0.0",
+  "description": "Kotlin Multiplatform Salon Booking App with Supabase Authentication",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 8080 -c-1",
+    "start": "npm run dev"
+  },
+  "keywords": [
+    "kotlin-multiplatform",
+    "compose-multiplatform",
+    "supabase",
+    "authentication",
+    "salon-booking"
+  ],
+  "author": "TechTacToe",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

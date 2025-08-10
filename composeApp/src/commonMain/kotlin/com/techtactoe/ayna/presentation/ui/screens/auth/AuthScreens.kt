@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,14 +38,14 @@ import com.techtactoe.ayna.common.designsystem.component.button.PrimaryButton
 import com.techtactoe.ayna.common.designsystem.component.button.SocialButton
 import com.techtactoe.ayna.common.designsystem.theme.Spacing
 import com.techtactoe.ayna.common.designsystem.typography.AynaTypography
-import com.techtactoe.ayna.common.designsystem.utils.Validations.EMAIL_REGEX
+import com.techtactoe.ayna.domain.repository.EmailValidator
 import com.techtactoe.ayna.presentation.navigation.Screen
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+    val uiState by authViewModel.uiState.collectAsState()
     var email by remember { mutableStateOf("") }
-    val isEmailValid = remember(email) { EMAIL_REGEX.matches(email) }
+    val isEmailValid = remember(email) { EmailValidator.isValid(email) }
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -56,6 +57,14 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
                 popUpTo<Screen.AuthLogin> { inclusive = true }
                 launchSingleTop = true
             }
+        }
+    }
+
+    // Handle authentication errors
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let { error ->
+            snackbarHostState.showSnackbar(error)
+            authViewModel.clearError()
         }
     }
 
@@ -84,17 +93,37 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
                 style = AynaTypography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
             )
 
-            SocialButton(text = "Continue with Facebook")
+            // Social authentication buttons
+            SocialButton(
+                text = "Continue with Facebook",
+                onClick = { 
+                    // TODO: Implement Facebook auth when needed
+                    snackbarHostState.showSnackbar("Facebook login coming soon")
+                }
+            )
 
             // Show Google only on Android
             if (com.techtactoe.ayna.util.Platform.isAndroid) {
                 SocialButton(
                     text = "Continue with Google",
                     onClick = {
-                        // Start ViewModel flow first (sets up pending continuation)
-                        authViewModel.signInWithGoogle()
-                        // Then launch Android Google Sign-In UI
-                        com.techtactoe.ayna.util.launchGoogleSignIn()
+                        if (uiState.isLoading) return@SocialButton
+                        
+                        viewModelScope.launch {
+                            try {
+                                // Start ViewModel flow first (sets up pending continuation)
+                                authViewModel.signInWithGoogle {
+                                    // Success callback
+                                    navController.navigate(Screen.Profile) {
+                                        popUpTo<Screen.AuthLogin> { inclusive = true }
+                                    }
+                                }
+                                // Then launch Android Google Sign-In UI
+                                com.techtactoe.ayna.util.launchGoogleSignIn()
+                            } catch (e: Exception) {
+                                snackbarHostState.showSnackbar("Google Sign-In failed: ${e.message}")
+                            }
+                        }
                     }
                 )
             }
@@ -103,7 +132,15 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
             if (com.techtactoe.ayna.util.Platform.isIos) {
                 SocialButton(
                     text = "Continue with Apple",
-                    onClick = { authViewModel.signInWithApple() }
+                    onClick = { 
+                        if (uiState.isLoading) return@SocialButton
+                        
+                        authViewModel.signInWithApple {
+                            navController.navigate(Screen.Profile) {
+                                popUpTo<Screen.AuthLogin> { inclusive = true }
+                            }
+                        }
+                    }
                 )
             }
 
@@ -111,13 +148,15 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
                 Text("OR", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
+            // Email input with validation
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it.trim() },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("Email address") },
                 isError = email.isNotEmpty() && !isEmailValid,
-                singleLine = true
+                singleLine = true,
+                enabled = !uiState.isLoading
             )
 
             AnimatedVisibility(
@@ -132,12 +171,38 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
                 )
             }
 
+            // Continue button with loading state
             PrimaryButton(
-                text = "Continue",
-                onClick = { if (isEmailValid) navController.navigate(Screen.AuthRegister) },
+                text = if (uiState.isLoading) "Loading..." else "Continue",
+                onClick = { 
+                    if (isEmailValid && !uiState.isLoading) {
+                        authViewModel.onEmailChange(email)
+                        navController.navigate(Screen.AuthRegister)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = isEmailValid
+                enabled = isEmailValid && !uiState.isLoading
             )
+
+            // Magic link option
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Or send me a magic link",
+                    style = AynaTypography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        if (isEmailValid && !uiState.isLoading) {
+                            authViewModel.onEmailChange(email)
+                            authViewModel.signInWithMagicLink {
+                                snackbarHostState.showSnackbar("Magic link sent! Check your email.")
+                            }
+                        }
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(Spacing.small))
 
@@ -149,16 +214,19 @@ fun AuthLoginScreen(navController: NavHostController, authViewModel: AuthViewMod
             Text(
                 text = "Sign in as a professional",
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable { },
+                modifier = Modifier.clickable { 
+                    // TODO: Navigate to business login
+                    snackbarHostState.showSnackbar("Business login coming soon")
+                },
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Snackbar host to show logout success as a transient message
+            // Snackbar host for messages
             SnackbarHost(hostState = snackbarHostState)
         }
 
-        // Show toast-like snackbar only when logout operation succeeded and triggered navigation here
+        // Show logout success message
         LaunchedEffect(Unit) {
             val shouldShow = navController.previousBackStackEntry
                 ?.savedStateHandle
