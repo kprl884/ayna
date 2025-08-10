@@ -16,22 +16,22 @@ import io.github.jan.supabase.storage.storage
  * Provides centralized access to all Supabase services
  */
 object AynaSupabaseClient {
-    
-    private const val SUPABASE_URL = "https://nrlzmqptvjcrndnzysqv.supabase.co"
-    private const val SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ybHptcXB0dmpjcm5kbnp5c3F2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NTI1ODIsImV4cCI6MjA3MDMyODU4Mn0.Z-kpn3PQ8bHwj-2NOvVlcrCxpQ9zqm9be_c4d43WHCg"
-    
+
     val client: SupabaseClient by lazy {
         createSupabaseClient(
-            supabaseUrl = SUPABASE_URL,
-            supabaseKey = SUPABASE_ANON_KEY
+            supabaseUrl = SupabaseEnv.url,
+            supabaseKey = SupabaseEnv.anonKey
         ) {
             install(Auth) {
                 // Configure authentication settings
                 autoLoadFromStorage = true
                 autoSaveToStorage = true
+                // Enable session refresh if available in the current supabase-kt version
+                // Some versions use alwaysAutoRefresh, others refresh automatically when possible
             }
             install(Postgrest) {
-                // Configure database settings
+                // Default schema
+                // For newer versions: defaultSchema = "public"
             }
             install(Realtime) {
                 // Configure real-time subscriptions
@@ -41,7 +41,7 @@ object AynaSupabaseClient {
             }
         }
     }
-    
+
     // Convenience accessors
     val auth get() = client.auth
     val database get() = client.postgrest

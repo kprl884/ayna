@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             
             // Supabase dependencies (aligned to 3.3.x for DSL support)
+            implementation(project.dependencies.platform("io.github.jan-tennert.supabase:bom:3.2.2"))
             implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.2")
             implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1")
             implementation("io.github.jan-tennert.supabase:realtime-kt:3.2.2")

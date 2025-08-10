@@ -142,9 +142,49 @@ fun AppNavigation() {
                         }
                     )
                 }
-                composable<Screen.Profile> { ProfileScreen() }
-                composable<Screen.AuthLogin> { AuthLoginScreen(navController) }
-                composable<Screen.AuthRegister> { CreateAccountScreen(navController) }
+                composable<Screen.Profile> { 
+                    val authViewModel = remember { com.techtactoe.ayna.presentation.ui.screens.auth.AuthViewModel() }
+                    val isAuthenticated by authViewModel.isAuthenticated.collectAsStateWithLifecycle()
+
+                    // Track previous auth state to detect explicit logout transitions (true -> false)
+                    val prevAuthState = remember { androidx.compose.runtime.mutableStateOf<Boolean?>(null) }
+
+                    LaunchedEffect(isAuthenticated) {
+                        val previous = prevAuthState.value
+                        if (previous == null) {
+                            // first observation, just set
+                            prevAuthState.value = isAuthenticated
+                        } else {
+                            // detect logout (authenticated -> not authenticated)
+                            if (previous && !isAuthenticated) {
+                                // mark one-time logout success flag for next screen
+                                navController.currentBackStackEntry
+                                    ?.savedStateHandle
+                                    ?.set("logout_success", true)
+                            }
+                            prevAuthState.value = isAuthenticated
+                        }
+
+                        if (!isAuthenticated) {
+                            navController.navigate(Screen.AuthLogin) {
+                                popUpTo<com.techtactoe.ayna.presentation.navigation.Screen.Profile> { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        }
+                    }
+
+                    if (isAuthenticated) {
+                        ProfileScreen()
+                    }
+                }
+                composable<Screen.AuthLogin> { 
+                                    val authViewModel = remember { com.techtactoe.ayna.presentation.ui.screens.auth.AuthViewModel() }
+                                    AuthLoginScreen(navController, authViewModel) 
+                                }
+                composable<Screen.AuthRegister> { 
+                                    val authViewModel = remember { com.techtactoe.ayna.presentation.ui.screens.auth.AuthViewModel() }
+                                    CreateAccountScreen(navController, authViewModel)
+                                }
 
                 composable<Screen.Notifications> {
                     val viewModel = remember { DataModule.createNotificationsViewModel() }
